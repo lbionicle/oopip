@@ -17,6 +17,8 @@ window['FLS'] = true;
 // Підключення основного файлу стилів
 import "../scss/style.scss";
 
+import "@js/myscript.js";
+
 //============================================================================================================================================================================================================================================
 // React ========================================================================================================================================================================================================================================================
 //============================================================================================================================================================================================================================================
@@ -34,7 +36,7 @@ flsFunctions.isWebp();
 /* Додавання класу touch для HTML якщо браузер мобільний */
 // flsFunctions.addTouchClass();
 /* Додавання loaded для HTML після повного завантаження сторінки */
-// flsFunctions.addLoadedClass();
+flsFunctions.addLoadedClass();
 /* Модуль для роботи з меню (Бургер) */
 // flsFunctions.menuInit();
 /* Враховування плаваючої панелі на мобільних пристроях при 100vh */
@@ -47,7 +49,7 @@ flsFunctions.isWebp();
 Документація: https://template.fls.guru/template-docs/modul-spojlery.html
 Сніппет (HTML): spollers
 */
-// flsFunctions.spollers();
+flsFunctions.spollers();
 
 /*
 Модуль "Таби"
@@ -89,7 +91,7 @@ flsFunctions.isWebp();
 Документація: https://template.fls.guru/template-docs/funkcional-popup.html
 Сніппет (HTML): pl, pop
 */
-// import './libs/popup.js'
+import './libs/popup.js'
 
 /*
 Модуль паралаксу мишею
@@ -104,12 +106,12 @@ import * as flsForms from "./files/forms/forms.js";
 
 /* Робота з полями форми */
 /* Документація: https://template.fls.guru/template-docs/rabota-s-formami.html */
-/*
+
 flsForms.formFieldsInit({
 	viewPass: false,
 	autoHeight: false
 });
-*/
+
 /* Надсилання форми */
 /* Документація: https://template.fls.guru/template-docs/rabota-s-formami.html */
 flsForms.formSubmit();
@@ -121,7 +123,7 @@ flsForms.formSubmit();
 // flsForms.formRating();
 
 /* Модуль роботи з select. */
-// import './libs/select.js'
+import './libs/select.js'
 
 /* Модуль роботи з календарем */
 // import './files/forms/datepicker.js'

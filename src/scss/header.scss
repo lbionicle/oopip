@@ -28,8 +28,10 @@ input:focus {
     outline: none;
   }
 .button {
+    width: toRem(100);
     @include adaptiveValue("height", 75, 75);
     align-items: center;
+    justify-content: center;
     @include adaptiveValue("padding-right", 20, 20);
 }
 .header-icons {

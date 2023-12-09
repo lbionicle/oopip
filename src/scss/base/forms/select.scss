@@ -1,9 +1,9 @@
 // <SELECT>
 // Сніппет (HTML): sel
 .select {
-	min-width: 0;
+	width: toRem(120);
 	position: relative;
-	// .select__body
+	// .select__bцody
 	&__body {
 		position: relative;
 	}
@@ -11,52 +11,20 @@
 	&__title {
 		color: inherit;
 		text-align: left;
-		border: 1px solid #d9d9d9;
 		background-color: #fff;
 		cursor: pointer;
 		width: 100%;
 		border-radius: 4px;
 	}
-	// .select__value
-	&__value {
-		display: flex;
-		min-width: 0;
-		align-items: center;
-		height: toRem(30);
-		padding: 0 toRem(15);
-		gap: toRem(10);
-		> * {
-			flex: 1 1 auto;
-		}
-		&:after {
-			content: "";
-			align-self: stretch;
-			flex: 0 0 10px;
-			transition: all 0.3s ease 0s;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			._select-open & {
-				transform: rotate(-180deg);
-			}
-		}
-		&._select-pseudo-label {
-			&::before {
-				content: attr(data-pseudo-label);
-				opacity: 0.5;
-			}
-		}
-	}
+	
 	// .select__content
 	&__content {
-		flex: 1 1 auto;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
 	// .select__text
 	&__text {
-		flex: 1 1 auto;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
@@ -71,12 +39,9 @@
 		color: #000;
 		position: absolute;
 		top: calc(100% - toRem(1));
-		border-radius: 0 0 4px 4px;
 		min-width: 100%;
 		left: 0;
 		background-color: #fff;
-		border-top: 0;
-		border: 1px solid #d9d9d9;
 		border-top: 0;
 		padding: 10px 0px 5px 0px;
 	}
@@ -89,7 +54,7 @@
 		// Стилі скроллбару
 		.simplebar-scrollbar {
 			&::before {
-				//opacity: 1;
+				// opacity: 1;
 			}
 		}
 	}
@@ -98,7 +63,7 @@
 		width: 100%;
 		text-align: left;
 		cursor: pointer;
-		padding: 5px 15px;
+		padding: 8px 15px;
 		color: inherit;
 		&._select-selected {
 			background-color: #eee;
@@ -124,7 +89,6 @@
 		.select__options {
 			top: auto;
 			bottom: calc(100% - toRem(1));
-			border: 1px solid #d9d9d9;
 			border-bottom: 0;
 			border-radius: 4px 4px 0 0;
 			padding: 5px 0px 10px 0px;

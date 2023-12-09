@@ -25,14 +25,32 @@
 							<div class="goods-category">
 								<div class="goods-category-title">Categories</div>
 								<div class="goods-category-items">
-									<div class="goods-category-item category-item-active">Building sets <span>(33)</span></div>
-									<div class="goods-category-item">Plush toys, dolls <span>(12)</span></div>
+									<button class="goods-category-item category-active">Building sets<span>(4)</span></button>
+									<button class="goods-category-item">Plush toys, dolls<span>(5)</span></button>
+									<button class="goods-category-item">Sport toys, sets<span>(7)</span></button>
+									<button class="goods-category-item">Arts, сrafts sets<span>(11)</span></button>
+									<button class="goods-category-item">Transformers<span>(9)</span></button>
 								</div>
 							</div>
 							<div class="goods-section-goods">
-								<div class="goods-filter"></div>
+								<div class="goods-filter">
+									<div class="filter-age">
+										<button class="filter-item active">All ages</button>
+										<button class="filter-item">0-3 year</button>
+										<button class="filter-item">3-6 year</button>
+										<button  class="filter-item">6+ year</button>
+									</div>
+									<div class="filter-price">
+										<div class="filter-price-title">Sort by price:</div>
+										<select name="form[]" data-class-modif="form">
+											<option value="1" selected>Default</option>
+											<option value="2">Ascending</option>
+											<option value="3">Descending</option>
+										</select>
+									</div>
+								</div>
 								<div class="goods-elements">
-									<div class="goods-element">
+									<button data-goods class="goods-element">
 										<div class="element-img">
 											<img src="@img/goods1.png" alt="">
 										</div>
@@ -40,34 +58,88 @@
 											<div class="element-info-name">Stacking pyramid</div>
 											<div class="element-info-price">$10.00</div>
 										</div>
-									</div>
-									<div class="goods-element">
+									</button>
+									<button data-goods class="goods-element">
 										<div class="element-img">
-											<img src="@img/goods1.png" alt="">
+											<img src="@img/goods3.png" alt="">
 										</div>
 										<div class="element-info">
-											<div class="element-info-name">Stacking pyramid</div>
-											<div class="element-info-price">$10.00</div>
+											<div class="element-info-name">Mini basketball</div>
+											<div class="element-info-price">$9.00</div>
 										</div>
-									</div>
-									<div class="goods-element">
+									</button>
+									<button data-goods class="goods-element">
 										<div class="element-img">
-											<img src="@img/goods1.png" alt="">
+											<img src="@img/goods4.png" alt="">
 										</div>
 										<div class="element-info">
-											<div class="element-info-name">Stacking pyramid</div>
-											<div class="element-info-price">$10.00</div>
+											<div class="element-info-name">Robot Transformer</div>
+											<div class="element-info-price">$29.00</div>
 										</div>
-									</div>
+									</button>
 								</div>
 							</div>
 						</div>
-						<div class="goods-row-pagination"></div>
+						<div class="goods-row-pagination">
+							<div class="row-pagination-elements">
+							<button id="prev-list" style="font-weight: 400;" class="pagination-element-prev">&lt</button>
+								<button id="page1" class="pagination-element pagination-active">1</button>
+								<button id="page2" class="pagination-element">2</button>
+								<button id="page3" class="pagination-element">3</button>
+								<button id="page4" class="pagination-element">4</button>
+								<button id="next-list" style="font-weight: 400;" class="pagination-element-next">></button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="body-recommend">
+					<div class="recommend-goods">
+						<div class="recommend-good">
+							<div class="recommend-good-img">
+								<img style="width: toRem(276); height: toRem(350);" src="@img/goods2.png" alt="">
+							</div>
+							<div class="recommend-good-info">
+								<div class="good-info-title">LEGO bricks set</div>
+								<div class="good-info-subtitle">Build anything from simple structures to elaborate townscapes to boost creativity.</div>
+								<button data-goods class="good-info-button">Show more -></button>
+							</div>
+						</div>
+						<div class="recommend-good">
+							<div class="recommend-good-img">
+								<img style="width: toRem(276); height: toRem(350);" src="@img/goods5.png" alt="">
+							</div>
+							<div class="recommend-good-info">
+								<div class="good-info-title">Play Kitchen</div>
+								<div class="good-info-subtitle">Equip your kids for imaginative role play with this 32x24 inch rolling kitchen play set.</div>
+								<button data-goods class="good-info-button">Show more -></button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="company-info">
+					<div class="company-info-row">
+						<div class="info-row-logo">
+							<img src="@img/logo.svg" alt="">
+							<div class="row-logo-textcompany">TEDDY<br/>SHOP</div>
+						</div>
+						<div class="info-row-adress">
+							<img class="contact-img" src="@img/location.svg" alt="">
+							Minsk city, Petrus Brovki st., 4
+						</div>
+						<div class="info-row-email">
+							<img class="contact-img" src="@img/msg.svg" alt="">
+							<a href="mailto:teddyshop@gmail.com">teddyshop@gmail.com</a>
+						</div>
+						<div class="info-row-phone">
+							<img class="contact-img" src="@img/phone.svg" alt="">
+							<a style="" href="tel:+3753312345678">+375 33 12 34 5678</a>
+						</div>
 					</div>
 				</div>
 			</main>
 			@@include('html/_footer.htm',{})
 		</div>
+		@@include('html/_popup.htm',{})
 		@@include('html/_preloader.htm',{})
 		@@include('html/_js.htm',{})
 	</body>

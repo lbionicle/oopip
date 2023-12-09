@@ -1,5 +1,3 @@
-// Підключення функціоналу "Чертоги Фрілансера"
-// Підключення списку активних модулів
 import { flsModules } from "../modules.js";
 // Допоміжні функції
 import { isMobile, _slideUp, _slideDown, _slideToggle, FLS } from "../functions.js";

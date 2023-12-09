@@ -51,9 +51,10 @@ body::after {
 	transform: scale(0);
 	transition: transform 0.3s ease 0s;
 	background-color: #eee;
-	padding: 20px;
+	padding: toRem(70) toRem(80);
 	width: 100%;
-	max-width: 900px;
+	max-width: toRem(1440);
+	min-height: toRem(600);
 	border-radius: 20px;
 	.lock & {
 		visibility: visible;

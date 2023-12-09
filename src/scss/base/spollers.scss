@@ -1,10 +1,9 @@
-// Базові стилі спойлерів
-// Сніппет (HTML): spoller
+
 
 // Блок зі спойлерами
 .spollers {
 	display: grid;
-	gap: 15px;
+	gap: toRem(1);
 }
 // Спойлер
 .spollers__item {
@@ -12,11 +11,12 @@
 }
 // Заголовок спойлера
 .spollers__title {
+	align-items: center;
+
 	width: 100%;
 	cursor: default;
 	text-align: left;
-	border: 1px solid #eee;
-	padding: toRem(10) toRem(15);
+	padding: toRem(10) toRem(30);
 	border-radius: toRem(5);
 	position: relative;
 	list-style: none;
@@ -30,11 +30,11 @@
 		&::after {
 			content: "";
 			position: absolute;
-			right: 10px;
-			top: 50%;
+			right: toRem(0);
+			top: 40%;
 			background-color: #000;
-			height: 2px;
-			width: 15px;
+			height: toRem(2);
+			width: toRem(11);
 			transition: transform 0.5s ease 0s;
 		}
 		&::before {
@@ -51,44 +51,9 @@
 				transform: rotate(40deg);
 			}
 		}
-		/*
-		._spoller-init & {
-			position: relative;
-			width: 100%;
-			text-align: left;
-			&::before,
-			&::after {
-				content: "";
-				position: absolute;
-				right: 0;
-				top: toRem(12);
-				height: toRem(1);
-				transition: all 0.3s ease 0s;
-				width: toRem(10);
-				background-color: #000;
-			}
-			&::before {
-				transform: rotate(40deg);
-				right: toRem(7);
-			}
-			&::after {
-				transform: rotate(-40deg);
-			}
-		}
-		&._spoller-active {
-			&::before {
-				transform: rotate(-40deg);
-			}
-			&::after {
-				transform: rotate(40deg);
-			}
-		}
-		*/
 	}
 }
 // Контент спойлера
 .spollers__body {
-	padding: toRem(20);
-	border-radius: toRem(5);
-	border: 1px solid #eee;
+	padding: toRem(10) toRem(30);
 }

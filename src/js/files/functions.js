@@ -248,7 +248,7 @@ export function spollers() {
 					const spollersBlock = spollerTitle.closest('[data-spollers]');
 					const oneSpoller = spollersBlock.hasAttribute('data-one-spoller');
 					const scrollSpoller = spollerBlock.hasAttribute('data-spoller-scroll');
-					const spollerSpeed = spollersBlock.dataset.spollersSpeed ? parseInt(spollersBlock.dataset.spollersSpeed) : 500;
+					const spollerSpeed = spollersBlock.dataset.spollersSpeed ? parseInt(spollersBlock.dataset.spollersSpeed) : 300;
 					if (!spollersBlock.querySelectorAll('._slide').length) {
 						if (oneSpoller && !spollerBlock.open) {
 							hideSpollersBody(spollersBlock);
@@ -264,14 +264,14 @@ export function spollers() {
 							const scrollSpollerOffset = +scrollSpollerValue ? +scrollSpollerValue : 0;
 							const scrollSpollerNoHeader = spollerBlock.hasAttribute('data-spoller-scroll-noheader') ? document.querySelector('.header').offsetHeight : 0;
 
-							//setTimeout(() => {
+							setTimeout(() => {
 							window.scrollTo(
 								{
 									top: spollerBlock.offsetTop - (scrollSpollerOffset + scrollSpollerNoHeader),
 									behavior: "smooth",
 								}
 							);
-							//}, spollerSpeed);
+							}, spollerSpeed);
 						}
 					}
 				}
