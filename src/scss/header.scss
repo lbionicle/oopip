@@ -1,0 +1,40 @@
+.header {
+    display: flex;
+    margin: toRem(16.5) 0;
+    width: 100%;
+}
+.header__container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+.search-form {
+    background-color: #F5F5F5;
+    align-items: center;
+    @include adaptiveValue("font-size", 19, 19);
+    @include adaptiveValue("width", 1184, 1184);
+    @include adaptiveValue("height", 75, 75);
+    display: flex;
+    border-radius: toRem(11);
+
+}
+.input {
+    border: none;
+    background-color: #F5F5F5;
+}
+input:focus {
+    outline: none;
+  }
+.button {
+    @include adaptiveValue("height", 75, 75);
+    align-items: center;
+    @include adaptiveValue("padding-right", 20, 20);
+}
+.header-icons {
+    width: 120px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}

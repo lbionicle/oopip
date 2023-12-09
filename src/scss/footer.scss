@@ -1,0 +1,16 @@
+//====================================================================================================
+.footer {
+    width: 100%;
+    display: flex;
+    margin: 0 auto;
+    @include adaptiveValue("font-size", 16, 14);
+    padding: toRem(10);
+    line-height: toRem(30);
+    color: var(--text-primary);
+    background-color: var(--bg-secondary);
+}
+.footer__container {
+    text-align: center;
+    justify-content: center;
+}
+//====================================================================================================

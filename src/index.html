@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+	@@include('html/_head.htm',{
+	"title":"TEDDY SHOP"
+	})
+	<body>
+		<div class="wrapper">
+			@@include('html/_header.htm',{})
+			<main class="page">
+				<div class="body-start">
+					<div class="body-start-row">
+						<div class="body-row-info">
+							<div class="body-info-wlcm">Welcome to TEDDYSHOP</div>
+							<div class="body-info-strtmsg">Let’s find a<br/>Better <span style="color: #46A358">Friend</span></div>
+							<div class="body-info-descrp">We are an online toy store offering a wide range of affordable and trendy toys.<br/>Use our toys to create a fun-filled playroom.</div>
+						</div>
+						<div class="body-row-img">
+							<img src="@img/panda.png" alt="">
+						</div>
+					</div>
+				</div>
+				<div class="body-goods">
+					<div class="body-goods-row">
+						<div class="goods-row-goods">
+							<div class="goods-category">
+								<div class="goods-category-title">Categories</div>
+								<div class="goods-category-items">
+									<div class="goods-category-item category-item-active">Building sets <span>(33)</span></div>
+									<div class="goods-category-item">Plush toys, dolls <span>(12)</span></div>
+								</div>
+							</div>
+							<div class="goods-section-goods">
+								<div class="goods-filter"></div>
+								<div class="goods-elements">
+									<div class="goods-element">
+										<div class="element-img">
+											<img src="@img/goods1.png" alt="">
+										</div>
+										<div class="element-info">
+											<div class="element-info-name">Stacking pyramid</div>
+											<div class="element-info-price">$10.00</div>
+										</div>
+									</div>
+									<div class="goods-element">
+										<div class="element-img">
+											<img src="@img/goods1.png" alt="">
+										</div>
+										<div class="element-info">
+											<div class="element-info-name">Stacking pyramid</div>
+											<div class="element-info-price">$10.00</div>
+										</div>
+									</div>
+									<div class="goods-element">
+										<div class="element-img">
+											<img src="@img/goods1.png" alt="">
+										</div>
+										<div class="element-info">
+											<div class="element-info-name">Stacking pyramid</div>
+											<div class="element-info-price">$10.00</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="goods-row-pagination"></div>
+					</div>
+				</div>
+			</main>
+			@@include('html/_footer.htm',{})
+		</div>
+		@@include('html/_preloader.htm',{})
+		@@include('html/_js.htm',{})
+	</body>
+</html>
