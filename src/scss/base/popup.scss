@@ -53,9 +53,8 @@ body::after {
 	background-color: #eee;
 	padding: toRem(70) toRem(80);
 	width: 100%;
-	max-width: toRem(1440);
-	min-height: toRem(600);
-	border-radius: 20px;
+	width: toRem(1440);
+	height: toRem(733);
 	.lock & {
 		visibility: visible;
 	}

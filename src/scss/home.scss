@@ -1,3 +1,5 @@
+@import "base/popup.scss";
+
 * {
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -526,3 +528,194 @@ button.active{
 }
   
 //====================================================================================================
+
+.choice-auth {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: toRem(53.2);
+}
+.login-auth, .register-auth{
+    font-size: toRem(20);
+    line-height: toRem(16);
+    font-weight: 500;
+    color: #3D3D3D;
+    z-index: 999;
+}
+.auth-active {
+    color: #46A358;
+}
+.divider-auth {
+    margin: 0 toRem(12);
+    font-size: toRem(16);
+    font-weight: 100;
+    line-height: toRem(16);
+}
+.text-auth {
+    margin-bottom: toRem(15);
+    font-size: toRem(13);
+    line-height: toRem(16);
+    color: #3D3D3D;
+}
+.auth-enter-password {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+.auth-forgot {
+    margin: toRem(16) 0 toRem(27) 0;
+}
+.email-auth {
+    margin-bottom: toRem(17);
+}
+.auth-enter-password {
+    position: relative;
+    width: toRem(300);
+    height: toRem(40);
+    border-radius: toRem(5);
+    background-color: transparent;
+    border: toRem(1) solid #dadada;
+}
+.email-auth, .password-auth {
+    padding: 0 toRem(40) 0 toRem(14);
+    width: toRem(300);
+    height: toRem(40);
+    border-radius: toRem(5);
+    background-color: transparent;
+    border: toRem(1) solid #dadada;
+    &:focus {
+        border-color: #46A358;
+    }
+}
+.show-auth {
+    background-image: url("../img/show.svg") !important; 
+}
+.hide-auth {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: toRem(40);
+    width: toRem(40);
+    background-image: url("../img/Hide.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: auto;
+    right: 0;
+    z-index: 200;
+    position: absolute;
+}
+.auth-forgot {
+    width: 100%;
+    font-size: toRem(12);
+    line-height: toRem(16);
+    text-align: right;
+    color: #46A358;
+}
+.form_auth_button {
+    font-size: toRem(16);
+    font-weight: 700;
+    line-height: toRem(16);
+    color: #FFFFFF;
+    background-color: #46A358;
+    width: 100%;
+    height: toRem(45);
+    border-radius: toRem(5);
+}
+.popup-hidden {
+    display: none;
+}
+//====================================================================================================
+
+
+.cart-goods {
+    display: flex;
+    flex-wrap: nowrap;
+}
+.cart-info {
+    flex: 0 1 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.cart-info-title {
+    width: 100%;
+    margin-bottom: toRem(10);
+    font-size: toRem(15);
+    color: #3D3D3D;
+    font-weight: 700;
+    line-height: toRem(13);
+}
+.cart-info-calcs {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    border-top: toRem(0.25) solid rgba(70, 163, 88, 0.5);
+}
+.info-calcs-subt, .info-calcs-ship, .cart-info-total{
+    font-size: toRem(15);
+    line-height: toRem(13.23);
+    color: #3D3D3D;
+    font-weight: 500;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: toRem(9) 0;
+}
+.info-calcs-ship {
+    margin: 0 0 toRem(9) 0;
+}
+.cart-info-shipping {
+    text-align: right;
+    color: #46A358;
+    font-size: toRem(10);
+    line-height: toRem(13.23);
+}
+.cart-info-total {
+    font-weight: 700;
+    color: #2C2D3B;
+}
+.cart-info-submit {
+    color: #fff;
+    font-size: toRem(13);
+    line-height: toRem(13.23);
+    width: 100%;
+    height: toRem(35);
+    border-radius: toRem(2.5);
+    background-color: rgba(70, 163, 88, 1);
+}
+.cart-goods{
+    display: flex;
+    flex: 0 1 75%;
+    flex-direction: column;
+    margin-right: 5%;
+}
+.cart-goods-header {
+    padding: 0 toRem(105) toRem(10) 0;
+    border-bottom: toRem(0.25) solid #46A358;
+    margin-bottom: toRem(10);
+    display: flex;
+    width: 100%;
+    flex-wrap: nowrap;
+    color: #3D3D3D;
+    font-size: toRem(13.23);
+    font-weight: 500;
+    line-height: toRem(13.23);
+    justify-content: space-between;
+}
+
+.cart-goods-body {
+}
+.goods-body-img {
+    width: toRem(59.76376);
+    height: toRem(59.76376);
+    background-image: url(../img/goods1.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover}

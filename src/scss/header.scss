@@ -2,6 +2,11 @@
     display: flex;
     margin: toRem(16.5) 0;
     width: 100%;
+    margin-top: 0;
+    background-color: #fff;
+    position: fixed;
+    border-bottom: toRem(1.33) solid #f5f5f5;
+    z-index: 148;
 }
 .header__container {
     width: 100%;

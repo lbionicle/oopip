@@ -1,28 +1,109 @@
-<div id="popup" aria-hidden="true" class="popup">
+<div id="popup-goods" aria-hidden="true" class="popup">
 	<div style="position: relative;" class="popup__wrapper">
 		<div class="popup__content">
 			<button data-close type="button" class="popup__close"><img src="@img/close.svg" alt=""></button>
 			<div class="popup-content-img">
-				<img class="popup-content-img" src="@img/biggoods1.png" alt="">
+				<img class="popup-content-img" alt="">
 			</div>
 			<div class="popup-content-info">
-				<div class="popup-content-title">LEGO bricks set</div>
-				<div class="popup-content-article">Article: <span>1995751877966</span></div>
-				<div class="popup-content-stock">Stock: <span>13</span></div>
-				<div class="popup-content-price">$20.00</div>
+				<div class="popup-content-title"></div>
+				<div class="popup-content-article">Article: <span></span></div>
+				<div class="popup-content-stock">Stock: <span></span></div>
+				<div class="popup-content-price"></div>
 				<div class="popup-divider"></div>
 				<div class="popup-content-titledescr">Short Description:</div>
-				<div class="popup-content-subdescrp">This 234-piece set includes bright and colorful LEGO-style bricks in a variety of shapes and sizes. Build anything from simple structures to elaborate townscapes to boost creativity. These chunky plastic bricks snap satisfyingly together and pull easily apart for frustration-free construction play. Big enough for little hands but still compatible with major brands, this budget-friendly builder set makes the perfect STEM learning toy.</div>
+				<div class="popup-content-subdescrp"></div>
 				<div class="popup-content-orderpanel">
 					<div class="orderpanel-count">
 						<button class="orderpanel-removeGoods"><img src="@img/minus.svg" alt=""></button>
-						<div class="orderpanel-countGoods">1</div>
+						<div class="orderpanel-countGoods"></div>
 						<button class="orderpanel-addGoods"><img src="@img/plus.svg" alt=""></button>
 					</div>
 					<button class="orderpanel-goOrder">Buy now</button>
 					<button class="orderpanel-cart">Add to cart</button>
 				</div>
 			</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="popup-auth" aria-hidden="true" class="popup">
+	<div id="auth" style="position: relative;" class="popup__wrapper">
+		<div id="login-auth-user" style="width: 500px; height: 400px; padding: 50px 100px; border-bottom: 10px solid #46A358; display: flex; flex-direction: column;" class="popup__content">
+			<button style="top: 24px; right: 24px" data-close type="button" class="popup__close"><img class="background-color:#46A358;" src="@img/closegreen.svg" alt=""></button>
+			<div class="choice-auth">
+				<button id="login-auth-btn" class="login-auth auth-active">Login</button>
+				<div class="divider-auth">|</div>
+				<button id="reg-auth-btn" class="register-auth">Register</button>
+			</div>
+			<div class="auth-body">
+				<div class="text-auth">Enter your username and password to login.</div>
+				<form class="form_auth_style" action="#" method="post">
+					<input class="email-auth" type="email" name="auth_email" placeholder="Enter your email address" required >
+					<div class="auth-enter-password">
+						<input id="log-1" class="password-auth" type="password" name="auth_pass" placeholder="Password" required >
+						<button style="z-index: 209;" id="btn-hide-log" class="hide-auth"></button>
+					</div>
+					<a href="" class="auth-forgot">Forgot Password?</a>
+					<button class="form_auth_button" type="submit" name="form_auth_submit">Login</button>
+				  </form>
+			</div>
+			</div>
+			<div id="reg-auth-user" style="width: 500px; height: 426px; padding: 52px 100px; border-bottom: 10px solid #46A358; display: none; flex-direction: column;" class="popup__content">
+			<button style="top: 24px; right: 24px" data-close type="button" class="popup__close"><img class="background-color:#46A358;" src="@img/closegreen.svg" alt=""></button>
+			<div style="margin-bottom: 40px;" class="choice-auth">
+				<button id="login-auth-btn" class="login-auth">Login</button>
+				<div class="divider-auth">|</div>
+				<button id="reg-auth" class="register-auth auth-active">Register</button>
+			</div>
+			<div class="auth-body">
+				<div style="margin-bottom: 27px;" class="text-auth">Enter your email and password to register.</div>
+				<form class="form_auth_style" action="#" method="post">
+					<input class="email-auth" type="email" name="auth_email" placeholder="Enter your email address" required >
+					<div class="auth-enter-password">
+						<input id="reg-1" class="password-auth" type="password" name="auth_pass" placeholder="Password" required >
+						<button style="z-index: 209;" id="btn-hide-reg" class="hide-auth"></button>
+					</div>
+						<input style="margin: 16px 0 26px 0;" id="reg-2" class="password-auth" type="password" name="auth_pass" placeholder="Confirm Password" required >
+					<button class="form_auth_button" type="submit" name="form_auth_submit">Register</button>
+				  </form>
+			</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="popup-cart" aria-hidden="true" class="popup">
+	<div style="position: relative;" class="popup__wrapper">
+		<div style="height: auto; padding: 41x 51px;" class="popup__content">
+			<button style="top: 24px; right: 24px;" data-close type="button" class="popup__close"><img src="@img/close.svg" alt=""></button>
+			<div class="cart-goods">
+				<div class="cart-goods-header">
+					<div class="goods-header-item1 goods-header-item">Products</div>
+					<div class="goods-header-item2 goods-header-item">Price</div>
+					<div class="goods-header-item3 goods-header-item">Quantity</div>
+					<div class="goods-header-item4 goods-header-item">Total</div>
+				</div>
+				<div class="cart-goods-body">
+					<div id="good1" class="goods-body-good">
+						<div class="goods-body-img"></div>
+					</div>
+				</div>
+			</div>
+			<div class="cart-info">
+				<div class="cart-info-block1">
+					<div class="cart-info-title">Cart Totals</div>
+					<div class="cart-info-calcs">
+						<div class="info-calcs-subt">Subtotal<span>$295.00</span></div>
+						<div class="info-calcs-ship">Shiping<span>$15.00</span></div>
+					</div>
+					<a href="" class="cart-info-shipping">View shipping charge</a>
+				</div>
+				<div style="margin-top: 20px;" class="cart-info-block2">
+					<div class="cart-info-total">Total<span>$310.00</span></div>
+					<button class="cart-info-submit">Proceed To Checkout</button>
+				</div>
 			</div>
 		</div>
 	</div>
