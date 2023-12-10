@@ -1,3 +1,132 @@
+//CART_GOODS====================================================================================================
+
+class CartItem {
+    constructor(srcImg, title, stock, price, quantity, parentSelector, ...classes) {
+        this.src = srcImg;
+        this.title = title;
+        this.stock = stock
+        this.price = price.toFixed(2);
+        this.classes = classes;
+        this.quantity = quantity
+        this.parent = document.querySelector(parentSelector);
+        this.calcTotal();
+    }
+
+    calcTotal() {
+        this.total = (Number(this.price) * Number(this.quantity)).toFixed(2); 
+    }
+    render() {
+        const element = document.createElement('div');
+
+        if (this.classes.length === 0) {
+            this.classes = "goods-body-good";
+            element.classList.add(this.classes);
+        } else {
+            this.classes.forEach(className => {
+                element.classList.add(className)
+            });
+        }
+
+        element.innerHTML = `
+        <div style="display: flex; flex-wrap: nowrap;" class="goods-elem">						
+        <div style="background-image: url(${this.src})" class="goods-body-img"></div>
+        <div class="goods-body-info">
+            <div class="body-info-title">${this.title}</div>
+            <div class="body-info-stock">Stock:<span>${this.stock}</span></div>
+        </div></div>
+        <div class="goods-body-price">$${this.price}</div>
+        <div class="goods-body-count">
+            <button style="background-image: url(../img/small-minus.svg)" class="body-removeGoods"></button>
+            <div class="body-countGoods">${this.quantity}</div>
+            <button style="background-image: url(../img/small-plus.svg)" id="addGoodsCart" class="body-addGoods"></button>
+        </div>
+        <div class="goods-body-total">$${this.total}</div>
+        <button id="del" class="goods-body-delelem"></button>
+        `;
+        this.parent.append(element);
+    }
+}
+
+new CartItem('img/goods1.png', "LEGO bricks set", 13, 2000.00, 2, ".cart-goods-body").render()
+new CartItem('img/goods1.png', "LEGO bricks set", 13, 20.00, 2, ".cart-goods-body").render()
+new CartItem('img/goods1.png', "LEGO bricks set", 13, 20.00, 2, ".cart-goods-body").render()
+new CartItem('img/goods1.png', "LEGO bricks set", 13, 20.00, 2, ".cart-goods-body").render()
+
+const cart_goods = document.querySelector(".cart-goods-body");
+const subtotalCart = document.querySelector(".info-calcs-subt > span");
+const shippingCart = document.querySelector(".info-calcs-ship > span");
+const totalCart = document.querySelector(".cart-info-total > span")
+
+function cartIsEmpty() {
+    if (document.querySelectorAll(".cart-goods-body > .goods-body-good").length != 0) {
+        document.getElementById("emptyCart").style.display = "none";
+    } else {
+        document.getElementById("emptyCart").style.display = "flex";
+        shippingCart.textContent = "$0.00";
+        sumTotal();
+    }
+}
+function sumTotal() {
+
+    let totalShop = 0
+
+    document.querySelectorAll(".cart-goods-body > .goods-body-good").forEach((elem) => {
+        totalShop += Number(elem.getElementsByClassName("goods-body-total")[0].textContent.slice(1, -3))
+        shippingCart.textContent = "$15.00"
+    })
+
+    console.log(Number(shippingCart.textContent.slice(1, -3)).toFixed(2))
+
+    subtotalCart.textContent = "$" + totalShop.toFixed(2)
+    totalCart.textContent = "$" + ((totalShop + Number(shippingCart.textContent.slice(1, -3))).toFixed(2))
+}
+
+sumTotal();
+cartIsEmpty();
+
+cart_goods.addEventListener("click", (e) => {
+
+    cartIsEmpty();
+    e.preventDefault()
+
+    if (e.target.id == "del") {
+
+        e.target.parentElement.remove();
+
+        cartIsEmpty();
+        sumTotal();
+
+    } else if (e.target.classList.contains("body-addGoods")) {
+
+        const price = e.target.parentElement.parentElement.getElementsByClassName("goods-body-price")[0]
+        const quantity = e.target.parentElement.parentElement.getElementsByClassName("body-countGoods")[0]
+        const total = e.target.parentElement.parentElement.getElementsByClassName("goods-body-total")[0]
+
+        console.log(quantity)
+       
+        if (Number(quantity.textContent) != Number(e.target.parentElement.parentElement.getElementsByTagName("SPAN")[0].textContent)) {
+            quantity.textContent = Number(quantity.textContent) + 1
+            total.textContent = "$" + (Number(price.textContent.slice(1, -3)) * Number(quantity.textContent)).toFixed(2)
+            sumTotal();
+
+        }
+    } else if (e.target.classList.contains("body-removeGoods")) {
+
+        const price = e.target.parentElement.parentElement.getElementsByClassName("goods-body-price")[0]
+        const quantity = e.target.parentElement.parentElement.getElementsByClassName("body-countGoods")[0]
+        const total = e.target.parentElement.parentElement.getElementsByClassName("goods-body-total")[0]
+
+        if (Number(quantity.textContent) > 1) {
+
+            quantity.textContent = Number(quantity.textContent) - 1
+            total.textContent = "$" + (Number(price.textContent.slice(1, -3)) * Number(quantity.textContent)).toFixed(2)
+            sumTotal();
+
+        }
+    }
+})
+
+
 //CARD_GOODS====================================================================================================
 
 class GoodsCard {
@@ -188,7 +317,8 @@ const addGoods = document.querySelector(".orderpanel-addGoods");
 const removeGoods = document.querySelector(".orderpanel-removeGoods");
 const countGoods = document.querySelector(".orderpanel-countGoods");
 const stockGoods = document.querySelector(".popup-content-stock");
-const cartGood = document.querySelectorAll(".cart-header")
+const cartGood = document.querySelectorAll(".cart-header");
+const addToCart = document.querySelector(".orderpanel-cart");
 
 const userAuth = document.querySelectorAll(".user-header");
 
@@ -214,10 +344,24 @@ removeGoods.addEventListener("click", () => {
     }
 })
 
+addToCart.addEventListener("click", (e) => {
+    const parent = e.target.parentElement.parentElement.parentElement
+    console.log(parent.getElementsByClassName("popup-content-stock")[0].getElementsByTagName("SPAN"))
+    new CartItem(
+        parent.getElementsByClassName("popup-content-img")[0].src, 
+        parent.getElementsByClassName("popup-content-title")[0].textContent,
+        Number(parent.getElementsByClassName("popup-content-stock")[0].getElementsByTagName("SPAN")[0].textContent),
+        Number(parent.getElementsByClassName("popup-content-price")[0].textContent.slice(1, -3)),
+        Number(parent.getElementsByClassName("orderpanel-countGoods")[0].textContent),
+        ".cart-goods-body")
+        .render()
+})
+
+
+
 addPopup(cartGood, "data-popup", "#popup-cart")
 addPopup(popup, "data-popup", "#popup-goods")
 addPopup(userAuth, "data-popup", "#popup-auth")
-console.log(userAuth)
 //REGISTER====================================================================================================
 
 const enter_password = document.querySelectorAll(".auth-enter-password");
