@@ -687,6 +687,43 @@ button.active{
     height: toRem(35);
     border-radius: toRem(2.5);
     background-color: rgba(70, 163, 88, 1);
+    &:hover {
+        color: rgba(70, 163, 88, 1);
+        background-color: #fff;
+      }
+    &:active {
+        background-color: rgba(70, 163, 88, 1);
+        color: #fff;
+      }
+}
+.btn-activate {
+    a {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+    }
+    &:hover {
+        color: rgba(70, 163, 88, 1);
+        border: toRem(0.5) solid #46A358;
+        background-color: transparent;
+      }
+    &:active {
+        background-color: rgba(70, 163, 88, 1);
+        color: #fff;
+      }
+}
+.btn-activate-text {
+    &:hover {
+        background-color: rgba(70, 163, 88, 1);
+        border: toRem(0.5) solid #46A358;
+        color: #fff;
+      }
+    &:active {
+        color: rgba(70, 163, 88, 1);
+        background-color: transparent;
+      }
 }
 .cart-goods{
     display: flex;
@@ -738,11 +775,7 @@ button.active{
     background-image: url(../img/goods1.png);
     background-repeat: no-repeat;
     background-position: center center;
-    background-attachment: fixed;
-    -webkit-background-size: contain;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover
+    background-size: contain;
 }
 .goods-body-info {
     width: toRem(135);
@@ -800,4 +833,220 @@ button.active{
     -moz-background-size: contain;
     -o-background-size: contain;
     background-size: contain
+}
+//====================================================================================================
+
+.page-ship-order {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    width: 500px;
+}
+.ship-order-goods {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.order-goods-title {
+    font-size: toRem(21);
+    line-height: toRem(20);
+    font-weight: 700;
+    color: #3D3D3D;
+    margin-bottom: toRem(26);
+}
+.ship-order-total {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+}
+.ship-orders {
+    border: none;
+}
+.order-goods-header {
+    font-size: toRem(20);
+    line-height: toRem(20);
+    font-weight: 500;
+    color: #3D3D3D;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: toRem(14);
+    padding: 0 toRem(10) toRem(14) 0;
+    border-bottom: toRem(0.25) solid rgba(70, 163, 88, 0.5);
+}
+.order-goods-orders {
+}
+.ship-order-calc {
+}
+.ship-info-block1 {
+    border: none;
+}
+.ship-info-total {
+    width: toRem(400) !important;
+}
+.order-subt, .order-ship{
+    font-size: toRem(19);
+    line-height: toRem(20);
+    color: #3D3D3D;
+    span {
+        font-size: toRem(23);
+        line-height: toRem(20);
+        font-weight: 500;
+    }
+    margin: toRem(12) 0 toRem(31) 0;
+}
+.order-ship {
+    margin: 0 0 toRem(10) 0;
+}
+.ca-info-block2 {
+}
+.cart-info-total {
+}
+.order-totl {
+    font-size: toRem(20);
+    line-height: toRem(20);
+    margin: toRem(60) 0 0 0;
+    padding: toRem(20) 0 0 0;
+    border-top: toRem(0.25) solid rgba(70, 163, 88, 0.5);
+    width: 100%;
+    span {
+        font-size: toRem(23);
+        font-weight: 700;
+        line-height: toRem(20);
+        color: #46A358;
+    }
+}
+.ship-order-payment {
+    margin: toRem(46) 0 0 0;
+}
+.order-payment-title {
+    float: right;
+    font-size: toRem(21);
+    width: toRem(400);
+    font-weight: 700;
+    line-height: toRem(20);
+    color: #3D3D3D;
+}
+
+.checkbox {
+    float: right;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    width: toRem(400);
+}
+.checkbox-online{
+    margin: toRem(24) 0;
+}
+.checkbox-online, .checkbox-cash {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    border: toRem(1.24) solid #EAEAEA;
+    border-radius: toRem(3.72);
+    height: toRem(56);
+    input {
+        width: toRem(20);
+        height: toRem(20);
+        border: 1px solid #46A358;
+    }
+}
+.checkbox__text {
+    font-size: toRem(18.59);
+    line-height: toRem(20);
+    color: #3D3D3D;
+}
+.button-order {
+    background-color: rgba(70, 163, 88, 1);
+    font-size: toRem(19);
+    line-height: toRem(20);
+    font-weight: 700;
+    color: white;
+    width: toRem(400);
+    height: toRem(50);
+    border-radius: toRem(4);
+    float: right;
+    margin: toRem(60) 0 0 0;
+}
+.checkbox-online, .checkbox-cash {
+    width: 100%;
+	display: flex;
+	align-items: center;
+    position: relative;
+    cursor: pointer;
+	&__input {
+		width: toRem(20);
+		height: toRem(20);
+		opacity: 1;
+		position: absolute;
+        left: toRem(15);
+		&:focus-visible + .options__label:before {
+			box-shadow: 1 1 5px #46A358;
+		}
+		&:checked + .options__label:before {
+		}
+		&:checked + .options__label:after {
+			transform: scale(1);
+		}
+	}
+	span {
+        width: 100%;
+        margin: 0 0 0 toRem(50);
+	}
+}
+.checkbox-online {
+    margin: toRem(25) 0 toRem(25) 0;
+}
+
+//====================================================================================================
+.order-good-order {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    background-color: #fbfbfb;
+    padding: toRem(10) toRem(10) toRem(10) 0;
+    margin: 0 0 toRem(18) 0;
+}
+.good-order-info {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+.good-order-img {
+    min-width: toRem(87);
+    min-height: toRem(87);
+    margin: 0 toRem(17.27) 0 0;
+    background-image: url("../img/goods1.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+.good-order-title {
+    color: #3D3D3D;
+    font-size: toRem(18);
+    line-height: toRem(18);
+    font-weight: 500;
+    margin: 0 0 toRem(10) 0;
+    word-break: break-word;
+
+}
+.good-order-subtitle {
+    font-size: toRem(16);
+    line-height: toRem(20);
+    color: #A5A5A5;
+    span {
+        color: #727272;
+    }
+}
+.good-order-amount {
+    color: #727272;
+    font-size: toRem(18);
+    line-height: toRem(20);
+}
+.good-order-total {
+    color: #46A358;
+    font-size: toRem(23);
+    line-height: toRem(20);
+    font-weight: 700;
 }

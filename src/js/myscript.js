@@ -1,3 +1,26 @@
+const radios = document.getElementsByName("choice-pay");
+
+function check(){
+    if(radios[0].checked){
+       radios[0].parentElement.style.borderColor = "#46A358";
+
+       radios[1].checked = false
+       radios[1].parentElement.style.borderColor = "#EAEAEA"; 
+    } else {
+        radios[1].parentElement.style.borderColor = "#46A358"; 
+
+        radios[0].checked = false
+        radios[0].parentElement.style.borderColor = "#EAEAEA";     }
+   }
+
+radios.forEach((elem) => {
+    console.log(elem.parentElement)
+    elem.parentElement.addEventListener("click", (e) => {
+        e.target.parentElement.getElementsByTagName("input")[0].checked = true
+        check();
+    })
+})
+
 //CART_GOODS====================================================================================================
 
 class CartItem {
@@ -8,7 +31,7 @@ class CartItem {
         this.price = price.toFixed(2);
         this.classes = classes;
         this.quantity = quantity
-        this.parent = document.querySelector(parentSelector);
+        this.parent = document.querySelectorAll(parentSelector);
         this.calcTotal();
     }
 
@@ -17,10 +40,14 @@ class CartItem {
     }
     render() {
         const element = document.createElement('div');
+        const order = document.createElement('div');
 
         if (this.classes.length === 0) {
-            this.classes = "goods-body-good";
-            element.classList.add(this.classes);
+            element.classList.add("goods-body-good");
+            element.setAttribute("data-item", Date.now());
+
+            order.classList.add("order-good-order");
+            order.setAttribute("data-item", Date.now());
         } else {
             this.classes.forEach(className => {
                 element.classList.add(className)
@@ -43,26 +70,46 @@ class CartItem {
         <div class="goods-body-total">$${this.total}</div>
         <button id="del" class="goods-body-delelem"></button>
         `;
-        this.parent.append(element);
+
+        order.innerHTML = `
+        <div class="good-order-info">
+        <div style="background-image: url(${this.src})" class="good-order-img"></div>
+        <div class="good-order-text">
+            <div class="good-order-title">${this.title}</div>
+            <div class="good-order-subtitle">Stoke: <span>${this.stock}</span></div>
+        </div>
+        </div>
+        <div class="body-countGoods good-order-amount">(x ${this.quantity})</div>
+        <div class="goods-body-total good-order-total">$${this.total}</div>
+        `
+
+        this.parent.forEach((par) => {
+            par.append(element);
+        })
+
+        document.querySelectorAll(".order-goods-orders").forEach((elem) => {
+            elem.append(order);
+        })
+
     }
 }
 
-new CartItem('img/goods1.png', "LEGO bricks set", 13, 2000.00, 2, ".cart-goods-body").render()
-new CartItem('img/goods1.png', "LEGO bricks set", 13, 20.00, 2, ".cart-goods-body").render()
+new CartItem('img/goods1.png', "Robot Transformer", 13, 200.00, 2, ".cart-goods-body").render() // можно попробовать вставлять 
+new CartItem('img/goods1.png', "Mini basketball", 13, 20.00, 2, ".cart-goods-body").render()
 new CartItem('img/goods1.png', "LEGO bricks set", 13, 20.00, 2, ".cart-goods-body").render()
 new CartItem('img/goods1.png', "LEGO bricks set", 13, 20.00, 2, ".cart-goods-body").render()
 
-const cart_goods = document.querySelector(".cart-goods-body");
-const subtotalCart = document.querySelector(".info-calcs-subt > span");
-const shippingCart = document.querySelector(".info-calcs-ship > span");
-const totalCart = document.querySelector(".cart-info-total > span")
+const cart_goods = document.querySelectorAll(".cart-goods-body");
+const subtotalCart = document.querySelectorAll(".info-calcs-subt > span");
+const shippingCart = document.querySelectorAll(".info-calcs-ship > span");
+const totalCart = document.querySelectorAll(".cart-info-total > span")
 
 function cartIsEmpty() {
     if (document.querySelectorAll(".cart-goods-body > .goods-body-good").length != 0) {
         document.getElementById("emptyCart").style.display = "none";
     } else {
         document.getElementById("emptyCart").style.display = "flex";
-        shippingCart.textContent = "$0.00";
+        shippingCart.forEach((elem) => elem.textContent = "$0.00");
         sumTotal();
     }
 }
@@ -72,45 +119,58 @@ function sumTotal() {
 
     document.querySelectorAll(".cart-goods-body > .goods-body-good").forEach((elem) => {
         totalShop += Number(elem.getElementsByClassName("goods-body-total")[0].textContent.slice(1, -3))
-        shippingCart.textContent = "$15.00"
+        
+        shippingCart.forEach((elem) => {
+            elem.textContent = "$15.00"
+        })
     })
 
-    console.log(Number(shippingCart.textContent.slice(1, -3)).toFixed(2))
-
-    subtotalCart.textContent = "$" + totalShop.toFixed(2)
-    totalCart.textContent = "$" + ((totalShop + Number(shippingCart.textContent.slice(1, -3))).toFixed(2))
+    subtotalCart.forEach((elem) => {
+        elem.textContent = "$" + totalShop.toFixed(2)
+    })
+    totalCart.forEach((elem) => {
+        elem.textContent = "$" + (totalShop + Number(shippingCart[0].textContent.slice(1, -3))).toFixed(2)
+    })
 }
 
 sumTotal();
 cartIsEmpty();
-
-cart_goods.addEventListener("click", (e) => {
+cart_goods.forEach((elem) => elem.addEventListener("click", (e) => {
 
     cartIsEmpty();
     e.preventDefault()
 
     if (e.target.id == "del") {
 
+        const order = document.querySelectorAll(`[data-item="${e.target.parentElement.getAttribute("data-item")}"]`)[0]
+
         e.target.parentElement.remove();
+        order.remove();
 
         cartIsEmpty();
         sumTotal();
 
     } else if (e.target.classList.contains("body-addGoods")) {
 
+        const order =  document.querySelectorAll(`[data-item="${e.target.parentElement.parentElement.getAttribute("data-item")}"]`)[0]
+
         const price = e.target.parentElement.parentElement.getElementsByClassName("goods-body-price")[0]
         const quantity = e.target.parentElement.parentElement.getElementsByClassName("body-countGoods")[0]
         const total = e.target.parentElement.parentElement.getElementsByClassName("goods-body-total")[0]
-
-        console.log(quantity)
        
         if (Number(quantity.textContent) != Number(e.target.parentElement.parentElement.getElementsByTagName("SPAN")[0].textContent)) {
             quantity.textContent = Number(quantity.textContent) + 1
             total.textContent = "$" + (Number(price.textContent.slice(1, -3)) * Number(quantity.textContent)).toFixed(2)
+
+            order.getElementsByClassName("good-order-amount")[0].textContent = "(x " + (Number(quantity.textContent)) + ")"
+            order.getElementsByClassName("good-order-total")[0].textContent = "$" + (Number(price.textContent.slice(1, -3)) * Number(quantity.textContent)).toFixed(2)
+            
             sumTotal();
 
         }
     } else if (e.target.classList.contains("body-removeGoods")) {
+
+        const order =  document.querySelectorAll(`[data-item="${e.target.parentElement.parentElement.getAttribute("data-item")}"]`)[0]
 
         const price = e.target.parentElement.parentElement.getElementsByClassName("goods-body-price")[0]
         const quantity = e.target.parentElement.parentElement.getElementsByClassName("body-countGoods")[0]
@@ -120,56 +180,61 @@ cart_goods.addEventListener("click", (e) => {
 
             quantity.textContent = Number(quantity.textContent) - 1
             total.textContent = "$" + (Number(price.textContent.slice(1, -3)) * Number(quantity.textContent)).toFixed(2)
+
+            order.getElementsByClassName("good-order-amount")[0].textContent = "(x " + (Number(quantity.textContent)) + ")"
+            order.getElementsByClassName("good-order-total")[0].textContent = "$" + (Number(price.textContent.slice(1, -3)) * Number(quantity.textContent)).toFixed(2)
             sumTotal();
 
         }
     }
-})
+}))
 
 
 //CARD_GOODS====================================================================================================
 
-class GoodsCard {
-    constructor(src, title, price, parentSelector, attr, ...classes) {
-        this.src = src;
-        this.title = title;
-        this.price = price;
-        this.classes = classes;
-        this.attr = attr;
-        this.parent = document.querySelector(parentSelector);
-    }
-
-
-    render() {
-        const element = document.createElement('button');
-
-        if (this.classes.length === 0) {
-            this.classes = "goods-element";
-            element.classList.add(this.classes);
-            element.setAttribute(this.attr, "")
-        } else {
-            this.classes.forEach(className => {
-                element.classList.add(className)
-                element.setAttribute(this.attr, "")
-            });
+if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
+    class GoodsCard {
+        constructor(src, title, price, parentSelector, attr, ...classes) {
+            this.src = src;
+            this.title = title;
+            this.price = price;
+            this.classes = classes;
+            this.attr = attr;
+            this.parent = document.querySelector(parentSelector);
         }
-
-        element.innerHTML = `
-        <div class="element-img">
-            <img src="${this.src}" alt="">
-        </div>
-        <div class="element-info">
-            <div class="element-info-name">${this.title}</div>
-            <div class="element-info-price">$${this.price}</div>
-        </div>
-        `;
-        this.parent.append(element);
+    
+    
+        render() {
+            const element = document.createElement('button');
+    
+            if (this.classes.length === 0) {
+                this.classes = "goods-element";
+                element.classList.add(this.classes);
+                element.setAttribute(this.attr, "")
+            } else {
+                this.classes.forEach(className => {
+                    element.classList.add(className)
+                    element.setAttribute(this.attr, "")
+                });
+            }
+    
+            element.innerHTML = `
+            <div class="element-img">
+                <img src="${this.src}" alt="">
+            </div>
+            <div class="element-info">
+                <div class="element-info-name">${this.title}</div>
+                <div class="element-info-price">$${this.price}</div>
+            </div>
+            `;
+            this.parent.append(element);
+        }
     }
+    
+    new GoodsCard("../img/goods1.png", "Stacking pyramid", "10.00", ".goods-elements" , "data-goods", "goods-element").render();
+    new GoodsCard("../img/goods3.png", "Mini basketball", "9.00", ".goods-elements" , "data-goods", "goods-element").render();
+    new GoodsCard("../img/goods4.png", "Robot Transformer", "29.00", ".goods-elements" , "data-goods", "goods-element").render();
 }
-
-new GoodsCard("../img/goods1.png", "Stacking pyramid", "10.00", ".goods-elements" , "data-goods", "goods-element").render();
-new GoodsCard("../img/goods3.png", "Mini basketball", "9.00", ".goods-elements" , "data-goods", "goods-element").render();
-new GoodsCard("../img/goods4.png", "Robot Transformer", "29.00", ".goods-elements" , "data-goods", "goods-element").render();
 
 //POPUP_GOODS====================================================================================================
 
@@ -345,16 +410,20 @@ removeGoods.addEventListener("click", () => {
 })
 
 addToCart.addEventListener("click", (e) => {
+
     const parent = e.target.parentElement.parentElement.parentElement
-    console.log(parent.getElementsByClassName("popup-content-stock")[0].getElementsByTagName("SPAN"))
+
     new CartItem(
-        parent.getElementsByClassName("popup-content-img")[0].src, 
+        parent.getElementsByClassName("popup-content-img")[0].getElementsByTagName("IMG")[0].src, 
         parent.getElementsByClassName("popup-content-title")[0].textContent,
         Number(parent.getElementsByClassName("popup-content-stock")[0].getElementsByTagName("SPAN")[0].textContent),
         Number(parent.getElementsByClassName("popup-content-price")[0].textContent.slice(1, -3)),
         Number(parent.getElementsByClassName("orderpanel-countGoods")[0].textContent),
         ".cart-goods-body")
         .render()
+
+    cartIsEmpty();
+    sumTotal();
 })
 
 

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+	@@include('html/_head.htm',{
+        "title":"TEDDY SHOP"
+        })
+        <body>
+            <div style="position: relative;" class="wrapper">
+                @@include('html/_header.htm',{})
+                <main style="margin: 157px 0 80px 0;" class="page">
+                    <div class="page-ship-forms"></div>
+                    <div class="page-ship-order">
+                        <div class="ship-order-goods">
+                            <div class="order-goods-title">Your Order</div>
+                            <div class="order-goods-header">Products<span>Subtotal</span>
+                            </div>
+                            <div class="order-goods-orders ship-orders">
+                                <!-- <div class="order-good-order">
+                                    <div class="good-order-info">
+                                        <div class="good-order-img"></div>
+                                        <div class="good-order-text">
+                                            <div class="good-order-title">LEGO bricks set</div>
+                                            <div class="good-order-subtitle">Stoke: <span>13</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="good-order-amount">(x 2)</div>
+                                    <div class="good-order-total">$40.00</div>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="ship-order-total">
+                            <div class="ship-order-calc">
+                                <div style="width: 400px; float: right" class="ship-info-block1">
+                                    <div class="ship-info-total">
+                                        <div class="info-calcs-subt order-subt">Subtotal<span>$0.00</span></div>
+                                        <div class="info-calcs-ship order-ship">Shiping<span>$0.00</span></div>
+                                    </div>
+                                    <a style="display: block; width: 100%;;" href="" class="cart-info-shipping">View shipping charge</a>
+                                    <div class="cart-info-total order-totl">Total<span>$0.00</span></div>
+                                </div>
+                            </div>
+                            <div class="ship-order-payment">
+                                <div class="order-payment-title">Payment Method</div>
+                                <div class="checkbox">
+                                    <div class="checkbox-online">                                   
+                                        <input type="radio" class="checkbox-online__input" value="1" name="choice-pay">
+                                        <span class="checkbox__text">Online payment</span>
+                                    </div>
+                                    <div class="checkbox-cash">                                   
+                                        <input type="radio" class="checkbox-cash__input" value="2" name="choice-pay">
+                                        <span class="checkbox__text">Cash on delivery</span>
+                                    </div>
+                                </div>
+                                <button type="submit" class="button-order btn-activate"><a href="">Place Order</a></button>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+                @@include('html/_footer.htm',{})
+            </div>
+            @@include('html/_popup.htm',{})
+            @@include('html/_preloader.htm',{})
+            @@include('html/_js.htm',{})
+        </body>
+    </html>
+    
