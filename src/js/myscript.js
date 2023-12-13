@@ -23,6 +23,70 @@ radios.forEach((elem) => {
 
 //CART_GOODS====================================================================================================
 
+const cart_goods = document.querySelectorAll(".cart-goods-body");
+const subtotalCart = document.querySelectorAll(".info-calcs-subt > span");
+const shippingCart = document.querySelectorAll(".info-calcs-ship > span");
+const totalCart = document.querySelectorAll(".cart-info-total > span");
+let i = 0;
+
+const initialState = () => {
+    if (localStorage.getItem('products') !== null) {
+        document.querySelectorAll('.cart-goods-body').forEach((elem) => {
+            cartIsEmpty();
+            elem.innerHTML = localStorage.getItem('products');
+            sumTotal();
+        })
+    }
+};
+
+const updateStorage = () => {
+    const parent1 = document.querySelector("#shopCart");
+    
+    let html1 = parent1.innerHTML;
+
+    html1 = html1.trim();
+
+    if (html1.length) {
+        localStorage.setItem('products', html1);
+    } else {
+        localStorage.removeItem('products');
+    }
+};
+
+function sumTotal() {
+
+    let totalShop = 0
+
+    document.querySelector("#shopCart").querySelectorAll(".goods-body-good").forEach((elem) => {
+        totalShop += Number(elem.getElementsByClassName("goods-body-total")[0].textContent.slice(1, -3))
+        
+        shippingCart.forEach((elem) => {
+            elem.textContent = "$15.00"
+        })
+    })
+
+    subtotalCart.forEach((elem) => {
+        elem.textContent = "$" + totalShop.toFixed(2)
+    })
+    totalCart.forEach((elem) => {
+        elem.textContent = "$" + (totalShop + Number(shippingCart[0].textContent.slice(1, -3))).toFixed(2)
+    })
+}
+initialState();
+
+function cartIsEmpty() {
+    if (document.querySelectorAll("#shopCart > .goods-body-good").length == 0) {
+        document.querySelectorAll(".goods-body-showempty").forEach((elem) => elem.innerHTML = `
+        <div id="emptyCart" style="font-size: 18px; display: flex; flex-direction: column; flex: 0 1 100%; justify-content: center; height: 185px; align-items:center; text-align: center">Cart is empty!</div>
+        `)
+        shippingCart.forEach((elem) => elem.textContent = "$0.00");
+        sumTotal();
+    } else {
+        document.querySelectorAll(".goods-body-showempty").forEach((elem) => elem.innerHTML = "")
+    }
+}
+
+
 class CartItem {
     constructor(srcImg, title, stock, price, quantity, parentSelector, ...classes) {
         this.src = srcImg;
@@ -40,14 +104,10 @@ class CartItem {
     }
     render() {
         const element = document.createElement('div');
-        const order = document.createElement('div');
 
         if (this.classes.length === 0) {
             element.classList.add("goods-body-good");
             element.setAttribute("data-item", Date.now());
-
-            order.classList.add("order-good-order");
-            order.setAttribute("data-item", Date.now());
         } else {
             this.classes.forEach(className => {
                 element.classList.add(className)
@@ -71,88 +131,38 @@ class CartItem {
         <button id="del" class="goods-body-delelem"></button>
         `;
 
-        order.innerHTML = `
-        <div class="good-order-info">
-        <div style="background-image: url(${this.src})" class="good-order-img"></div>
-        <div class="good-order-text">
-            <div class="good-order-title">${this.title}</div>
-            <div class="good-order-subtitle">Stoke: <span>${this.stock}</span></div>
-        </div>
-        </div>
-        <div class="body-countGoods good-order-amount">(x ${this.quantity})</div>
-        <div class="goods-body-total good-order-total">$${this.total}</div>
-        `
-
         this.parent.forEach((par) => {
             par.append(element);
         })
-
-        document.querySelectorAll(".order-goods-orders").forEach((elem) => {
-            elem.append(order);
-        })
-
     }
 }
 
-new CartItem('img/goods1.png', "Robot Transformer", 13, 200.00, 2, ".cart-goods-body").render() // можно попробовать вставлять 
-new CartItem('img/goods1.png', "Mini basketball", 13, 20.00, 2, ".cart-goods-body").render()
-new CartItem('img/goods1.png', "LEGO bricks set", 13, 20.00, 2, ".cart-goods-body").render()
-new CartItem('img/goods1.png', "LEGO bricks set", 13, 20.00, 2, ".cart-goods-body").render()
 
-const cart_goods = document.querySelectorAll(".cart-goods-body");
-const subtotalCart = document.querySelectorAll(".info-calcs-subt > span");
-const shippingCart = document.querySelectorAll(".info-calcs-ship > span");
-const totalCart = document.querySelectorAll(".cart-info-total > span")
+// setTimeout(function addCartFromDB() {
+//     if (i != 10) {
+//         new CartItem('img/goods1.png', "Robot Transformer", 13, 200.00, 2, ".cart-goods-body").render() // можно попробовать вставлять 
+//         cartIsEmpty();
+//         sumTotal();
+//         updateStorage();
+//         i++;
+//     }
+//         setTimeout(addCartFromDB, 2)
+//     }, 2);
 
-function cartIsEmpty() {
-    if (document.querySelectorAll(".cart-goods-body > .goods-body-good").length != 0) {
-        document.getElementById("emptyCart").style.display = "none";
-    } else {
-        document.getElementById("emptyCart").style.display = "flex";
-        shippingCart.forEach((elem) => elem.textContent = "$0.00");
-        sumTotal();
-    }
-}
-function sumTotal() {
-
-    let totalShop = 0
-
-    document.querySelectorAll(".cart-goods-body > .goods-body-good").forEach((elem) => {
-        totalShop += Number(elem.getElementsByClassName("goods-body-total")[0].textContent.slice(1, -3))
-        
-        shippingCart.forEach((elem) => {
-            elem.textContent = "$15.00"
-        })
-    })
-
-    subtotalCart.forEach((elem) => {
-        elem.textContent = "$" + totalShop.toFixed(2)
-    })
-    totalCart.forEach((elem) => {
-        elem.textContent = "$" + (totalShop + Number(shippingCart[0].textContent.slice(1, -3))).toFixed(2)
-    })
-}
-
-sumTotal();
-cartIsEmpty();
 cart_goods.forEach((elem) => elem.addEventListener("click", (e) => {
-
-    cartIsEmpty();
     e.preventDefault()
 
     if (e.target.id == "del") {
 
-        const order = document.querySelectorAll(`[data-item="${e.target.parentElement.getAttribute("data-item")}"]`)[0]
-
         e.target.parentElement.remove();
-        order.remove();
 
         cartIsEmpty();
+        updateStorage();
+        initialState();
         sumTotal();
 
-    } else if (e.target.classList.contains("body-addGoods")) {
 
-        const order =  document.querySelectorAll(`[data-item="${e.target.parentElement.parentElement.getAttribute("data-item")}"]`)[0]
+    } else if (e.target.classList.contains("body-addGoods")) {
 
         const price = e.target.parentElement.parentElement.getElementsByClassName("goods-body-price")[0]
         const quantity = e.target.parentElement.parentElement.getElementsByClassName("body-countGoods")[0]
@@ -162,15 +172,14 @@ cart_goods.forEach((elem) => elem.addEventListener("click", (e) => {
             quantity.textContent = Number(quantity.textContent) + 1
             total.textContent = "$" + (Number(price.textContent.slice(1, -3)) * Number(quantity.textContent)).toFixed(2)
 
-            order.getElementsByClassName("good-order-amount")[0].textContent = "(x " + (Number(quantity.textContent)) + ")"
-            order.getElementsByClassName("good-order-total")[0].textContent = "$" + (Number(price.textContent.slice(1, -3)) * Number(quantity.textContent)).toFixed(2)
-            
+            updateStorage();
+            initialState();
             sumTotal();
 
         }
-    } else if (e.target.classList.contains("body-removeGoods")) {
 
-        const order =  document.querySelectorAll(`[data-item="${e.target.parentElement.parentElement.getAttribute("data-item")}"]`)[0]
+
+    } else if (e.target.classList.contains("body-removeGoods")) {
 
         const price = e.target.parentElement.parentElement.getElementsByClassName("goods-body-price")[0]
         const quantity = e.target.parentElement.parentElement.getElementsByClassName("body-countGoods")[0]
@@ -181,15 +190,14 @@ cart_goods.forEach((elem) => elem.addEventListener("click", (e) => {
             quantity.textContent = Number(quantity.textContent) - 1
             total.textContent = "$" + (Number(price.textContent.slice(1, -3)) * Number(quantity.textContent)).toFixed(2)
 
-            order.getElementsByClassName("good-order-amount")[0].textContent = "(x " + (Number(quantity.textContent)) + ")"
-            order.getElementsByClassName("good-order-total")[0].textContent = "$" + (Number(price.textContent.slice(1, -3)) * Number(quantity.textContent)).toFixed(2)
+            updateStorage();
+            initialState();
             sumTotal();
 
         }
+
     }
 }))
-
-
 //CARD_GOODS====================================================================================================
 
 if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
@@ -410,7 +418,6 @@ removeGoods.addEventListener("click", () => {
 })
 
 addToCart.addEventListener("click", (e) => {
-
     const parent = e.target.parentElement.parentElement.parentElement
 
     new CartItem(
@@ -422,6 +429,8 @@ addToCart.addEventListener("click", (e) => {
         ".cart-goods-body")
         .render()
 
+    updateStorage();
+    initialState();
     cartIsEmpty();
     sumTotal();
 })
@@ -474,4 +483,39 @@ enter_password.forEach((elem) => {
         }
     }) 
 })
-//====================================================================================================
+//USER_ACC====================================================================================================
+
+const user_pages = document.querySelector(".user-auth-pages");
+
+function clear_active_pages () {
+    user_pages.querySelectorAll(".user-pages").forEach((elem) => {
+    if (elem.classList.contains("user-pages-address")) {
+        elem.classList.remove("active-page")
+        elem.children[0].style.backgroundImage = `url("../img/location.svg")`
+    } else if (elem.classList.contains("user-pages-details")) {
+        elem.classList.remove("active-page")
+        elem.children[0].style.backgroundImage = `url("../img/user-acc.svg")`
+    } else if (elem.classList.contains("user-pages-orders")) {
+        elem.classList.remove("active-page")
+        elem.children[0].style.backgroundImage = `url("../img/shopcart.svg")`
+    }
+})
+}
+
+user_pages.addEventListener("click", (e) => {
+
+    function check(url) {
+        e.preventDefault();
+        clear_active_pages();
+        e.target.classList.add("active-page")
+        e.target.children[0].style.backgroundImage = `url(${url})` 
+    }
+
+    if (e.target.classList.contains("user-pages-address")) {
+        check("../img/location-active.svg")
+    } else if (e.target.classList.contains("user-pages-details")) {
+        check("../img/user-acc-active.svg")
+    } else if (e.target.classList.contains("user-pages-orders")) {
+        check("../img/shopcart-active.svg")
+    }
+})

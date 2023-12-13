@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+	@@include('html/_head.htm',{
+        "title":"TEDDY SHOP"
+        })
+        <body>
+            <div style="position: relative;" class="wrapper">
+                <header class="header">
+                    <div class="header__container">
+                        <a href="../index.html"><img src="@img/logo.svg" alt=""></a>
+                        <div style="justify-content: right;" class="header-icons">
+                            <button class="user-header" style="z-index: 1;"><img class="user-icon icon" src="@img/User.svg" alt=""></button>
+                        </div>
+                    </div>
+                </header>
+                <main style="margin: 157px 0 80px 0;" class="page">
+                    <div class="page-user-auth">
+                        <div class="user-auth-row">
+                            <div class="user-auth-pages">
+                                <div class="user-pages-title">My Account</div>
+                                <button><div class="user-pages-details user-pages active-page">
+                                    <div class="pages-details-img pages-img-user"></div>
+                                    Account Details
+                                </div></button>
+                                <button><div class="user-pages-address user-pages">
+                                    <div class="pages-address-img pages-img-user"></div>
+                                    Address
+                                </div></button>
+                                <button><div class="user-pages-orders user-pages">
+                                    <div class="pages-orders-img pages-img-user"></div>
+                                    Orders
+                                </div></button>
+                                <button><div class="user-pages-logout user-pages">
+                                    <div class="pages-logout-img pages-img-user"></div>
+                                    Log out
+                                </div></button>
+                            </div>
+                            <div class="user-auth-forms">
+
+                            </div>
+                        </div>
+                    </div>
+                </main>
+                @@include('html/_footer.htm',{})
+            </div>
+            @@include('html/_popup.htm',{})
+            @@include('html/_preloader.htm',{})
+            @@include('html/_js.htm',{})
+        </body>
+    </html>
+    
