@@ -1052,18 +1052,18 @@ button.active{
     margin: 0 auto;
 }
 .user-auth-pages {
-    width: toRem(300);
-    height: toRem(215);
+    width: toRem(386);
+    height: toRem(278);
     display: flex;
     flex-direction: column;
-    padding: toRem(15) 0 0 0;
-    margin: 0 toRem(20) 0 0;
+    padding: toRem(21) 0 0 0;
+    margin: 0 toRem(17) 0 0;
     background-color: #FBFBFB;  
 }
 .user-pages-title {
-    font-size: toRem(17);
+    font-size: toRem(22.41);
     font-weight: 700;
-    line-height: toRem(15);
+    line-height: toRem(20);
     color: #3D3D3D;
     margin: 0 0 toRem(4) toRem(22);
 }
@@ -1073,8 +1073,8 @@ button.active{
     flex-wrap: nowrap;
     align-items: center;
     color: #727272;
-    font-size: toRem(14);
-    line-height: toRem(42);
+    font-size: toRem(18.68);
+    line-height: toRem(56.83);
 }
 .user-pages-details {
 }
@@ -1086,34 +1086,34 @@ button.active{
         content: '';
         display: block;
         width: toRem(5);
-        height: toRem(35);
+        height: toRem(45);
         background: #46A358;
         left: 0;
         position: absolute;
 }
 }
 .pages-details-img {
-    width: toRem(18);
-    height: toRem(18);
+    width: toRem(24);
+    height: toRem(24);
     background-image: url("../img/user-acc-active.svg");
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
 }
 .pages-img-user {
-    margin: 0 toRem(8) 0 toRem(22);
+    margin: 0 toRem(10) 0 toRem(24);
 }
 .pages-address-img {
-    width: toRem(18);
-    height: toRem(18);
+    width: toRem(24);
+    height: toRem(24);
     background-image: url("../img/location.svg");
     background-repeat: no-repeat;
     background-position: center center;
     background-size: contain;
 }
 .pages-orders-img {
-    width: toRem(18);
-    height: toRem(18);
+    width: toRem(24);
+    height: toRem(24);
     background-image: url("../img/shopcart.svg");
     background-repeat: no-repeat;
     background-position: center center;
@@ -1121,13 +1121,13 @@ button.active{
 }
 .user-pages-logout {
     font-weight: 700;
-    height: toRem(50);
+    height: toRem(61);
     color: #46A358;
-    border-top: toRem(0.28) solid rgba(70, 163, 88, 0.3);
+    border-top: toRem(0.28) solid rgba(70, 163, 88, 0.6);
 }
 .pages-logout-img {
-    width: toRem(18);
-    height: toRem(18);
+    width: toRem(24);
+    height: toRem(24);
     background-image: url("../img/Logout.svg");
     background-repeat: no-repeat;
     background-position: center center;
@@ -1136,5 +1136,87 @@ button.active{
 
 .user-auth-forms {
     width: toRem(1120);
-    height: toRem(1000);
+}
+
+.auth-forms-title {
+    font-size: toRem(20);
+    line-height: toRem(20);
+    font-weight: 500;
+    color: #3D3D3D;
+}
+
+.defForm {
+    width: toRem(525);
+    height: toRem(50);
+    border-radius: toRem(2.82);
+    border: toRem(0.94) solid rgba(234, 234, 234, 1);
+    padding: 0 toRem(50) 0 toRem(10);
+    &:focus {
+        border-color: #46A358;
+    }
+}
+.textinputbox {
+    display: flex;
+    flex-wrap: nowrap;
+    text-align: center;
+    position: relative;
+    justify-content: left;
+    align-items: center;
+    span{
+        color: #F03800;
+        font-size: toRem(20.16);
+        line-height: toRem(14.12);
+        margin-left: toRem(5);
+    }
+}
+.inputbox_user {
+    height: toRem(77.5);
+    display: flex;
+    position: relative;
+    flex: 0 1 50%;
+    margin: toRem(24) 0 0 0;
+    flex-direction: column-reverse;
+    font-size: toRem(14);
+    line-height: toRem(14);
+    color: #3D3D3D;
+    justify-content: space-between;
+}
+.user-auth-forms {
+    width: 100%;
+}
+.user_form_details {
+    display: flex;
+    flex-wrap: wrap;
+}
+.change-password-user {
+    margin: toRem(32) 0 0 0;
+    width: 100%;
+}
+.password-user-title {
+    font-size: toRem(20);
+    line-height: toRem(20);
+    font-weight: 500;
+}
+.btn-submit {
+    font-size: toRem(18);
+    line-height: toRem(20);
+    font-weight: 700;
+    margin: toRem(33) 0 0 0;
+    color: white;
+    width: toRem(165);
+    height: toRem(50);
+    border-radius: toRem(4);
+    background-color: #46A358;
+}
+
+.password-checker {
+    width: toRem(50);
+    height: toRem(50);
+    background-image: url("../img/Hide.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 40%;
+    position: absolute;
+    bottom: 0;
+    left: toRem(473);
 }

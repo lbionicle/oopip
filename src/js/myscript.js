@@ -86,6 +86,7 @@ function cartIsEmpty() {
     }
 }
 
+cartIsEmpty();
 
 class CartItem {
     constructor(srcImg, title, stock, price, quantity, parentSelector, ...classes) {
@@ -156,9 +157,9 @@ cart_goods.forEach((elem) => elem.addEventListener("click", (e) => {
 
         e.target.parentElement.remove();
 
-        cartIsEmpty();
         updateStorage();
         initialState();
+        cartIsEmpty();
         sumTotal();
 
 
@@ -238,7 +239,6 @@ if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
             this.parent.append(element);
         }
     }
-    
     new GoodsCard("../img/goods1.png", "Stacking pyramid", "10.00", ".goods-elements" , "data-goods", "goods-element").render();
     new GoodsCard("../img/goods3.png", "Mini basketball", "9.00", ".goods-elements" , "data-goods", "goods-element").render();
     new GoodsCard("../img/goods4.png", "Robot Transformer", "29.00", ".goods-elements" , "data-goods", "goods-element").render();
@@ -392,6 +392,9 @@ const countGoods = document.querySelector(".orderpanel-countGoods");
 const stockGoods = document.querySelector(".popup-content-stock");
 const cartGood = document.querySelectorAll(".cart-header");
 const addToCart = document.querySelector(".orderpanel-cart");
+const goOrder = document.querySelector(".orderpanel-goOrder");
+
+const bigCartInfo = document.getElementsByClassName("popup-content-info")[0];
 
 const userAuth = document.querySelectorAll(".user-header");
 
@@ -415,6 +418,27 @@ removeGoods.addEventListener("click", () => {
     if (parseInt(countGoods.textContent.match(/\d+/)) != 1) {
         countGoods.textContent = parseInt(countGoods.textContent.match(/\d+/)) - 1
     }
+})
+
+goOrder.addEventListener("click", (e) => {
+    const parent = e.target.parentElement.parentElement.parentElement
+
+    new CartItem(
+        parent.getElementsByClassName("popup-content-img")[0].getElementsByTagName("IMG")[0].src, 
+        parent.getElementsByClassName("popup-content-title")[0].textContent,
+        Number(parent.getElementsByClassName("popup-content-stock")[0].getElementsByTagName("SPAN")[0].textContent),
+        Number(parent.getElementsByClassName("popup-content-price")[0].textContent.slice(1, -3)),
+        Number(parent.getElementsByClassName("orderpanel-countGoods")[0].textContent),
+        ".cart-goods-body")
+        .render()
+
+    updateStorage();
+    initialState();
+    cartIsEmpty();
+    sumTotal();
+
+    window.location.href = "../shipping.html";
+
 })
 
 addToCart.addEventListener("click", (e) => {
@@ -450,6 +474,17 @@ const auth_reg_btns = document.querySelectorAll(".register-auth")
 
 const btn_log = document.querySelector("#btn-hide-log");
 const btn_reg = document.querySelector("#btn-hide-reg");
+const user_pass = document.querySelector(".user-auth-forms");
+
+user_pass.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (e.target.classList.contains("password-checker")) {
+        const parent = e.target.parentElement.querySelector(".defForm")
+
+        parent.type == "password" ? parent.type = "text" : parent.type = "password";        
+        parent.type == "password" ? e.target.style.backgroundImage = `url("../img/Hide.svg")` : e.target.style.backgroundImage = `url("../img/show.svg")`;
+    }
+})
 
 
 auth_login_btns.forEach((elem) => {
@@ -486,6 +521,9 @@ enter_password.forEach((elem) => {
 //USER_ACC====================================================================================================
 
 const user_pages = document.querySelector(".user-auth-pages");
+const user_forms = document.querySelector(".user-auth-forms");
+
+console.log(user_forms)
 
 function clear_active_pages () {
     user_pages.querySelectorAll(".user-pages").forEach((elem) => {
@@ -502,6 +540,7 @@ function clear_active_pages () {
 })
 }
 
+if(document.getElementsByTagName("body")[0].classList.contains("user-acc")) {
 user_pages.addEventListener("click", (e) => {
 
     function check(url) {
@@ -513,9 +552,46 @@ user_pages.addEventListener("click", (e) => {
 
     if (e.target.classList.contains("user-pages-address")) {
         check("../img/location-active.svg")
+        user_forms.innerHTML = `
+        <div class="auth-forms-title">Billing Address</div>
+        <form action="" method="post" class="user_form_details">
+            <div class="inputbox_user"><input type="text" name="firstname" class="defForm" required><label for="firstname" class="textinputbox">First Name <span>*</span></label></div>
+            <div class="inputbox_user"><input type="text" name="lastname" class="defForm" required><label for="lastname" class="textinputbox">Last Name <span>*</span></label></div>
+            <div class="inputbox_user"><input type="text" name="country-region" class="defForm" required><label for="country-region" class="textinputbox">Country / Region <span>*</span></label></div>
+            <div class="inputbox_user"><input type="text" name="town-city" class="defForm" required><label for="town-city" class="textinputbox">Town / City <span>*</span></label></div>
+            <div class="inputbox_user"><input type="text" name="street-address" class="defForm" required><label for="street-address" class="textinputbox">Street Address<span>*</span></label></div>
+            <div class="inputbox_user"><input type="text" name="state" class="defForm" required><label for="state" class="textinputbox">State <span>*</span></label></div>
+            <div class="inputbox_user"><input type="text" name="zip" class="defForm" required><label for="zip" class="textinputbox">Zip <span>*</span></label></div>
+            <div class="inputbox_user"><input type="text" name="email" class="defForm" required><label for="email" class="textinputbox">Email address <span>*</span></label></div>
+            <button type="submit" class="btn-submit">Save Change</button>
+        </form>
+        `
     } else if (e.target.classList.contains("user-pages-details")) {
         check("../img/user-acc-active.svg")
+        user_forms.innerHTML = `
+        <div class="auth-forms-title">Personal Information</div>
+        <form action="" method="post" class="user_form_details">
+            <div class="inputbox_user"><input type="text" name="username" class="defForm" required><label for="username" class="textinputbox">Username <span>*</span></label></div>
+            <div class="inputbox_user"><input type="text" name="firstname" class="defForm" required><label for="firstname" class="textinputbox">First Name <span>*</span></label></div>
+            <div class="inputbox_user"><input type="text" name="lastname" class="defForm" required><label for="lastname" class="textinputbox">Last Name <span>*</span></label></div>
+            <div class="inputbox_user"><input type="text" name="email" class="defForm" required><label for="email" class="textinputbox">Email address <span>*</span></label></div>
+            <div class="change-password-user">
+                <div class="password-user-title">Password change</div>
+                <div class="inputbox_user"><input type="password" name="currpassword" class="defForm"><label for="currpassword" class="textinputbox">Current password</label>
+                    <button style="z-index: 209;" class="password-checker hide-checker"></button>
+                </div>
+                <div class="inputbox_user"><input type="password" name="newpassword" class="defForm"><label for="newpassword" class="textinputbox">New password</label>
+                    <button style="z-index: 209;" class="password-checker hide-checker"></button>
+                </div>
+                <div class="inputbox_user"><input type="password" name="confirmpassword" class="defForm"><label for="confirmpassword" class="textinputbox">Confirm new password</label>
+                    <button style="z-index: 209;" class="password-checker hide-checker"></button>
+                </div>
+            </div>
+            <button type="submit" class="btn-submit">Save Change</button>
+        </form>
+        `
     } else if (e.target.classList.contains("user-pages-orders")) {
         check("../img/shopcart-active.svg")
     }
 })
+}
