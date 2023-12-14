@@ -588,6 +588,13 @@ button.active{
         border-color: #46A358;
     }
 }
+.element-img {
+    height: toRem(406.76);
+    width: toRem(323);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+}
 .show-auth {
     background-image: url("../img/show.svg") !important; 
 }
@@ -731,7 +738,7 @@ button.active{
     margin-right: 5%;
 }
 .cart-goods-header {
-    padding: 0 toRem(75) toRem(10) 0;
+    padding: 0 0 toRem(10) 0;
     border-bottom: toRem(0.25) solid #46A358;
     margin-bottom: toRem(10);
     display: flex;
@@ -743,35 +750,34 @@ button.active{
     line-height: toRem(13.23);
 
     .goods-header-item1 {
-        width: toRem(245);
-        float: left;
-        text-align: left;
-    }
+        flex: 0 1 30%;
+        justify-content: center;
+        align-items: center;
+        }
     .goods-header-item2 {
-        width: toRem(108);
-        float: right;
-        text-align: right;
+        flex: 0 1 15%;
+        text-align: center;
     }
     .goods-header-item3 {
-        width: toRem(147);
-        float: right;
-        text-align: right;
+        flex: 0 1 25%;
+        text-align: center;
     }
     .goods-header-item4 {
-        margin-left: toRem(83);
+        flex: 0 1 20%;
+        text-align: center;
     }
 }
 .goods-header-item {
     display: block;
 }
+// Коризна из главного меню
 .goods-body-good {
     display: flex;
     flex-wrap: nowrap;
     font-size: toRem(13.23);
     line-height: toRem(13.23);
     align-items: center;
-    padding-right: toRem(42);
-    align-content: space-between;
+    text-align: center;
     margin: 0 0 toRem(9) 0;
     background-color: rgba(226, 226, 226, 0.2);;
 }
@@ -785,33 +791,34 @@ button.active{
     background-size: contain;
 }
 .goods-body-info {
-    width: toRem(175);
+    width: 100%;
     float: left;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 .body-info-title {
+    text-align: left;
     font-weight: 500;
     color: #3D3D3D;
 }
 .body-info-stock {
+    text-align: left;
     margin: toRem(5) 0 0 0;
     color: #727272;
     font-size: toRem(11.58);
 }
 .goods-body-price {
     display: block;
-    width: toRem(108);
-    float: right;
-    text-align: right;
+    text-align: center;
+    justify-content: center;
+    flex: 0 1 15%;
     color: #727272;
     font-weight: 500;
 }
 .goods-body-count {
-    width: toRem(147);
-    justify-content: right;
-    float: right;
+    flex: 0 1 25%;
+    justify-content: center;
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
@@ -830,21 +837,22 @@ button.active{
 }
 .goods-body-total {
     display: block;
-    width: toRem(113);
-    float: right;
-    text-align: right;
+    flex: 0 1 20%;
+    text-align: center;
     color: #2C2D3B;
     font-weight: 700;
 }
 .goods-body-delelem {
     padding: toRem(1.81), toRem(2.42), toRem(1.87), toRem(2.81);
-    width: toRem(16);
-    height: toRem(16);
-    margin-left: auto;
+    flex: 0 1 10%;
+    height: toRem(60);
     background-image: url("../img/Delete.svg");
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: cover
+    background-size: toRem(18) toRem(18)
+}
+.goods-elem {
+    flex: 0 1 30%;
 }
 //====================================================================================================
 
@@ -1219,4 +1227,139 @@ button.active{
     position: absolute;
     bottom: 0;
     left: toRem(473);
+}
+
+//====================================================================================================
+
+.auth-forms-title {
+    font-size: toRem(21);
+    line-height: toRem(20);
+    font-weight: 700;
+    color: #3D3D3D;
+}
+.auth-goods-header {
+    font-size: toRem(20);
+    color: #3D3D3D;
+    line-height: toRem(20);
+    font-weight: 500;
+    border-bottom: toRem(0.25) solid #46A358;
+    margin: toRem(25.33) 0 0 0;
+    padding: 0 toRem(20) toRem(13.14) 0;
+    display: flex;
+    width: 100%;
+    flex-wrap: nowrap;
+    color: #3D3D3D;
+    justify-content: space-between;
+    text-align: center;
+
+    .auth-header-item {
+    }
+    .auth-header-item1 {
+        flex: 0 1 30%;
+        text-align: left;
+    }
+    .auth-header-item2 {
+        flex: 0 1 14%;
+    }
+    .auth-header-item3 {
+        flex: 0 1 17%;
+    }
+    .auth-header-item4 {
+        flex: 0 1 17%;
+    }
+    .auth-header-item5 {
+        flex: 0 1 10%;
+    }
+    .auth-header-item6 {
+        flex: 0 1 12%;
+        text-align: right;
+    }
+
+}
+.forms-body-good {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    padding: 0 toRem(20) 0 0;
+    margin: toRem(14.02) 0 0 0;
+    background-color: rgba(251, 251, 251, 1);
+}
+.body-good-img {
+    width: toRem(87);
+    height: toRem(87);
+    margin: 0 toRem(17) 0 0;
+    background-image: url("../img/goods1.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+.body-good-info {
+    flex: 0 1 30%;
+    text-align: left;
+    display: flex;
+    word-wrap: break-word;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+.body-good-blocktext {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    align-items: left;
+    text-align: left;
+    justify-content: center;
+}
+.good-info-titleorder {
+    display: inline-block;
+    width: 100%;
+    font-size: toRem(18);
+    line-height: toRem(18);
+    color: #3D3D3D;
+    font-weight: 500;
+    margin-bottom: toRem(10);
+}
+.good-info-article {
+    font-size: toRem(16);
+    line-height: toRem(20);
+    color: #A5A5A5;
+    span {
+        color: #767676;
+    }
+}
+.body-good-status {
+    flex: 0 1 14%;
+    font-size: toRem(19);
+    line-height: toRem(20);
+    &.greenStatus {
+        color: #46A358;
+    }
+    &.defaulStatus {
+        color: #2C2D3B;
+    }
+    &.redStatus {
+        color: #E10707;
+    }
+}
+.body-good-datadelivery, .body-good-datasale {
+    flex: 0 1 17%;
+    font-size: toRem(19);
+    line-height: toRem(20);
+    color: #2C2D3B;
+}
+.body-good-amount {
+    flex: 0 1 10%;
+    color: #727272;
+    line-height: toRem(20);
+    font-size: toRem(18);
+}
+.body-good-subtotal {
+    font-size: toRem(23);
+    line-height: toRem(20);
+    font-weight: 700;
+    color: #46A358;
+    float: right;
+    flex: 0 1 12%;
+    text-align: right;
 }

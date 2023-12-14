@@ -38,7 +38,7 @@ class Popup {
 				goHash: true, // Перехід по наявності в адресному рядку
 			},
 			on: { // Події
-				beforeOpen: function () { },
+				beforeOpen: function () {},
 				afterOpen: function () { },
 				beforeClose: function () { },
 				afterClose: function () { },

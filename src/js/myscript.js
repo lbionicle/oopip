@@ -219,7 +219,7 @@ if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
             if (this.classes.length === 0) {
                 this.classes = "goods-element";
                 element.classList.add(this.classes);
-                element.setAttribute(this.attr, "")
+                element.setAttribute(this.attr, "");
             } else {
                 this.classes.forEach(className => {
                     element.classList.add(className)
@@ -402,8 +402,16 @@ function addPopup(elemPop, data, id) {
     elemPop.forEach((elem) => {
         elem.setAttribute(data, id)
         elem.classList.add("link")
-        elem.addEventListener("click", () => {
-            renderPopup("../img/biggoods1.png", "LEGO bricks set", "20.00", "1995751877966", "13", "This 234-piece set includes bright and colorful LEGO-style bricks in a variety of shapes and sizes. Build anything from simple structures to elaborate townscapes to boost creativity. These chunky plastic bricks snap satisfyingly together and pull easily apart for frustration-free construction play. Big enough for little hands but still compatible with major brands, this budget-friendly builder set makes the perfect STEM learning toy.");
+        elem.addEventListener("click", (e) => {
+            e.preventDefault();
+            renderPopup("../img/biggoods1.png",
+            "LEGO bricks set",
+            "20.00",
+            "1995751877966",
+            "13",
+            "This 234-piece set includes bright and colorful LEGO-style bricks in a variety of shapes and sizes. Build anything from simple structures to elaborate townscapes to boost creativity. These chunky plastic bricks snap satisfyingly together and pull easily apart for frustration-free construction play. Big enough for little hands but still compatible with major brands, this budget-friendly builder set makes the perfect STEM learning toy."
+            );
+            console.log(checkGoodsInCart(e));
         })
     })
 }
@@ -474,17 +482,20 @@ const auth_reg_btns = document.querySelectorAll(".register-auth")
 
 const btn_log = document.querySelector("#btn-hide-log");
 const btn_reg = document.querySelector("#btn-hide-reg");
-const user_pass = document.querySelector(".user-auth-forms");
 
-user_pass.addEventListener("click", (e) => {
-    e.preventDefault();
-    if (e.target.classList.contains("password-checker")) {
-        const parent = e.target.parentElement.querySelector(".defForm")
+if(document.getElementsByTagName("body")[0].classList.contains("user-acc")) {
+    const user_pass = document.querySelector(".user-auth-forms");
 
-        parent.type == "password" ? parent.type = "text" : parent.type = "password";        
-        parent.type == "password" ? e.target.style.backgroundImage = `url("../img/Hide.svg")` : e.target.style.backgroundImage = `url("../img/show.svg")`;
-    }
-})
+    user_pass.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (e.target.classList.contains("password-checker")) {
+            const parent = e.target.parentElement.querySelector(".defForm")
+
+            parent.type == "password" ? parent.type = "text" : parent.type = "password";        
+            parent.type == "password" ? e.target.style.backgroundImage = `url("../img/Hide.svg")` : e.target.style.backgroundImage = `url("../img/show.svg")`;
+        }
+    })
+}
 
 
 auth_login_btns.forEach((elem) => {
@@ -518,12 +529,74 @@ enter_password.forEach((elem) => {
         }
     }) 
 })
-//USER_ACC====================================================================================================
-
+//ORDERS====================================================================================================
 const user_pages = document.querySelector(".user-auth-pages");
 const user_forms = document.querySelector(".user-auth-forms");
 
-console.log(user_forms)
+class Order {
+    constructor(srcImg, title, article, status, dateDelivery, dateSale, amount, total, parentSelector, ...classes) {
+        this.src = srcImg;
+        this.title = title;
+        this.article = article;
+        this.total = total.toFixed(2);
+        this.classes = classes;
+        this.amount = amount;
+        this.status = status;
+        this.dateDelivery = dateDelivery;
+        this.dateSale = dateSale;
+        this.parent = document.querySelectorAll(parentSelector);
+        this.fullDate();
+    }
+
+    fullDate() {
+
+        function fd(data, delivery = false) {
+            let month = data.getUTCMonth() + 1;
+            let day = delivery ? data.getUTCDate() + 7: data.getUTCDate();
+            let year = data.getUTCFullYear();
+
+            return `${day}.${month}.${year}`
+        }
+
+        this.dateDelivery = fd(new Date(this.dateDelivery), true);
+        this.dateSale = fd(new Date(this.dateSale));
+    }
+
+    render() {
+        const element = document.createElement('div');
+
+        if (this.classes.length === 0) {
+            element.classList.add("forms-body-good");
+        } else {
+            this.classes.forEach(className => {
+                element.classList.add(className)
+            });
+        }
+
+        element.innerHTML = `
+        <div class="body-good-info">
+            <div style="background-image = url('${this.src}')" class="body-good-img"></div>
+            <div class="body-good-blocktext">
+                <div class="good-info-titleorder">${this.title}</div>
+                <div class="good-info-article">Article: <span>${this.article}</span></div>
+            </div>
+        </div>
+        <div class="body-good-status greenStatus">${this.status}</div>
+        <div class="body-good-datadelivery">${this.dateDelivery}</div>
+        <div class="body-good-datasale">${this.dateSale}</div>
+        <div class="body-good-amount">(x <span>${this.amount}</span>)</div>
+        <div class="body-good-subtotal">$${this.total}</div>
+            `;
+
+        this.parent.forEach((par) => {
+            par.append(element);
+        })
+    }
+}
+
+
+//USER_ACC====================================================================================================
+
 
 function clear_active_pages () {
     user_pages.querySelectorAll(".user-pages").forEach((elem) => {
@@ -592,6 +665,49 @@ user_pages.addEventListener("click", (e) => {
         `
     } else if (e.target.classList.contains("user-pages-orders")) {
         check("../img/shopcart-active.svg")
+        user_forms.innerHTML = `
+        <div class="auth-forms-title">Purchases</div>
+        <div class="auth-goods-header">
+            <div class="auth-header-item1 auth-header-item">Products</div>
+            <div class="auth-header-item2 auth-header-item">Status</div>
+            <div class="auth-header-item3 auth-header-item">Date of delivery</div>
+            <div class="auth-header-item4 auth-header-item">Date of sale</div>
+            <div class="auth-header-item5 auth-header-item">Amount</div>
+            <div class="auth-header-item6 auth-header-item">Subtotal</div>
+
+        </div>
+        <div class="auth-forms-body">
+        </div>
+            `;
+        if(document.getElementsByTagName("body")[0].classList.contains("user-acc")) {
+            new Order(
+            "../img/goods1.png", 
+            "Stacking pyramid", 
+            1995751877966, 
+            "Delivered", 
+            Date.now(),
+            Date.now(),
+            2,
+            10.00, 
+            ".auth-forms-body",
+            ).render();
+        }
     }
 })
+}
+
+//CHECK=GOOD=IN=CART====================================================================================================
+
+const bigGood = document.querySelector("#bigGoods");
+const uniqueNames = new Set();
+
+function checkGoodsInCart(e) {
+    const nameOfGoods = e.target.parentElement.parentElement.querySelector("element-info-name");
+
+    const nowCart = document.querySelector("#shopCart").querySelectorAll(".body-info-title");
+    nowCart.forEach((elem) => {
+        uniqueNames.add(elem.textContent.trim())
+    })
+    //Потом заменить на nameOfGoods и оно будет из
+    return uniqueNames.has("LEGO bricks set")
 }
