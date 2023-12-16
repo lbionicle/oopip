@@ -3,60 +3,60 @@
 	@@include('html/_head.htm',{
         "title":"TEDDY SHOP"
         })
-        <body class="user-acc">
+        <body class="admin-acc">
             <div style="position: relative;" class="wrapper">
                 <header class="header">
                     <div class="header__container">
                         <a href="../index.html"><img src="@img/logo.svg" alt=""></a>
                         <div style="justify-content: right;" class="header-icons">
-                            <button class="user-header" style="z-index: 1;"><img class="user-icon icon" src="@img/User.svg" alt=""></button>
+                            <a href=""><button class="user-header" style="z-index: 1;"><img class="user-icon icon" src="@img/User.svg" alt=""></button></a>
                         </div>
-                    </div>
                 </header>
                 <main style="margin: 157px 0 80px 0;" class="page">
-                    <div class="page-user-auth">
-                        <div class="user-auth-row">
-                            <div class="user-auth-pages">
-                                <div class="user-pages-title">My Account</div>
-                                <button><div class="user-pages-details user-pages active-page">
-                                    <div class="pages-details-img pages-img-user"></div>
-                                    Account Details
+                    <div class="page-admin-auth">
+                        <div class="admin-auth-row">
+                            <div class="admin-auth-pages">
+                                <div class="admin-pages-title">Admin account</div>
+                                <button><div class="admin-pages-details admin-pages admin-active-page">
+                                    <div class="pages-details-img pages-img-admin"></div>
+                                    Users
                                 </div></button>
-                                <button><div class="user-pages-address user-pages">
-                                    <div class="pages-address-img pages-img-user"></div>
-                                    Address
+                                <button><div class="admin-pages-goods admin-pages">
+                                    <div class="pages-goods-img pages-img-admin"></div>
+                                    Goods
                                 </div></button>
-                                <button><div class="user-pages-orders user-pages">
-                                    <div class="pages-orders-img pages-img-user"></div>
+                                <button><div class="admin-pages-orders admin-pages">
+                                    <div class="pages-orders-img pages-img-admin"></div>
                                     Orders
                                 </div></button>
-                                <button><div class="user-pages-logout user-pages">
-                                    <div class="pages-logout-img pages-img-user"></div>
+                                <button><div class="admin-pages-logout admin-pages">
+                                    <div class="pages-logout-img pages-img-admin"></div>
                                     Log out
                                 </div>
                             </button>
                             </div>
-                            <div class="user-auth-forms">
-                                <div class="auth-forms-title">Personal Information</div>
-                                <form action="" method="post" class="user_form_details">
-                                    <div class="inputbox_user"><input type="text" name="username" class="defForm" required><label for="username" class="textinputbox">Username <span>*</span></label></div>
-                                    <div class="inputbox_user"><input type="text" name="firstname" class="defForm" required><label for="firstname" class="textinputbox">First Name <span>*</span></label></div>
-                                    <div class="inputbox_user"><input type="text" name="lastname" class="defForm" required><label for="lastname" class="textinputbox">Last Name <span>*</span></label></div>
-                                    <div class="inputbox_user"><input type="text" name="email" class="defForm" required><label for="email" class="textinputbox">Email address <span>*</span></label></div>
-                                    <div class="change-password-user">
-                                        <div class="password-user-title">Password change</div>
-                                        <div class="inputbox_user"><input type="password" name="currpassword" class="defForm"><label for="currpassword" class="textinputbox">Current password</label>
-                                            <button style="z-index: 209;" class="password-checker hide-checker"></button>
-                                        </div>
-                                        <div class="inputbox_user"><input type="password" name="newpassword" class="defForm"><label for="newpassword" class="textinputbox">New password</label>
-                                            <button style="z-index: 209;" class="password-checker hide-checker"></button>
-                                        </div>
-                                        <div class="inputbox_user"><input type="password" name="confirmpassword" class="defForm"><label for="confirmpassword" class="textinputbox">Confirm new password</label>
-                                            <button style="z-index: 209;" class="password-checker hide-checker"></button>
+                            <div class="admin-auth-block">
+                                <div class="admin-forms-title">Users</div>
+                                <div class="admin-users-header">
+                                    <div class="admin-header-item1 admin-header-item">Id</div>
+                                    <div class="admin-header-item2 admin-header-item">Username</div>
+                                    <div class="admin-header-item3 admin-header-item">Email</div>
+                                    <div class="admin-header-item4 admin-header-item">Status</div>
+                                    <div class="admin-header-item5 admin-header-item">Last activity</div>
+                                </div>
+                                <div class="admin-forms-body">
+                                    <div class="forms-body-userinfo">
+                                        <div class="body-userinfo-id">1</div>
+                                        <div class="body-userinfo-username">user1</div>
+                                        <div class="body-userinfo-email">user1@gmail.com</div>
+                                        <div class="body-userinfo-status">Unblocked</div>
+                                        <div class="body-userinfo-activity">29.11.2023</div>
+                                        <div class="body-userinfo-opportunity">
+                                            <button class="userinfo-opportunity-changer"></button>
+                                            <button class="userinfo-opportunity-delete"></button>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn-submit">Save Change</button>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>

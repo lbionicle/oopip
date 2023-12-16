@@ -1,30 +1,5 @@
 <div id="popup-goods" aria-hidden="true" class="popup">
-	<div style="position: relative;" class="popup__wrapper">
-		<div id="bigGoods" class="popup__content">
-			<button data-close type="button" class="popup__close"><img src="@img/close.svg" alt=""></button>
-			<div class="popup-content-img">
-				<img class="popup-content-img" alt="">
-			</div>
-			<div class="popup-content-info">
-				<div class="popup-content-title"></div>
-				<div class="popup-content-article">Article: <span></span></div>
-				<div class="popup-content-stock">Stock: <span></span></div>
-				<div class="popup-content-price"></div>
-				<div class="popup-divider"></div>
-				<div class="popup-content-titledescr">Short Description:</div>
-				<div class="popup-content-subdescrp"></div>
-				<div class="popup-content-orderpanel">
-					<div class="orderpanel-count">
-						<button class="orderpanel-removeGoods"><img src="@img/minus.svg" alt=""></button>
-						<div class="orderpanel-countGoods"></div>
-						<button class="orderpanel-addGoods"><img src="@img/plus.svg" alt=""></button>
-					</div>
-					<button class="orderpanel-goOrder btn-activate">Buy now</button>
-					<button class="orderpanel-cart btn-activate-text disabled-button-cart">Add to cart</button>
-				</div>
-			</div>
-			</div>
-		</div>
+	<div id="bigGoods" style="position: relative;" class="popup__wrapper">
 	</div>
 </div>
 
@@ -104,6 +79,41 @@
 					<div class="cart-info-total">Total<span>$0.00</span></div>
 					<button class="cart-info-submit btn-activate"><a href="../shipping.html">Proceed To Checkout</a></button>
 				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="popup-username" aria-hidden="true" class="popup">
+	<div id="userInfoChange" style="position: relative;" class="popup__wrapper">
+		<div style="width: 1440px; height: auto; padding: 50px 50px; background-color: #fff;" class="popup__content">
+			<button style="top: 24px; right: 24px;" data-close type="button" class="popup__close"><img src="../img/close.svg" alt=""></button>
+			<div class="content-username-row">
+				<form action="" method="post">
+					<div class="username-changeInfo">
+						<div class="username-personal">
+							<div class="username-personal-title">Personal Information</div>
+							<div class="admin-input-personal"><input type="email" name="email" class="adminForm"><label for="email" class="textinputbox">Email address</label></div>
+							<div class="admin-input-personal"><input type="text" name="username" class="adminForm"><label for="username" class="textinputbox">Username</label></div>
+							<div style="display: flex; flex-wrap: nowrap;" class="admin-input-personal">
+								<input type="radio" name="blocked" class="radio-unblocked-user blocked-user">Unblocked
+								<input type="radio" name="blocked" class="radio-blocked-user blocked-user">Blocked
+								<label for="blocked" class="textinputbox">Blocking</label>
+							</div>
+						</div>
+						<div class="username-address">
+							<div class="username-address-title">Billing Address</div>
+							<div class="admin-input-address"><input type="email" name="firstname" class="adminForm"><label for="firstname" class="textinputbox">First Name</label></div>
+							<div class="admin-input-address"><input type="text" name="lastname" class="adminForm"><label for="lastname" class="textinputbox">Last Name</label></div>
+							<div class="admin-input-address"><input type="text" name="country-region" class="adminForm"><label for="country-region" class="textinputbox">Country / Region</label></div>
+							<div class="admin-input-address"><input type="text" name="town-city" class="adminForm"><label for="town-city" class="textinputbox">Town / City</label></div>
+							<div class="admin-input-address"><input type="text" name="street" class="adminForm"><label for="street" class="textinputbox">Street Address</label></div>
+							<div class="admin-input-address"><input type="text" name="state" class="adminForm"><label for="state" class="textinputbox">State</label></div>
+							<div class="admin-input-address"><input type="text" name="zip" class="adminForm"><label for="zip" class="textinputbox">Zip</label></div>
+						</div>
+					</div>
+					<button type="submit" class="btn-submit">Save Change</button>
+				</form>
 			</div>
 		</div>
 	</div>

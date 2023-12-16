@@ -1,3 +1,24 @@
+//CHECK=GOOD=IN=CART====================================================================================================
+
+function checkGoodsInCart(element) {
+
+    const uniqueNames = new Set();
+
+    let nameOfGoods = "";
+
+    element.classList.contains("goods-element") ? nameOfGoods = element.querySelector(".element-info").querySelector(".element-info-name").textContent : nameOfGoods = element.querySelector(".popup-content-title").textContent;
+
+    const nowCart = document.querySelector("#shopCart").querySelectorAll(".body-info-title");
+
+    nowCart.forEach((elem) => {
+        uniqueNames.add(elem.textContent.trim())
+    })
+    //Потом заменить на nameOfGoods и оно будет из
+    return uniqueNames.has(nameOfGoods)
+}
+
+//=======================================================================================================================
+
 const radios = document.getElementsByName("choice-pay");
 
 function check(){
@@ -228,9 +249,7 @@ if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
             }
     
             element.innerHTML = `
-            <div class="element-img">
-                <img src="${this.src}" alt="">
-            </div>
+            <div style="background-image: url(${this.src})" class="element-img"></div>
             <div class="element-info">
                 <div class="element-info-name">${this.title}</div>
                 <div class="element-info-price">$${this.price}</div>
@@ -246,72 +265,60 @@ if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
 
 //POPUP_GOODS====================================================================================================
 
-// class BigGoodsCard {
-//     constructor(src, title, price, article, stock, descr, parentSelector, ...classes) {
-//         this.src = src;
-//         this.title = title;
-//         this.article = article;
-//         this.stock = stock;
-//         this.descr = descr;
-//         this.price = price;
-//         this.classes = classes;
-//         this.attr = attr;
-//         this.parent = document.querySelector(parentSelector);
-//     }
+class BigGoodsCard {
+    constructor(src, title, price, article, stock, descr, parentSelector, ...classes) {
+        this.src = src;
+        this.title = title;
+        this.article = article;
+        this.stock = stock;
+        this.descr = descr;
+        this.price = price.toFixed(2);
+        this.classes = classes;
+        this.parent = document.querySelector(parentSelector);
+    }
 
 
-//     render() {
-//         const element = document.createElement('div');
+    render() {
+        const element = document.createElement('div');
 
-//         if (this.classes.length === 0) {
-//             this.classes = "popup__content";
-//             element.classList.add(this.classes);
-//             element.setAttribute(this.attr, "")
-//         } else {
-//             this.classes.forEach(className => {
-//                 element.classList.add(className)
-//                 element.setAttribute(this.attr, "")
-//             });
-//         }
-//         element.innerHTML = `
-//         <button data-close type="button" class="popup__close"><img src="../img/close.svg" alt=""></button>
-//         <div class="popup-content-img">
-//             <img class="popup-content-img" src="${this.src}" alt="">
-//         </div>
-//         <div class="popup-content-info">
-//             <div class="popup-content-title">${this.title}</div>
-//             <div class="popup-content-article">Article: <span>${this.article}</span></div>
-//             <div class="popup-content-stock">Stock: <span>${this.stock}</span></div>
-//             <div class="popup-content-price">$${this.price}</div>
-//             <div class="popup-divider"></div>
-//             <div class="popup-content-titledescr">Short Description:</div>
-//             <div class="popup-content-subdescrp">${this.descr}</div>
-//             <div class="popup-content-orderpanel">
-//                 <div class="orderpanel-count">
-//                     <button class="orderpanel-removeGoods"><img src="../img/minus.svg" alt=""></button>
-//                     <div class="orderpanel-countGoods">1</div>
-//                     <button class="orderpanel-addGoods"><img src="../img/plus.svg" alt=""></button>
-//                 </div>
-//                 <button class="orderpanel-goOrder">Buy now</button>
-//                 <button class="orderpanel-cart">Add to cart</button>
-//             </div>
-//         </div>
-//         </div>
-//         `;
-//         this.parent.innerHTML = ``;
-//         this.parent.append(element);
-//     }
-// }
-
-function renderPopup(src, title, price, article, stock, descr) {
-    document.querySelector("img.popup-content-img").src = src;
-    document.querySelector(".popup-content-title").textContent = title;
-    document.querySelector(".popup-content-price").textContent = "$" + price;
-    document.querySelector(".popup-content-article > span").textContent = article;
-    document.querySelector(".popup-content-stock > span").textContent = stock;
-    document.querySelector(".popup-content-subdescrp").textContent = descr;
-    document.querySelector(".orderpanel-countGoods").textContent = 1;
+        if (this.classes.length === 0) {
+            this.classes = "popup__content";
+            element.classList.add(this.classes);
+        } else {
+            this.classes.forEach(className => {
+                element.classList.add(className)
+            });
+        }
+        element.innerHTML = `
+        <button data-close type="button" class="popup__close"><img src="../img/close.svg" alt=""></button>
+        <div class="popup-content-img">
+            <img class="popup-content-img" src="${this.src}" alt="">
+        </div>
+        <div class="popup-content-info">
+            <div class="popup-content-title">${this.title}</div>
+            <div class="popup-content-article">Article: <span>${this.article}</span></div>
+            <div class="popup-content-stock">Stock: <span>${this.stock}</span></div>
+            <div class="popup-content-price">$${this.price}</div>
+            <div class="popup-divider"></div>
+            <div class="popup-content-titledescr">Short Description:</div>
+            <div class="popup-content-subdescrp">${this.descr}</div>
+            <div class="popup-content-orderpanel">
+                <div class="orderpanel-count">
+                    <button class="orderpanel-removeGoods"><img src="../img/minus.svg" alt=""></button>
+                    <div class="orderpanel-countGoods">1</div>
+                    <button class="orderpanel-addGoods"><img src="../img/plus.svg" alt=""></button>
+                </div>
+                <button class="orderpanel-goOrder btn-activate">Buy now</button>
+                <button class="orderpanel-cart btn-activate-text">Add to cart</button>
+            </div>
+        </div>
+        </div>
+        `;
+        this.parent.innerHTML = ``;
+        this.parent.append(element);
+    }
 }
+
 //GOODS====================================================================================================
 
 const btnFilterAge = document.querySelectorAll(".filter-item");
@@ -384,94 +391,125 @@ show(btnCategories, "category-active");
 
 //POPUP====================================================================================================
 
+const popup = document.querySelector('.goods-elements');
 
-const popup = document.querySelectorAll('[data-goods]');
-const addGoods = document.querySelector(".orderpanel-addGoods");
-const removeGoods = document.querySelector(".orderpanel-removeGoods");
-const countGoods = document.querySelector(".orderpanel-countGoods");
-const stockGoods = document.querySelector(".popup-content-stock");
 const cartGood = document.querySelectorAll(".cart-header");
-const addToCart = document.querySelector(".orderpanel-cart");
-const goOrder = document.querySelector(".orderpanel-goOrder");
-
-const bigCartInfo = document.getElementsByClassName("popup-content-info")[0];
-
 const userAuth = document.querySelectorAll(".user-header");
+
 
 function addPopup(elemPop, data, id) {
     elemPop.forEach((elem) => {
         elem.setAttribute(data, id)
         elem.classList.add("link")
-        elem.addEventListener("click", (e) => {
-            e.preventDefault();
-            renderPopup("../img/biggoods1.png",
-            "LEGO bricks set",
-            "20.00",
-            "1995751877966",
-            "13",
-            "This 234-piece set includes bright and colorful LEGO-style bricks in a variety of shapes and sizes. Build anything from simple structures to elaborate townscapes to boost creativity. These chunky plastic bricks snap satisfyingly together and pull easily apart for frustration-free construction play. Big enough for little hands but still compatible with major brands, this budget-friendly builder set makes the perfect STEM learning toy."
-            );
-            console.log(checkGoodsInCart(e));
-        })
     })
 }
 
-addGoods.addEventListener("click", () => {
-    if (parseInt(countGoods.textContent.match(/\d+/)) != parseInt(stockGoods.textContent.match(/\d+/))) {
-        countGoods.textContent = parseInt(countGoods.textContent.match(/\d+/)) + 1
-    }
-})
-
-removeGoods.addEventListener("click", () => {
-    if (parseInt(countGoods.textContent.match(/\d+/)) != 1) {
-        countGoods.textContent = parseInt(countGoods.textContent.match(/\d+/)) - 1
-    }
-})
-
-goOrder.addEventListener("click", (e) => {
-    const parent = e.target.parentElement.parentElement.parentElement
-
-    new CartItem(
-        parent.getElementsByClassName("popup-content-img")[0].getElementsByTagName("IMG")[0].src, 
-        parent.getElementsByClassName("popup-content-title")[0].textContent,
-        Number(parent.getElementsByClassName("popup-content-stock")[0].getElementsByTagName("SPAN")[0].textContent),
-        Number(parent.getElementsByClassName("popup-content-price")[0].textContent.slice(1, -3)),
-        Number(parent.getElementsByClassName("orderpanel-countGoods")[0].textContent),
-        ".cart-goods-body")
-        .render()
-
-    updateStorage();
-    initialState();
-    cartIsEmpty();
-    sumTotal();
-
-    window.location.href = "../shipping.html";
-
-})
-
-addToCart.addEventListener("click", (e) => {
-    const parent = e.target.parentElement.parentElement.parentElement
-
-    new CartItem(
-        parent.getElementsByClassName("popup-content-img")[0].getElementsByTagName("IMG")[0].src, 
-        parent.getElementsByClassName("popup-content-title")[0].textContent,
-        Number(parent.getElementsByClassName("popup-content-stock")[0].getElementsByTagName("SPAN")[0].textContent),
-        Number(parent.getElementsByClassName("popup-content-price")[0].textContent.slice(1, -3)),
-        Number(parent.getElementsByClassName("orderpanel-countGoods")[0].textContent),
-        ".cart-goods-body")
-        .render()
-
-    updateStorage();
-    initialState();
-    cartIsEmpty();
-    sumTotal();
-})
+if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
+    popup.addEventListener("click", (e) => {
+        const parent = e.target.parentElement;
 
 
+        if(parent.classList.contains("goods-element")) {
+            
+            new BigGoodsCard(
+                "../img/biggoods1.png",
+                parent.querySelector(".element-info-name").textContent.trim(),
+                100.00,
+                125125123,
+                22,
+                "loresdgsdgsdf",
+                "#bigGoods"
+                ).render();
 
-addPopup(cartGood, "data-popup", "#popup-cart")
-addPopup(popup, "data-popup", "#popup-goods")
-addPopup(userAuth, "data-popup", "#popup-auth")
+
+            parent.setAttribute("data-popup", "#popup-goods");
+            parent.setAttribute("data-close", "");
+
+
+            const addGoods = document.querySelector(".orderpanel-addGoods");
+            const removeGoods = document.querySelector(".orderpanel-removeGoods");
+            const countGoods = document.querySelector(".orderpanel-countGoods");
+            const stockGoods = document.querySelector(".popup-content-stock");
+            const addToCart = document.querySelectorAll(".orderpanel-cart");
+            const goOrder = document.querySelector(".orderpanel-goOrder");
+
+            if (checkGoodsInCart(parent)) {
+                addToCart[0].textContent = "In cart"
+                addPopup(addToCart, "data-popup", "#popup-cart");
+            } else {
+                addToCart[0].removeAttribute("data-popup")
+            }
+
+            addGoods.addEventListener("click", () => {
+                if (parseInt(countGoods.textContent.match(/\d+/)) != parseInt(stockGoods.textContent.match(/\d+/))) {
+                    countGoods.textContent = parseInt(countGoods.textContent.match(/\d+/)) + 1
+                }
+            })
+            
+            removeGoods.addEventListener("click", () => {
+                if (parseInt(countGoods.textContent.match(/\d+/)) != 1) {
+                    countGoods.textContent = parseInt(countGoods.textContent.match(/\d+/)) - 1
+                }
+            })
+            
+            goOrder.addEventListener("click", (e) => {
+                const parent = e.target.parentElement.parentElement.parentElement
+                console.log(parent)
+
+                if (parent.querySelector(".popup-content-info").querySelector(".popup-content-orderpanel").querySelector(".orderpanel-cart").textContent.toLowerCase().trim() == "add to cart") {
+                    new CartItem(
+                        parent.getElementsByClassName("popup-content-img")[0].getElementsByTagName("IMG")[0].src, 
+                        parent.getElementsByClassName("popup-content-title")[0].textContent,
+                        Number(parent.getElementsByClassName("popup-content-stock")[0].getElementsByTagName("SPAN")[0].textContent),
+                        Number(parent.getElementsByClassName("popup-content-price")[0].textContent.slice(1, -3)),
+                        Number(parent.getElementsByClassName("orderpanel-countGoods")[0].textContent),
+                        ".cart-goods-body")
+                        .render()
+                
+                    updateStorage();
+                    initialState();
+                    cartIsEmpty();
+                    sumTotal();
+                }
+            
+                window.location.href = "../shipping.html";
+            
+            })
+            
+            addToCart[0].addEventListener("click", (e) => {
+                const parent = e.target.parentElement.parentElement.parentElement
+
+                console.log(parent)
+
+                if (parent.querySelector(".popup-content-info").querySelector(".popup-content-orderpanel").querySelector(".orderpanel-cart").textContent.toLowerCase().trim() == "add to cart") {
+                    new CartItem(
+                        parent.getElementsByClassName("popup-content-img")[0].getElementsByTagName("IMG")[0].src, 
+                        parent.getElementsByClassName("popup-content-title")[0].textContent,
+                        Number(parent.getElementsByClassName("popup-content-stock")[0].getElementsByTagName("SPAN")[0].textContent),
+                        Number(parent.getElementsByClassName("popup-content-price")[0].textContent.slice(1, -3)),
+                        Number(parent.getElementsByClassName("orderpanel-countGoods")[0].textContent),
+                        ".cart-goods-body")
+                        .render()
+                
+                    updateStorage();
+                    initialState();
+                    cartIsEmpty();
+                    sumTotal();
+
+                    if (checkGoodsInCart(parent)) {
+                        addToCart[0].textContent = "In cart";
+                        addPopup(addToCart, "data-popup", "#popup-cart");
+                    } else {
+                        addToCart[0].removeAttribute("data-popup")
+                    }
+                }
+            })
+        }
+    })
+
+    addPopup(cartGood, "data-popup", "#popup-cart")
+    addPopup(userAuth, "data-popup", "#popup-auth")
+}
 //REGISTER====================================================================================================
 
 const enter_password = document.querySelectorAll(".auth-enter-password");
@@ -573,6 +611,14 @@ class Order {
             });
         }
 
+        if(this.status.toLowerCase() == "delivered") {
+            this.color = "greenStatus";
+        } else if (this.status.toLowerCase() == "canceled") {
+            this.color = "redStatus";
+        } else {
+            this.color = "defaultStatus";
+        }
+
         element.innerHTML = `
         <div class="body-good-info">
             <div style="background-image = url('${this.src}')" class="body-good-img"></div>
@@ -581,7 +627,7 @@ class Order {
                 <div class="good-info-article">Article: <span>${this.article}</span></div>
             </div>
         </div>
-        <div class="body-good-status greenStatus">${this.status}</div>
+        <div class="body-good-status">${this.status}</div>
         <div class="body-good-datadelivery">${this.dateDelivery}</div>
         <div class="body-good-datasale">${this.dateSale}</div>
         <div class="body-good-amount">(x <span>${this.amount}</span>)</div>
@@ -589,6 +635,7 @@ class Order {
             `;
 
         this.parent.forEach((par) => {
+            element.querySelector(".body-good-status").classList.add(this.color);
             par.append(element);
         })
     }
@@ -597,8 +644,9 @@ class Order {
 
 //USER_ACC====================================================================================================
 
+if(document.getElementsByTagName("body")[0].classList.contains("user-acc")) {
 
-function clear_active_pages () {
+function clear_active_pages() {
     user_pages.querySelectorAll(".user-pages").forEach((elem) => {
     if (elem.classList.contains("user-pages-address")) {
         elem.classList.remove("active-page")
@@ -613,7 +661,6 @@ function clear_active_pages () {
 })
 }
 
-if(document.getElementsByTagName("body")[0].classList.contains("user-acc")) {
 user_pages.addEventListener("click", (e) => {
 
     function check(url) {
@@ -681,33 +728,89 @@ user_pages.addEventListener("click", (e) => {
             `;
         if(document.getElementsByTagName("body")[0].classList.contains("user-acc")) {
             new Order(
-            "../img/goods1.png", 
-            "Stacking pyramid", 
-            1995751877966, 
-            "Delivered", 
-            Date.now(),
-            Date.now(),
-            2,
-            10.00, 
-            ".auth-forms-body",
-            ).render();
+                "../img/goods1.png", 
+                "Stacking pyramid", 
+                1995751877966, 
+                "In delivery", 
+                Date.now(),
+                Date.now(),
+                2,
+                10.00, 
+                ".auth-forms-body",
+                ).render();
         }
     }
 })
 }
 
-//CHECK=GOOD=IN=CART====================================================================================================
+//ADMIN_ACC====================================================================================================
 
-const bigGood = document.querySelector("#bigGoods");
-const uniqueNames = new Set();
 
-function checkGoodsInCart(e) {
-    const nameOfGoods = e.target.parentElement.parentElement.querySelector("element-info-name");
+if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
 
-    const nowCart = document.querySelector("#shopCart").querySelectorAll(".body-info-title");
-    nowCart.forEach((elem) => {
-        uniqueNames.add(elem.textContent.trim())
+    //Боковая панелька
+    const user_pages = document.querySelector(".admin-auth-pages");
+    const user_forms = document.querySelector(".admin-auth-block");
+
+    function clear_active_pages_adm() {
+        user_pages.querySelectorAll(".admin-pages").forEach((elem) => {
+        if (elem.classList.contains("admin-pages-goods")) {
+            elem.classList.remove("admin-active-page")
+            elem.children[0].style.backgroundImage = `url("../img/box.svg")`
+        } else if (elem.classList.contains("admin-pages-details")) {
+            elem.classList.remove("admin-active-page")
+            elem.children[0].style.backgroundImage = `url("../img/user-acc.svg")`
+        } else if (elem.classList.contains("admin-pages-orders")) {
+            elem.classList.remove("admin-active-page")
+            elem.children[0].style.backgroundImage = `url("../img/shopcart.svg")`
+        }
     })
-    //Потом заменить на nameOfGoods и оно будет из
-    return uniqueNames.has("LEGO bricks set")
+    }
+    
+    user_pages.addEventListener("click", (e) => {
+    
+        function check(url) {
+            e.preventDefault();
+            clear_active_pages_adm();
+            e.target.classList.add("admin-active-page")
+            e.target.children[0].style.backgroundImage = `url(${url})` 
+        }
+    
+        if (e.target.classList.contains("admin-pages-goods")) {
+            check("../img/box-active.svg")
+            user_forms.innerHTML = `
+            `
+        } else if (e.target.classList.contains("admin-pages-details")) {
+            check("../img/user-acc-active.svg")
+            user_forms.innerHTML = `
+            <div class="admin-forms-title">Users</div>
+            <div class="admin-users-header">
+                <div class="admin-header-item1 admin-header-item">Id</div>
+                <div class="admin-header-item2 admin-header-item">Username</div>
+                <div class="admin-header-item3 admin-header-item">Email</div>
+                <div class="admin-header-item4 admin-header-item">Status</div>
+                <div class="admin-header-item5 admin-header-item">Last activity</div>
+            </div>
+            <div class="admin-forms-body">
+            </div>
+            `
+        } else if (e.target.classList.contains("admin-pages-orders")) {
+            check("../img/shopcart-active.svg")
+            user_forms.innerHTML = `
+                `;
+        }
+    })
+
+    // Товарка
+
+    const parent_adminGoods = document.querySelector(".admin-forms-body");
+
+    parent_adminGoods.addEventListener("click", (e) => {
+        if (e.target.classList.contains("userinfo-opportunity-delete")) {
+            e.target.parentElement.parentElement.remove();
+        } else {e.target.classList.contains("userinfo-opportunity-changer")} {
+            e.target.setAttribute("data-popup", "#popup-username");
+        }
+    })
+
 }
