@@ -95,10 +95,18 @@
 							<div class="username-personal-title">Personal Information</div>
 							<div class="admin-input-personal"><input type="email" name="email" class="adminForm"><label for="email" class="textinputbox">Email address</label></div>
 							<div class="admin-input-personal"><input type="text" name="username" class="adminForm"><label for="username" class="textinputbox">Username</label></div>
-							<div style="display: flex; flex-wrap: nowrap;" class="admin-input-personal">
-								<input type="radio" name="blocked" class="radio-unblocked-user blocked-user">Unblocked
-								<input type="radio" name="blocked" class="radio-blocked-user blocked-user">Blocked
-								<label for="blocked" class="textinputbox">Blocking</label>
+							<div style="display: flex; flex-wrap: nowrap; width: 100%;" class="admin-input-personal">
+								<div class="form_toggle">
+									<div class="form_toggle-item item-2">
+										<input id="fid-2" type="radio" name="radio" value="unblocked">
+										<label for="fid-2">Unblocked</label>
+									</div>
+									<div class="form_toggle-item item-1">
+										<input id="fid-1" type="radio" name="radio" value="blocked">
+										<label for="fid-1">Blocked</label>
+									</div>
+								</div>
+								<label for="username" class="textinputbox">Blocking</label>
 							</div>
 						</div>
 						<div class="username-address">

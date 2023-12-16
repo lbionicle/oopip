@@ -748,6 +748,69 @@ user_pages.addEventListener("click", (e) => {
 
 if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
 
+    class UserAccount {
+        constructor(id, username, email, status, last_activivty, parentSelector, ...classes) {
+           this.id = id;
+           this.username = username;
+           this.email = email;
+           this.status = status;
+           this.classes = classes;
+           this.last_activivty = last_activivty;
+           this.parent = document.querySelectorAll(parentSelector);
+           this.fullDate();
+        }
+    
+        fullDate() {
+    
+            function fd(data) {
+                let month = data.getUTCMonth() + 1;
+                let day = data.getUTCDate();
+                let year = data.getUTCFullYear();
+    
+                return `${day}.${month}.${year}`
+            }
+    
+            this.last_activivty = fd(new Date(this.last_activivty));
+        }
+    
+        render() {
+            const element = document.createElement('div');
+    
+            if (this.classes.length === 0) {
+                element.classList.add("forms-body-userinfo");
+            } else {
+                this.classes.forEach(className => {
+                    element.classList.add(className)
+                });
+            }
+    
+            if(this.status.toLowerCase() == "unblocked") {
+                this.color = "unblocked";
+            } else if (this.status.toLowerCase() == "blocked") {
+                this.color = "blocked";
+            }
+    
+            element.innerHTML = `
+            <div class="body-userinfo-id">${this.id}</div>
+            <div class="body-userinfo-username">${this.username}</div>
+            <div class="body-userinfo-email">${this.email}</div>
+            <div class="body-userinfo-status">${this.status}</div>
+            <div class="body-userinfo-activity">${this.last_activivty}</div>
+            <div class="body-userinfo-opportunity">
+                <button class="userinfo-opportunity-changer"></button>
+                <button class="userinfo-opportunity-delete"></button>
+            </div>
+                `;
+    
+            this.parent.forEach((par) => {
+                element.querySelector(".body-userinfo-status").classList.add(this.color);
+                par.append(element);
+            })
+        }
+    }
+    new UserAccount(1, "user1", "user1@gmail.com", "Unblocked", Date.now(), ".admin-forms-body").render();
+    new UserAccount(2, "user2", "user2@gmail.com", "Blocked", Date.now(), ".admin-forms-body").render();
+
     //Боковая панелька
     const user_pages = document.querySelector(".admin-auth-pages");
     const user_forms = document.querySelector(".admin-auth-block");
@@ -794,6 +857,8 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
             <div class="admin-forms-body">
             </div>
             `
+            new UserAccount(1, "user1", "user1@gmail.com", "Unblocked", Date.now(), ".admin-forms-body").render();
+            new UserAccount(2, "user2", "user2@gmail.com", "Blocked", Date.now(), ".admin-forms-body").render();
         } else if (e.target.classList.contains("admin-pages-orders")) {
             check("../img/shopcart-active.svg")
             user_forms.innerHTML = `
@@ -803,14 +868,31 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
 
     // Товарка
 
-    const parent_adminGoods = document.querySelector(".admin-forms-body");
-
-    parent_adminGoods.addEventListener("click", (e) => {
+    user_forms.addEventListener("click", (e) => {
+        console.log(e.target)
         if (e.target.classList.contains("userinfo-opportunity-delete")) {
             e.target.parentElement.parentElement.remove();
         } else {e.target.classList.contains("userinfo-opportunity-changer")} {
-            e.target.setAttribute("data-popup", "#popup-username");
+            e.target.parentElement.parentElement.querySelector(".userinfo-opportunity-changer").setAttribute("data-popup", "#popup-username");
         }
+
+        const blocked = document.querySelector(".item-1");
+        const unblocked = document.querySelector(".item-2");
+
+        unblocked.addEventListener("click", (e) => {
+            unblocked.classList.add("item-2-checked");
+            blocked.classList.remove("item-1-checked");
+            unblocked.getElementsByTagName("input").checked = true;
+        })
+
+        blocked.addEventListener("click", (e) => {
+            blocked.classList.add("item-1-checked");
+            unblocked.classList.remove("item-2-checked");
+            blocked.getElementsByTagName("input").checked = true;
+        })
+
     })
+
+
 
 }

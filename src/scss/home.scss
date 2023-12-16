@@ -770,6 +770,63 @@ button.active{
 .goods-header-item {
     display: block;
 }
+.shipping-goods-forms {
+    flex: 0 1 65%;
+    display: flex;
+    flex-direction: column;
+}
+// Форма из доставки
+.shipping-forms-title {
+    width: 100%;
+    font-weight: 500;
+    font-size: toRem(19);
+    line-height: toRem(20);
+    margin: 0 0 toRem(26) 0;
+}
+.shipping_form_details {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+.inputbox_shipping {
+    flex: 0 1 50%;
+    height: toRem(65.5);
+    display: flex;
+    position: relative;
+    margin: toRem(24) 0 0 0;
+    flex-direction: column-reverse;
+    color: #3D3D3D;
+    justify-content: space-between;
+}
+.defShipping {
+    display: flex;
+    height: toRem(45);
+    width: 90%;
+    border-radius: toRem(2.82);
+    border: toRem(0.94) solid rgba(234, 234, 234, 1);
+    padding: 0 toRem(40) 0 toRem(10);
+    &:focus {
+        border-color: #46A358;
+    }
+}
+.shipping-textinputbox {
+    display: flex;
+    flex-wrap: nowrap;
+    text-align: center;
+    position: relative;
+    justify-content: left;
+    align-items: center;
+    font-size: toRem(14);
+    line-height: toRem(14);
+    span{
+        color: #F03800;
+        font-size: toRem(18);
+        line-height: toRem(12.12);
+        margin-left: toRem(5);
+    }
+}
+.btn-submit {
+}
 // Коризна из главного меню
 .goods-body-good {
     display: flex;
@@ -856,6 +913,10 @@ button.active{
 }
 //====================================================================================================
 
+.page-ship-order {
+    flex: 0 1 35%;
+}
+
 .shipping-goods {
     display: flex;
     flex-wrap: nowrap;
@@ -864,14 +925,16 @@ button.active{
     display: flex;
     flex-wrap: nowrap;
     width: toRem(1440);
+    justify-content: space-between;
     margin: 0 auto;
 }
 .ship-order-total {
-    width: toRem(400);
+    width: 100%;
     margin: toRem(25) 0 0 0;
     display: flex;
     flex-wrap: nowrap;
     flex-direction: column;
+    float: right;
 }
 .order-goods-orders {
     border: none;
@@ -882,14 +945,14 @@ button.active{
     border: none;
 }
 .ship-info-total {
-    width: toRem(400) !important;
+    width: 100%;
 }
 .order-subt, .order-ship{
-    font-size: toRem(19);
+    font-size: toRem(18);
     line-height: toRem(20);
     color: #3D3D3D;
     span {
-        font-size: toRem(23);
+        font-size: toRem(19);
         line-height: toRem(20);
         font-weight: 500;
     }
@@ -899,27 +962,28 @@ button.active{
     margin: 0 0 toRem(10) 0;
 }
 .order-totl {
-    font-size: toRem(20);
+    font-size: toRem(18);
     line-height: toRem(20);
     margin: toRem(60) 0 0 0;
     padding: toRem(20) 0 0 0;
     border-top: toRem(0.25) solid rgba(70, 163, 88, 0.5);
     width: 100%;
     span {
-        font-size: toRem(23);
+        font-size: toRem(19);
         font-weight: 700;
         line-height: toRem(20);
         color: #46A358;
     }
 }
 .ship-order-payment {
-    margin: toRem(46) 0 0 0;
+    margin: toRem(26) 0 0 0;
+    width: 45%;
 }
 .order-payment-title {
     float: right;
-    font-size: toRem(21);
-    width: toRem(400);
-    font-weight: 700;
+    font-size: toRem(19);
+    width: 100%;
+    font-weight: 500;
     line-height: toRem(20);
     color: #3D3D3D;
 }
@@ -929,7 +993,7 @@ button.active{
     display: flex;
     flex-wrap: nowrap;
     flex-direction: column;
-    width: toRem(400);
+    width: 100%;
 }
 .checkbox-online{
     margin: toRem(24) 0;
@@ -940,7 +1004,8 @@ button.active{
     justify-content: left;
     border: toRem(1.24) solid #EAEAEA;
     border-radius: toRem(3.72);
-    height: toRem(56);
+    height: toRem(45);
+    padding: toRem(15) 0;
     input {
         width: toRem(20);
         height: toRem(20);
@@ -948,17 +1013,17 @@ button.active{
     }
 }
 .checkbox__text {
-    font-size: toRem(18.59);
-    line-height: toRem(20);
+    font-size: toRem(16);
+    line-height: toRem(18);
     color: #3D3D3D;
 }
 .button-order {
     background-color: rgba(70, 163, 88, 1);
-    font-size: toRem(19);
+    font-size: toRem(18);
     line-height: toRem(20);
     font-weight: 700;
     color: white;
-    width: toRem(400);
+    width: 100%;
     height: toRem(50);
     border-radius: toRem(4);
     float: right;
@@ -1478,7 +1543,9 @@ button.active{
 
 
 .forms-body-userinfo {
+    margin: toRem(10) 0 0 0;
     padding: toRem(28) 0;
+    background-color: #FBFBFB;
     display: flex;
     width: 100%;
     height: toRem(87);
@@ -1502,17 +1569,17 @@ button.active{
 .body-userinfo-status {
     color: #46A358;
     flex: 0 1 20%;
-}
-.body-userinfo-activity {
-    color: #2C2D3B;
-    flex: 0 1 15%;
-
+    
     &.unblocked {
         color: #46A358;
     }
     &.blocked {
         color: #E10707;
     }
+}
+.body-userinfo-activity {
+    color: #2C2D3B;
+    flex: 0 1 15%;
 }
 .body-userinfo-opportunity {
     display: flex;
@@ -1599,29 +1666,53 @@ button.active{
 }
 
 .admin-input-personal {
-    input[type=radio] {
-        display: none;
-      }
-      
-      input[type=radio]+label {
-        display: inline-block;
-        margin: -2px;
-        padding: 4px 12px;
-        margin-bottom: 0;
-        font-size: 14px;
-        line-height: 20px;
-        color: #333;
+    .form_toggle {
+        display: flex;
+        width: 100%;
+        flex-wrap: nowrap;
+        overflow: hidden;
+    }
+    .form_toggle-item {
         text-align: center;
-        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-        vertical-align: middle;
-        cursor: pointer;
-        background-color: #f5f5f5;
-        background-repeat: repeat-x;
-      }
-      
-      input[type=radio]:checked+label {
-        background-image: none;
-        outline: 0;
-        background-color: #e0e0e0;
-      }
+        width: 50%;
+    }
+    .form_toggle-item input[type=radio] {
+        display: none;
+    }
+    .form_toggle-item {
+        display: flex;
+        align-items: center;
+        height: toRem(50);   
+        label {
+            width: 100%;
+            line-height: 34px;    
+            border-right: none;
+            cursor: pointer;
+            user-select: none; 
+        }
+        border: toRem(0.25) solid #d9d9d9;
+    }
+     
+    .form_toggle .item-1{
+        border-radius: 0 toRem(6) toRem(6) 0;
+    }
+    .form_toggle .item-2{
+        border-radius: toRem(6) 0 0 toRem(6);
+    }
+    .item-1-checked{
+        background-color: #D62424;
+        label {
+            color: white;
+        }    }
+    .item-2-checked{
+        background-color: #46A358;
+        label {
+            color: white;
+        }
+    }
+}
+.shipping-goods-forms {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
 }

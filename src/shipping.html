@@ -16,31 +16,17 @@
                 <main style="margin: 157px 0 80px 0;" class="page">
                     <div class="shipping-goods">
                         <div class="shipping-goods-row">
-                            <div class="cart-goods">
-                                <div style="font-size: 16px; line-height: 16px;" class="cart-goods-header">
-                                    <div class="goods-header-item1 goods-header-item">Products</div>
-                                    <div class="goods-header-item2 goods-header-item">Price</div>
-                                    <div class="goods-header-item3 goods-header-item">Quantity</div>
-                                    <div class="goods-header-item4 goods-header-item">Total</div>
-                                </div>
-                                <div id="shopCart" class="cart-goods-body">
-                                    <div class="goods-body-showempty">
-                                        <div id="emptyCart" style="font-size: 18px; display: flex; flex-direction: column; flex: 0 1 100%; justify-content: center; height: 185px; align-items:center; text-align: center">Cart is empty!</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="page-ship-order">
-                                <div class="ship-order-total">
-                                    <div class="ship-order-calc">
-                                        <div style="width: 400px; float: right" class="ship-info-block1">
-                                            <div class="ship-info-total">
-                                                <div class="info-calcs-subt order-subt">Subtotal<span>$0.00</span></div>
-                                                <div class="info-calcs-ship order-ship">Shiping<span>$0.00</span></div>
-                                            </div>
-                                            <a style="display: block; width: 100%;;" href="" class="cart-info-shipping">View shipping charge</a>
-                                            <div class="cart-info-total order-totl">Total<span>$0.00</span></div>
-                                        </div>
-                                    </div>
+                            <div class="shipping-goods-forms">
+                                <div class="shipping-forms-title">Billing Address</div>
+                                <form action="" method="post" class="shipping_form_details">
+                                    <div style="margin: 0 0 0 0;" class="inputbox_shipping"><input type="text" name="firstname" class="defShipping" required><label for="firstname" class="shipping-textinputbox">First Name <span>*</span></label></div>
+                                    <div style="margin: 0 0 0 0;" class="inputbox_shipping"><input type="text" name="lastname" class="defShipping" required><label for="lastname" class="shipping-textinputbox">Last Name <span>*</span></label></div>
+                                    <div class="inputbox_shipping"><input type="text" name="country-region" class="defShipping" required><label for="country-region" class="shipping-textinputbox">Country / Region <span>*</span></label></div>
+                                    <div class="inputbox_shipping"><input type="text" name="town-city" class="defShipping" required><label for="town-city" class="shipping-textinputbox">Town / City <span>*</span></label></div>
+                                    <div class="inputbox_shipping"><input type="text" name="street-address" class="defShipping" required><label for="street-address" class="shipping-textinputbox">Street Address<span>*</span></label></div>
+                                    <div class="inputbox_shipping"><input type="text" name="state" class="defShipping" required><label for="state" class="shipping-textinputbox">State <span>*</span></label></div>
+                                    <div class="inputbox_shipping"><input type="text" name="zip" class="defShipping" required><label for="zip" class="shipping-textinputbox">Zip <span>*</span></label></div>
+                                    <div class="inputbox_shipping"><input type="text" name="email" class="defShipping" required><label for="email" class="shipping-textinputbox">Email address <span>*</span></label></div>
                                     <div class="ship-order-payment">
                                         <div class="order-payment-title">Payment Method</div>
                                         <div class="checkbox">
@@ -56,6 +42,34 @@
                                             </form>
                                         </div>
                                         <button type="submit" class="button-order btn-activate"><a href="">Place Order</a></button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="page-ship-order">
+                                <div class="shipping-forms-title">Your Order</div>
+                                <div style="margin: 0;" class="cart-goods">
+                                    <div style="font-size: 16px; line-height: 16px;" class="cart-goods-header">
+                                        <div class="goods-header-item1 goods-header-item">Products</div>
+                                        <div class="goods-header-item2 goods-header-item">Price</div>
+                                        <div class="goods-header-item3 goods-header-item">Quantity</div>
+                                        <div class="goods-header-item4 goods-header-item">Total</div>
+                                    </div>
+                                    <div id="shopCart" class="cart-goods-body">
+                                        <div class="goods-body-showempty">
+                                            <div id="emptyCart" style="font-size: 18px; display: flex; flex-direction: column; flex: 0 1 100%; justify-content: center; height: 185px; align-items:center; text-align: center">Cart is empty!</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ship-order-total">
+                                    <div class="ship-order-calc">
+                                        <div style="width: 100%; float: left" class="ship-info-block1">
+                                            <div class="ship-info-total">
+                                                <div class="info-calcs-subt order-subt">Subtotal<span>$0.00</span></div>
+                                                <div class="info-calcs-ship order-ship">Shiping<span>$0.00</span></div>
+                                            </div>
+                                            <a style="display: block; width: 100%;" href="" class="cart-info-shipping">View shipping charge</a>
+                                            <div class="cart-info-total order-totl">Total<span>$0.00</span></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
