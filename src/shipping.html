@@ -3,13 +3,13 @@
 	@@include('html/_head.htm',{
         "title":"TEDDY SHOP"
         })
-        <body>
+        <body class="shipping.html">
             <div style="position: relative;" class="wrapper">
                 <header class="header">
                     <div class="header__container">
                         <a href="../index.html"><img src="@img/logo.svg" alt=""></a>
                         <div style="justify-content: right;" class="header-icons">
-                            <button class="user-header" style="z-index: 1;"><img class="user-icon icon" src="@img/User.svg" alt=""></button>
+                            <a id="user-account-btn"><button class="user-header" style="z-index: 1;"><img class="user-icon icon" src="@img/User.svg" alt=""></button></a>
                         </div>
                     </div>
                 </header>
@@ -26,13 +26,13 @@
                                     <div class="inputbox_shipping"><input type="text" name="street-address" class="defShipping" required><label for="street-address" class="shipping-textinputbox">Street Address<span>*</span></label></div>
                                     <div class="inputbox_shipping"><input type="text" name="state" class="defShipping" required><label for="state" class="shipping-textinputbox">State <span>*</span></label></div>
                                     <div class="inputbox_shipping"><input type="text" name="zip" class="defShipping" required><label for="zip" class="shipping-textinputbox">Zip <span>*</span></label></div>
-                                    <div class="inputbox_shipping"><input type="text" name="email" class="defShipping" required><label for="email" class="shipping-textinputbox">Email address <span>*</span></label></div>
+                                    <div class="inputbox_shipping"><input type="text" name="email" class="defShipping" disabled><label for="email" class="shipping-textinputbox">Email address</label></div>
                                     <div class="ship-order-payment">
                                         <div class="order-payment-title">Payment Method</div>
                                         <div class="checkbox">
                                             <form action="" method="get">
                                                 <div class="checkbox-online">                                   
-                                                    <input type="radio" class="checkbox-online__input" value="1" name="choice-pay">
+                                                    <input type="radio" class="checkbox-online__input" value="1" name="choice-pay" checked>
                                                     <span class="checkbox__text">Online payment</span>
                                                 </div>
                                                 <div class="checkbox-cash">                                   

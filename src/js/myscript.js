@@ -1,3 +1,44 @@
+const postData = async (url, data) => {
+    const res = await fetch(url, {
+        method: "POST",
+        body: data,
+        mode: 'cors',
+        headers: new Headers({
+            'Content-Type': 'application/json'
+          })
+    });
+
+    return await res.json();
+};
+
+function showUserInfo() {
+    const jsonFirst = JSON.stringify({"token" : localStorage.getItem("session")});
+
+    postData("http://192.168.100.13:8008/token", jsonFirst).then(json => {
+        const allPersonalForms = document.querySelectorAll(".defForm");
+
+        allPersonalForms[0].value = json["First_Name"]
+        allPersonalForms[1].value = json["Last_Name"]
+        allPersonalForms[2].value = json["email"]
+    })
+}
+
+function showUserAddress(class_check) {
+    const jsonFirst = JSON.stringify({"token" : localStorage.getItem("session")});
+
+    postData("http://192.168.100.13:8008/token", jsonFirst).then(json => {
+        const allPersonalForms = document.querySelectorAll(class_check);
+
+        allPersonalForms[0].value = json["First_Name"]
+        allPersonalForms[1].value = json["Last_Name"]
+        allPersonalForms[2].value = json["Country"]
+        allPersonalForms[3].value = json["Town"]
+        allPersonalForms[4].value = json["Address"]
+        allPersonalForms[5].value = json["State"]
+        allPersonalForms[6].value = json["Zip"]
+        allPersonalForms[7].value = json["email"]
+    })
+}
 //CHECK=GOOD=IN=CART====================================================================================================
 
 function checkGoodsInCart(element) {
@@ -17,30 +58,36 @@ function checkGoodsInCart(element) {
     return uniqueNames.has(nameOfGoods)
 }
 
-//=======================================================================================================================
+//SHIPPING=======================================================================================================================
 
-const radios = document.getElementsByName("choice-pay");
+if(document.getElementsByTagName("body")[0].classList.contains("shipping.html")) {
 
-function check(){
-    if(radios[0].checked){
-       radios[0].parentElement.style.borderColor = "#46A358";
+    showUserAddress(".defShipping");
 
-       radios[1].checked = false
-       radios[1].parentElement.style.borderColor = "#EAEAEA"; 
-    } else {
-        radios[1].parentElement.style.borderColor = "#46A358"; 
+    const radios = document.getElementsByName("choice-pay");
 
-        radios[0].checked = false
-        radios[0].parentElement.style.borderColor = "#EAEAEA";     }
-   }
+    function check(){
+        if(radios[0].checked){
+        radios[0].parentElement.style.borderColor = "#46A358";
 
-radios.forEach((elem) => {
-    console.log(elem.parentElement)
-    elem.parentElement.addEventListener("click", (e) => {
-        e.target.parentElement.getElementsByTagName("input")[0].checked = true
-        check();
+        radios[1].checked = false
+        radios[1].parentElement.style.borderColor = "#EAEAEA"; 
+        } else {
+            radios[1].parentElement.style.borderColor = "#46A358"; 
+
+            radios[0].checked = false
+            radios[0].parentElement.style.borderColor = "#EAEAEA";     }
+    }
+
+    radios.forEach((elem) => {
+        console.log(elem.parentElement)
+        elem.parentElement.addEventListener("click", (e) => {
+            e.target.parentElement.getElementsByTagName("input")[0].checked = true
+            check();
+        })
     })
-})
+
+}
 
 //CART_GOODS====================================================================================================
 
@@ -506,9 +553,23 @@ if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
             })
         }
     })
+}
 
-    addPopup(cartGood, "data-popup", "#popup-cart")
+addPopup(cartGood, "data-popup", "#popup-cart")
+
+if(localStorage.getItem("session") == null) {
     addPopup(userAuth, "data-popup", "#popup-auth")
+} else {
+    const jsonFirst = JSON.stringify({"token" : localStorage.getItem("session")});
+
+    postData("http://192.168.100.13:8008/token", jsonFirst)
+    .then(json => {
+        if (json["SuperUser"]) {
+            document.querySelector("#user-account-btn").href = "../admin.html"
+        } else {
+            document.querySelector("#user-account-btn").href = "../user.html"
+        }
+    })
 }
 //REGISTER====================================================================================================
 
@@ -646,6 +707,8 @@ class Order {
 
 if(document.getElementsByTagName("body")[0].classList.contains("user-acc")) {
 
+showUserInfo();
+
 function clear_active_pages() {
     user_pages.querySelectorAll(".user-pages").forEach((elem) => {
     if (elem.classList.contains("user-pages-address")) {
@@ -675,41 +738,68 @@ user_pages.addEventListener("click", (e) => {
         user_forms.innerHTML = `
         <div class="auth-forms-title">Billing Address</div>
         <form action="" method="post" class="user_form_details">
-            <div class="inputbox_user"><input type="text" name="firstname" class="defForm" required><label for="firstname" class="textinputbox">First Name <span>*</span></label></div>
-            <div class="inputbox_user"><input type="text" name="lastname" class="defForm" required><label for="lastname" class="textinputbox">Last Name <span>*</span></label></div>
-            <div class="inputbox_user"><input type="text" name="country-region" class="defForm" required><label for="country-region" class="textinputbox">Country / Region <span>*</span></label></div>
-            <div class="inputbox_user"><input type="text" name="town-city" class="defForm" required><label for="town-city" class="textinputbox">Town / City <span>*</span></label></div>
-            <div class="inputbox_user"><input type="text" name="street-address" class="defForm" required><label for="street-address" class="textinputbox">Street Address<span>*</span></label></div>
+            <div class="inputbox_user"><input type="text" name="first_name" class="defForm" required><label for="first_name" class="textinputbox">First Name <span>*</span></label></div>
+            <div class="inputbox_user"><input type="text" name="last_name" class="defForm" required><label for="last_name" class="textinputbox">Last Name <span>*</span></label></div>
+            <div class="inputbox_user"><input type="text" name="country" class="defForm" required><label for="country" class="textinputbox">Country / Region <span>*</span></label></div>
+            <div class="inputbox_user"><input type="text" name="town" class="defForm" required><label for="town" class="textinputbox">Town / City <span>*</span></label></div>
+            <div class="inputbox_user"><input type="text" name="address" class="defForm" required><label for="address" class="textinputbox">Street Address<span>*</span></label></div>
             <div class="inputbox_user"><input type="text" name="state" class="defForm" required><label for="state" class="textinputbox">State <span>*</span></label></div>
             <div class="inputbox_user"><input type="text" name="zip" class="defForm" required><label for="zip" class="textinputbox">Zip <span>*</span></label></div>
-            <div class="inputbox_user"><input type="text" name="email" class="defForm" required><label for="email" class="textinputbox">Email address <span>*</span></label></div>
+            <div class="inputbox_user"><input type="text" name="email" class="defForm" disabled><label for="email" class="textinputbox">Email address</label></div>
             <button type="submit" class="btn-submit">Save Change</button>
         </form>
         `
+        showUserAddress(".defForm");
+    
+        const parent = e.target.parentElement.parentElement.parentElement.querySelector(".user-auth-forms").querySelector(".user_form_details")
+
+        document.querySelector(".btn-submit").addEventListener("click", (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(e.target.parentElement.parentElement.parentElement.querySelector(".user-auth-forms").querySelector(".user_form_details"));
+
+            const jsonFirst = JSON.stringify(Object.assign({}, {"user_token": localStorage.getItem("session"), "blocked": false, "superuser": false}, Object.fromEntries(formData.entries())));
+            
+            postData("http://192.168.100.13:8008/edituser", jsonFirst).then(json => window.location.reload())
+        })
+
     } else if (e.target.classList.contains("user-pages-details")) {
         check("../img/user-acc-active.svg")
         user_forms.innerHTML = `
         <div class="auth-forms-title">Personal Information</div>
         <form action="" method="post" class="user_form_details">
-            <div class="inputbox_user"><input type="text" name="username" class="defForm" required><label for="username" class="textinputbox">Username <span>*</span></label></div>
             <div class="inputbox_user"><input type="text" name="firstname" class="defForm" required><label for="firstname" class="textinputbox">First Name <span>*</span></label></div>
             <div class="inputbox_user"><input type="text" name="lastname" class="defForm" required><label for="lastname" class="textinputbox">Last Name <span>*</span></label></div>
-            <div class="inputbox_user"><input type="text" name="email" class="defForm" required><label for="email" class="textinputbox">Email address <span>*</span></label></div>
+            <div class="inputbox_user"><input type="text" name="email" class="defForm" disabled><label for="email" class="textinputbox">Email address</label></div>
             <div class="change-password-user">
                 <div class="password-user-title">Password change</div>
                 <div class="inputbox_user"><input type="password" name="currpassword" class="defForm"><label for="currpassword" class="textinputbox">Current password</label>
-                    <button style="z-index: 209;" class="password-checker hide-checker"></button>
+                    <button class="password-checker hide-checker"></button>
                 </div>
                 <div class="inputbox_user"><input type="password" name="newpassword" class="defForm"><label for="newpassword" class="textinputbox">New password</label>
-                    <button style="z-index: 209;" class="password-checker hide-checker"></button>
+                    <button class="password-checker hide-checker"></button>
                 </div>
                 <div class="inputbox_user"><input type="password" name="confirmpassword" class="defForm"><label for="confirmpassword" class="textinputbox">Confirm new password</label>
-                    <button style="z-index: 209;" class="password-checker hide-checker"></button>
+                    <button class="password-checker hide-checker"></button>
                 </div>
             </div>
             <button type="submit" class="btn-submit">Save Change</button>
         </form>
         `
+        showUserInfo();
+
+        const parent = e.target.parentElement.parentElement.parentElement.querySelector(".user-auth-forms").querySelector(".user_form_details")
+
+        document.querySelector(".btn-submit").addEventListener("click", (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(e.target.parentElement.parentElement.parentElement.querySelector(".user-auth-forms").querySelector(".user_form_details"));
+
+            const jsonFirst = JSON.stringify(Object.assign({}, {"user_token": localStorage.getItem("session"), "blocked": false, "superuser": false}, Object.fromEntries(formData.entries())));
+            
+            postData("http://192.168.100.13:8008/edituser", jsonFirst).then(json => window.location.reload())
+        })
+
     } else if (e.target.classList.contains("user-pages-orders")) {
         check("../img/shopcart-active.svg")
         user_forms.innerHTML = `
@@ -739,6 +829,10 @@ user_pages.addEventListener("click", (e) => {
                 ".auth-forms-body",
                 ).render();
         }
+    }  else if (e.target.classList.contains("user-pages-logout")) {
+        e.preventDefault();
+        localStorage.removeItem("session");
+        window.location.href = "../index.html"
     }
 })
 }
@@ -843,6 +937,10 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
             check("../img/shopcart-active.svg")
             user_forms.innerHTML = `
                 `;
+        } else if (e.target.classList.contains("admin-pages-logout")) {
+            e.preventDefault();
+            localStorage.removeItem("session");
+            window.location.href = "../index.html"
         }
     })
 
@@ -874,5 +972,36 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
     })
 
 
-
 }
+
+//BACKEND-REGISTER==================================================================================================
+
+const btns_sumbit = document.querySelectorAll(".form_auth_button");
+
+function sendRequest(parent, url) {
+    const formData = new FormData(parent);
+
+    const jsonFirst = JSON.stringify(Object.fromEntries(formData.entries()));
+
+    postData(url, jsonFirst)
+      .then(json => {
+        if (url == "http://192.168.100.13:8008/login" && typeof(json) == "string") {
+            localStorage.setItem("session", json);
+            window.location.reload();
+        }
+      })
+
+    parent.reset();
+}
+
+btns_sumbit.forEach((elem) => {
+    elem.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        if(elem.parentElement.id == "form_user_reg") {
+            sendRequest(elem.parentElement, "http://192.168.100.13:8008/reg")
+        } else if (elem.parentElement.id == "form_user_log") {
+            sendRequest(elem.parentElement, "http://192.168.100.13:8008/login")
+        }
+    })
+})

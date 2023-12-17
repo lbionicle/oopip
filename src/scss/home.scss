@@ -553,26 +553,21 @@ button.active{
     line-height: toRem(16);
 }
 .text-auth {
-    margin-bottom: toRem(15);
     font-size: toRem(13);
     line-height: toRem(16);
     color: #3D3D3D;
+}
+.email-auth {
+    margin: toRem(30) 0 toRem(20) 0;
 }
 .auth-enter-password {
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
-}
-.auth-forgot {
-    margin: toRem(16) 0 toRem(27) 0;
-}
-.email-auth {
-    margin-bottom: toRem(17);
-}
-.auth-enter-password {
     position: relative;
     width: toRem(300);
     height: toRem(40);
+    margin: 0 0 toRem(30) 0;
     border-radius: toRem(5);
     background-color: transparent;
     border: toRem(1) solid #dadada;

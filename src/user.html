@@ -5,14 +5,7 @@
         })
         <body class="user-acc">
             <div style="position: relative;" class="wrapper">
-                <header class="header">
-                    <div class="header__container">
-                        <a href="../index.html"><img src="@img/logo.svg" alt=""></a>
-                        <div style="justify-content: right;" class="header-icons">
-                            <button class="user-header" style="z-index: 1;"><img class="user-icon icon" src="@img/User.svg" alt=""></button>
-                        </div>
-                    </div>
-                </header>
+                @@include('html/_header.htm',{})
                 <main style="margin: 157px 0 80px 0;" class="page">
                     <div class="page-user-auth">
                         <div class="user-auth-row">
@@ -38,20 +31,16 @@
                             <div class="user-auth-forms">
                                 <div class="auth-forms-title">Personal Information</div>
                                 <form action="" method="post" class="user_form_details">
-                                    <div class="inputbox_user"><input type="text" name="username" class="defForm" required><label for="username" class="textinputbox">Username <span>*</span></label></div>
                                     <div class="inputbox_user"><input type="text" name="firstname" class="defForm" required><label for="firstname" class="textinputbox">First Name <span>*</span></label></div>
                                     <div class="inputbox_user"><input type="text" name="lastname" class="defForm" required><label for="lastname" class="textinputbox">Last Name <span>*</span></label></div>
-                                    <div class="inputbox_user"><input type="text" name="email" class="defForm" required><label for="email" class="textinputbox">Email address <span>*</span></label></div>
+                                    <div class="inputbox_user"><input type="text" name="email" class="defForm" disabled><label for="email" class="textinputbox">Email address</label></div>
                                     <div class="change-password-user">
                                         <div class="password-user-title">Password change</div>
                                         <div class="inputbox_user"><input type="password" name="currpassword" class="defForm"><label for="currpassword" class="textinputbox">Current password</label>
-                                            <button style="z-index: 209;" class="password-checker hide-checker"></button>
+                                            <button class="password-checker hide-checker"></button>
                                         </div>
                                         <div class="inputbox_user"><input type="password" name="newpassword" class="defForm"><label for="newpassword" class="textinputbox">New password</label>
-                                            <button style="z-index: 209;" class="password-checker hide-checker"></button>
-                                        </div>
-                                        <div class="inputbox_user"><input type="password" name="confirmpassword" class="defForm"><label for="confirmpassword" class="textinputbox">Confirm new password</label>
-                                            <button style="z-index: 209;" class="password-checker hide-checker"></button>
+                                            <button class="password-checker hide-checker"></button>
                                         </div>
                                     </div>
                                     <button type="submit" class="btn-submit">Save Change</button>

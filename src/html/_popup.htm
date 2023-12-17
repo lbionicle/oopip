@@ -14,34 +14,32 @@
 			</div>
 			<div class="auth-body">
 				<div class="text-auth">Enter your username and password to login.</div>
-				<form class="form_auth_style" action="#" method="post">
+				<form id="form_user_log" class="form_auth_style" action="#" method="post">
 					<input class="email-auth" type="email" name="auth_email" placeholder="Enter your email address" required >
 					<div class="auth-enter-password">
 						<input id="log-1" class="password-auth" type="password" name="auth_pass" placeholder="Password" required >
 						<button style="z-index: 209;" id="btn-hide-log" class="hide-auth"></button>
 					</div>
-					<a href="" class="auth-forgot">Forgot Password?</a>
 					<button class="form_auth_button btn-activate" type="submit" name="form_auth_submit">Login</button>
 				  </form>
 			</div>
 			</div>
-			<div id="reg-auth-user" style="width: 500px; height: 426px; padding: 52px 100px; border-bottom: 10px solid #46A358; display: none; flex-direction: column;" class="popup__content">
+			<div id="reg-auth-user" style="width: 500px; height: 400px; padding: 50px 100px; border-bottom: 10px solid #46A358; display: none; flex-direction: column;" class="popup__content">
 			<button style="top: 24px; right: 24px" data-close type="button" class="popup__close"><img class="background-color:#46A358;" src="@img/closegreen.svg" alt=""></button>
-			<div style="margin-bottom: 40px;" class="choice-auth">
+			<div style="margin-bottom: 3.325rem;" class="choice-auth">
 				<button id="login-auth-btn" class="login-auth">Login</button>
 				<div class="divider-auth">|</div>
 				<button id="reg-auth" class="register-auth auth-active">Register</button>
 			</div>
 			<div class="auth-body">
-				<div style="margin-bottom: 27px;" class="text-auth">Enter your email and password to register.</div>
-				<form class="form_auth_style" action="#" method="post">
+				<div class="text-auth">Enter your email and password to register.</div>
+				<form id="form_user_reg" class="form_auth_style" action="#" method="post">
 					<input class="email-auth" type="email" name="auth_email" placeholder="Enter your email address" required >
 					<div class="auth-enter-password">
 						<input id="reg-1" class="password-auth" type="password" name="auth_pass" placeholder="Password" required >
 						<button style="z-index: 209;" id="btn-hide-reg" class="hide-auth"></button>
 					</div>
-						<input style="margin: 16px 0 26px 0;" id="reg-2" class="password-auth" type="password" name="auth_pass" placeholder="Confirm Password" required >
-					<button class="form_auth_button btn-activate" type="submit" name="form_auth_submit">Register</button>
+					<button class="form_auth_button btn-activate" type="submit">Register</button>
 				  </form>
 			</div>
 			</div>

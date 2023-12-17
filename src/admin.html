@@ -5,13 +5,7 @@
         })
         <body class="admin-acc">
             <div style="position: relative;" class="wrapper">
-                <header class="header">
-                    <div class="header__container">
-                        <a href="../index.html"><img src="@img/logo.svg" alt=""></a>
-                        <div style="justify-content: right;" class="header-icons">
-                            <a href=""><button class="user-header" style="z-index: 1;"><img class="user-icon icon" src="@img/User.svg" alt=""></button></a>
-                        </div>
-                </header>
+                @@include('html/_header.htm',{})
                 <main style="margin: 157px 0 80px 0;" class="page">
                     <div class="page-admin-auth">
                         <div class="admin-auth-row">
@@ -39,7 +33,6 @@
                                 <div class="admin-forms-title">Users</div>
                                 <div class="admin-users-header">
                                     <div class="admin-header-item1 admin-header-item">Id</div>
-                                    <!-- <div class="admin-header-item2 admin-header-item">Username</div> -->
                                     <div class="admin-header-item3 admin-header-item">Email</div>
                                     <div class="admin-header-item4 admin-header-item">Status</div>
                                 </div>
