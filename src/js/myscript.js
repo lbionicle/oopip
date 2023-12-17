@@ -749,28 +749,12 @@ user_pages.addEventListener("click", (e) => {
 if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
 
     class UserAccount {
-        constructor(id, username, email, status, last_activivty, parentSelector, ...classes) {
+        constructor(id, email, status, parentSelector, ...classes) {
            this.id = id;
-           this.username = username;
            this.email = email;
            this.status = status;
            this.classes = classes;
-           this.last_activivty = last_activivty;
-           this.parent = document.querySelectorAll(parentSelector);
-           this.fullDate();
-        }
-    
-        fullDate() {
-    
-            function fd(data) {
-                let month = data.getUTCMonth() + 1;
-                let day = data.getUTCDate();
-                let year = data.getUTCFullYear();
-    
-                return `${day}.${month}.${year}`
-            }
-    
-            this.last_activivty = fd(new Date(this.last_activivty));
+           this.parent = document.querySelector(parentSelector).querySelectorAll(".admin-forms-body");
         }
     
         render() {
@@ -792,10 +776,8 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
     
             element.innerHTML = `
             <div class="body-userinfo-id">${this.id}</div>
-            <div class="body-userinfo-username">${this.username}</div>
             <div class="body-userinfo-email">${this.email}</div>
             <div class="body-userinfo-status">${this.status}</div>
-            <div class="body-userinfo-activity">${this.last_activivty}</div>
             <div class="body-userinfo-opportunity">
                 <button class="userinfo-opportunity-changer"></button>
                 <button class="userinfo-opportunity-delete"></button>
@@ -808,8 +790,8 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
             })
         }
     }
-    new UserAccount(1, "user1", "user1@gmail.com", "Unblocked", Date.now(), ".admin-forms-body").render();
-    new UserAccount(2, "user2", "user2@gmail.com", "Blocked", Date.now(), ".admin-forms-body").render();
+    new UserAccount(1, "user1@gmail.com", "Unblocked", ".admin-auth-block").render();
+    new UserAccount(2, "user2@gmail.com", "Blocked", ".admin-auth-block").render();
 
     //Боковая панелька
     const user_pages = document.querySelector(".admin-auth-pages");
@@ -849,16 +831,14 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
             <div class="admin-forms-title">Users</div>
             <div class="admin-users-header">
                 <div class="admin-header-item1 admin-header-item">Id</div>
-                <div class="admin-header-item2 admin-header-item">Username</div>
                 <div class="admin-header-item3 admin-header-item">Email</div>
                 <div class="admin-header-item4 admin-header-item">Status</div>
-                <div class="admin-header-item5 admin-header-item">Last activity</div>
             </div>
             <div class="admin-forms-body">
             </div>
             `
-            new UserAccount(1, "user1", "user1@gmail.com", "Unblocked", Date.now(), ".admin-forms-body").render();
-            new UserAccount(2, "user2", "user2@gmail.com", "Blocked", Date.now(), ".admin-forms-body").render();
+            new UserAccount(1, "lastnamefirstname@gmail.com", "Unblocked", ".admin-auth-block").render();
+            new UserAccount(2, "user2@gmail.com", "Blocked", ".admin-auth-block").render();
         } else if (e.target.classList.contains("admin-pages-orders")) {
             check("../img/shopcart-active.svg")
             user_forms.innerHTML = `
@@ -869,7 +849,7 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
     // Товарка
 
     user_forms.addEventListener("click", (e) => {
-        console.log(e.target)
+        
         if (e.target.classList.contains("userinfo-opportunity-delete")) {
             e.target.parentElement.parentElement.remove();
         } else {e.target.classList.contains("userinfo-opportunity-changer")} {

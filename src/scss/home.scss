@@ -1523,17 +1523,11 @@ button.active{
 .admin-header-item1 {
     flex: 0 1 10%;
 }
-.admin-header-item2 {
-    flex: 0 1 15%;
-}
 .admin-header-item3 {
-    flex: 0 1 20%;
+    flex: 0 1 37.5%;
 }
 .admin-header-item4 {
-    flex: 0 1 20%;
-}
-.admin-header-item5 {
-    flex: 0 1 15%;
+    flex: 0 1 27.5%;
 }
 .admin-forms-body {
     display: flex;
@@ -1559,16 +1553,13 @@ button.active{
     line-height: toRem(18);
     flex: 0 1 10%;
 }
-.body-userinfo-username {
-    flex: 0 1 15%;
-}
 .body-userinfo-email {
     text-decoration: underline;
-    flex: 0 1 20%;
+    flex: 0 1 37.5%;
 }
 .body-userinfo-status {
     color: #46A358;
-    flex: 0 1 20%;
+    flex: 0 1 27.5%;
     
     &.unblocked {
         color: #46A358;
@@ -1577,17 +1568,13 @@ button.active{
         color: #E10707;
     }
 }
-.body-userinfo-activity {
-    color: #2C2D3B;
-    flex: 0 1 15%;
-}
 .body-userinfo-opportunity {
     display: flex;
     align-items: center;
     flex-wrap: nowrap;
     justify-content: right;
     padding: 0 toRem(30) 0 0;
-    flex: 0 1 20%;
+    flex: 0 1 25%;
 }
 .userinfo-opportunity-changer {
     width: 50%;
@@ -1614,9 +1601,6 @@ button.active{
     width: toRem(1340);
     justify-content: space-between;
 }
-.username-personal {
-    flex: 0 1 34%;
-}
 .username-personal-title, .username-address-title {
     width: 100%;
     font-size: toRem(21);
@@ -1625,7 +1609,7 @@ button.active{
     color: #3D3D3D;
 }
 .username-address {
-    flex: 0 1 64%;
+    flex: 0 1 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -1647,7 +1631,7 @@ button.active{
     height: toRem(77.5);
     display: flex;
     position: relative;
-    flex: 0 1 100%;
+    flex: 0 1 47.5%;
     margin: toRem(24) 0 0 0;
     flex-direction: column-reverse;
     font-size: toRem(14);

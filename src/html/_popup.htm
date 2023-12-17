@@ -91,11 +91,16 @@
 			<div class="content-username-row">
 				<form action="" method="post">
 					<div class="username-changeInfo">
-						<div class="username-personal">
-							<div class="username-personal-title">Personal Information</div>
-							<div class="admin-input-personal"><input type="email" name="email" class="adminForm"><label for="email" class="textinputbox">Email address</label></div>
-							<div class="admin-input-personal"><input type="text" name="username" class="adminForm"><label for="username" class="textinputbox">Username</label></div>
-							<div style="display: flex; flex-wrap: nowrap; width: 100%;" class="admin-input-personal">
+						<div class="username-address">
+							<div class="username-address-title">Billing Address</div>
+							<div class="admin-input-address"><input type="email" name="firstname" class="adminForm"><label for="firstname" class="textinputbox">First Name</label></div>
+							<div class="admin-input-address"><input type="text" name="lastname" class="adminForm"><label for="lastname" class="textinputbox">Last Name</label></div>
+							<div class="admin-input-address"><input type="text" name="country-region" class="adminForm"><label for="country-region" class="textinputbox">Country / Region</label></div>
+							<div class="admin-input-address"><input type="text" name="town-city" class="adminForm"><label for="town-city" class="textinputbox">Town / City</label></div>
+							<div class="admin-input-address"><input type="text" name="street" class="adminForm"><label for="street" class="textinputbox">Street Address</label></div>
+							<div class="admin-input-address"><input type="text" name="state" class="adminForm"><label for="state" class="textinputbox">State</label></div>
+							<div class="admin-input-address"><input type="text" name="zip" class="adminForm"><label for="zip" class="textinputbox">Zip</label></div>
+							<div style="display: flex; flex-wrap: nowrap; width: 50%;" class="admin-input-personal">
 								<div class="form_toggle">
 									<div class="form_toggle-item item-2">
 										<input id="fid-2" type="radio" name="radio" value="unblocked">
@@ -106,18 +111,8 @@
 										<label for="fid-1">Blocked</label>
 									</div>
 								</div>
-								<label for="username" class="textinputbox">Blocking</label>
+								<label style="width: 50%;" class="textinputbox">Blocking</label>
 							</div>
-						</div>
-						<div class="username-address">
-							<div class="username-address-title">Billing Address</div>
-							<div class="admin-input-address"><input type="email" name="firstname" class="adminForm"><label for="firstname" class="textinputbox">First Name</label></div>
-							<div class="admin-input-address"><input type="text" name="lastname" class="adminForm"><label for="lastname" class="textinputbox">Last Name</label></div>
-							<div class="admin-input-address"><input type="text" name="country-region" class="adminForm"><label for="country-region" class="textinputbox">Country / Region</label></div>
-							<div class="admin-input-address"><input type="text" name="town-city" class="adminForm"><label for="town-city" class="textinputbox">Town / City</label></div>
-							<div class="admin-input-address"><input type="text" name="street" class="adminForm"><label for="street" class="textinputbox">Street Address</label></div>
-							<div class="admin-input-address"><input type="text" name="state" class="adminForm"><label for="state" class="textinputbox">State</label></div>
-							<div class="admin-input-address"><input type="text" name="zip" class="adminForm"><label for="zip" class="textinputbox">Zip</label></div>
 						</div>
 					</div>
 					<button type="submit" class="btn-submit">Save Change</button>
