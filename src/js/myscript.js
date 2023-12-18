@@ -87,6 +87,17 @@ if(document.getElementsByTagName("body")[0].classList.contains("shipping.html"))
         })
     })
 
+    document.querySelector(".button-order").addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(document.querySelector(".shipping_form_details"));
+
+        const jsonFirst = JSON.stringify(Object.assign({}, {"user_token": localStorage.getItem("session")}, Object.fromEntries(formData.entries())));
+        
+        postData("http://192.168.100.13:8008/edituser", jsonFirst)
+    })
+
+
 }
 
 //CART_GOODS====================================================================================================
@@ -644,21 +655,6 @@ class Order {
         this.dateDelivery = dateDelivery;
         this.dateSale = dateSale;
         this.parent = document.querySelectorAll(parentSelector);
-        this.fullDate();
-    }
-
-    fullDate() {
-
-        function fd(data, delivery = false) {
-            let month = data.getUTCMonth() + 1;
-            let day = delivery ? data.getUTCDate() + 7: data.getUTCDate();
-            let year = data.getUTCFullYear();
-
-            return `${day}.${month}.${year}`
-        }
-
-        this.dateDelivery = fd(new Date(this.dateDelivery), true);
-        this.dateSale = fd(new Date(this.dateSale));
     }
 
     render() {
@@ -707,7 +703,23 @@ class Order {
 
 if(document.getElementsByTagName("body")[0].classList.contains("user-acc")) {
 
+const addEventButton = () => {
+    document.querySelector(".btn-submit").addEventListener("click", (e) => {
+        e.preventDefault();
+    
+        const formData = new FormData(e.target.parentElement.parentElement.parentElement.querySelector(".user-auth-forms").querySelector(".user_form_details"));
+    
+        const jsonFirst = JSON.stringify(Object.assign({}, {"token": localStorage.getItem("session"), "blocked": false, "superuser": false}, Object.fromEntries(formData.entries())));
+        
+        postData("http://192.168.100.13:8008/setpassworduser", jsonFirst).then(
+            json => {localStorage.setItem("session", json);
+            window.location.reload();
+        })
+    })
+}
+
 showUserInfo();
+addEventButton();
 
 function clear_active_pages() {
     user_pages.querySelectorAll(".user-pages").forEach((elem) => {
@@ -751,35 +763,31 @@ user_pages.addEventListener("click", (e) => {
         `
         showUserAddress(".defForm");
     
-        const parent = e.target.parentElement.parentElement.parentElement.querySelector(".user-auth-forms").querySelector(".user_form_details")
-
         document.querySelector(".btn-submit").addEventListener("click", (e) => {
             e.preventDefault();
 
             const formData = new FormData(e.target.parentElement.parentElement.parentElement.querySelector(".user-auth-forms").querySelector(".user_form_details"));
 
-            const jsonFirst = JSON.stringify(Object.assign({}, {"user_token": localStorage.getItem("session"), "blocked": false, "superuser": false}, Object.fromEntries(formData.entries())));
+            const jsonFirst = JSON.stringify(Object.assign({}, {"user_token": localStorage.getItem("session")}, Object.fromEntries(formData.entries())));
             
             postData("http://192.168.100.13:8008/edituser", jsonFirst).then(json => window.location.reload())
         })
 
-    } else if (e.target.classList.contains("user-pages-details")) {
+    } 
+    else if (e.target.classList.contains("user-pages-details")) {
         check("../img/user-acc-active.svg")
         user_forms.innerHTML = `
         <div class="auth-forms-title">Personal Information</div>
         <form action="" method="post" class="user_form_details">
-            <div class="inputbox_user"><input type="text" name="firstname" class="defForm" required><label for="firstname" class="textinputbox">First Name <span>*</span></label></div>
-            <div class="inputbox_user"><input type="text" name="lastname" class="defForm" required><label for="lastname" class="textinputbox">Last Name <span>*</span></label></div>
+            <div class="inputbox_user"><input type="text" name="firstname" class="defForm" disabled><label for="firstname" class="textinputbox">First Name</label></div>
+            <div class="inputbox_user"><input type="text" name="lastname" class="defForm" disabled><label for="lastname" class="textinputbox">Last Name</label></div>
             <div class="inputbox_user"><input type="text" name="email" class="defForm" disabled><label for="email" class="textinputbox">Email address</label></div>
             <div class="change-password-user">
                 <div class="password-user-title">Password change</div>
-                <div class="inputbox_user"><input type="password" name="currpassword" class="defForm"><label for="currpassword" class="textinputbox">Current password</label>
+                <div class="inputbox_user"><input type="password" name="currpassword" class="defForm" required><label for="currpassword" class="textinputbox">Current password <span>*</span></label>
                     <button class="password-checker hide-checker"></button>
                 </div>
-                <div class="inputbox_user"><input type="password" name="newpassword" class="defForm"><label for="newpassword" class="textinputbox">New password</label>
-                    <button class="password-checker hide-checker"></button>
-                </div>
-                <div class="inputbox_user"><input type="password" name="confirmpassword" class="defForm"><label for="confirmpassword" class="textinputbox">Confirm new password</label>
+                <div class="inputbox_user"><input type="password" name="newpassword" class="defForm" required><label for="newpassword" class="textinputbox">New password <span>*</span></label>
                     <button class="password-checker hide-checker"></button>
                 </div>
             </div>
@@ -787,20 +795,9 @@ user_pages.addEventListener("click", (e) => {
         </form>
         `
         showUserInfo();
-
-        const parent = e.target.parentElement.parentElement.parentElement.querySelector(".user-auth-forms").querySelector(".user_form_details")
-
-        document.querySelector(".btn-submit").addEventListener("click", (e) => {
-            e.preventDefault();
-
-            const formData = new FormData(e.target.parentElement.parentElement.parentElement.querySelector(".user-auth-forms").querySelector(".user_form_details"));
-
-            const jsonFirst = JSON.stringify(Object.assign({}, {"user_token": localStorage.getItem("session"), "blocked": false, "superuser": false}, Object.fromEntries(formData.entries())));
-            
-            postData("http://192.168.100.13:8008/edituser", jsonFirst).then(json => window.location.reload())
-        })
-
-    } else if (e.target.classList.contains("user-pages-orders")) {
+        addEventButton();
+    } 
+    else if (e.target.classList.contains("user-pages-orders")) {
         check("../img/shopcart-active.svg")
         user_forms.innerHTML = `
         <div class="auth-forms-title">Purchases</div>
