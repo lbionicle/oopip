@@ -241,7 +241,7 @@ class Popup {
 
 				setTimeout(() => {
 					this._focusTrap();
-				}, 50);
+				}, 100);
 
 				// Після відкриття
 				this.options.on.afterOpen(this);
@@ -303,7 +303,7 @@ class Popup {
 
 		setTimeout(() => {
 			this._focusTrap();
-		}, 50);
+		}, 100);
 
 		this.popupLogging(`Закрив попап`);
 	}

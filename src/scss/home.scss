@@ -46,14 +46,14 @@
 .body-goods {
     display: flex;
     width: 100%;
-    height: toRem(720);
+    height: 100%;
 }
 .body-goods-row {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     width: toRem(1440);
-    margin: toRem(50) auto;
+    margin: toRem(50) auto toRem(30) auto;
 }
 .goods-row-goods {
     width: 100%;
@@ -63,28 +63,37 @@
 .goods-category {
     background-color: #FBFBFB;
     width: toRem(384);
-    height: toRem(533);
+    height: 100%;
+    padding: toRem(30) toRem(24);
 }
 .goods-category-title {
     color: rgba(60.56, 60.56, 60.56, 0.95);
     align-items: center;
     font-size: toRem(24);
     line-height: toRem(22);
-    margin: toRem(30) 0 0 toRem(24);
     font-weight: 700;
 }
 .goods-category-items {
     font-size: toRem(20);
+    text-align: left;
+    align-items: left;
+    justify-content: center;
     display: flex;
     flex-direction: column;
-    line-height: toRem(54);
-    margin: toRem(16) 0 toRem(16) toRem(38);
+    line-height: toRem(32);
+    word-wrap: break-word;
+    margin: 0 0 toRem(16) toRem(38);
 
 }
 button.goods-category-item {
+    margin: toRem(21) 0 0 0;
     display: flex;
+    text-align: left;
     justify-content: space-between;
     padding-right: toRem(30);
+    span {
+        margin: 0 0 0 toRem(10);
+    }
 }
 button.category-active{
     font-weight: 700;
@@ -93,15 +102,16 @@ button.category-active{
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    height: toRem(533);
-    width: toRem(994);
+    height: 100%;
+    overflow: hidden;
+    width: toRem(993);
 }
 .goods-filter {
     display: flex;
     justify-content: space-between;
     flex-wrap: nowrap;
     width: 100%;
-    width: toRem(994);
+    width: 100%;
     height: toRem(28);
 }
 .filter-age {
@@ -139,100 +149,76 @@ button.active{
 }
 
 //====================================================================================================
-.goods-row-pagination {
-    margin-top: toRem(60);
-}
-.row-pagination-elements {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    float: right;
-}
-.pagination-element {
-    color: #3D3D3D;
-    font-weight: 300;
-    text-align: center;
-    line-height: toRem(22);
-    font-size: toRem(20);
-    margin: 0 toRem(8);
-    border: toRem(1.33) solid #e5e5e5;
-    border-radius: toRem(5.33);
-    padding: toRem(8) toRem(12);
-}
-.pagination-element-active {
-    font-weight: 400;
-    background-color: #46A358;
-    color: #fff;
-    text-align: center;
-    line-height: toRem(22);
-    font-size: toRem(20);
-    margin: 0 toRem(8);
-    border: toRem(1.33) solid #e5e5e5;
-    border-radius: toRem(5.33);
-    padding: toRem(8) toRem(12);
-}
 .goods-elements {
-    height: toRem(464);
-    @include adaptiveValue("margin-top", 41, 41);
+    margin-top: toRem(41);
     width: 100%;
     display: flex;
-    flex: 0 1 33.333%;
-    justify-content: space-between;
+    position: relative;
+    left: 0;
+    transition: left 0.3s ease-out; 
 
 }
 .goods-element {
-    width: toRem(322);
-    margin: 0 toRem(-19);
-    padding: 0 toRem(19);
+    width: toRem(310);
+    margin: 0 toRem(21) 0 0;
+    height: toRem(300);
 }
 .element-info {
     display: flex;
     flex-wrap: nowrap;
     margin-top: toRem(36);
+    width: 100%;
     justify-content: space-between;
 }
 .element-info-name {
     font-weight: 400;
+    text-align: left;
+    flex: 0 1 70%;
     font-size: toRem(21);
     margin-right: toRem(15);
-    white-space: nowrap;
+    word-wrap: break-word;
 }
 .element-info-price {
+    flex: 0 1 10%;
     font-size: toRem(24);
     font-weight: 700;
-}
-.goods-row-pagination {
-    margin-top: toRem(60);
-}
-.row-pagination-elements {
     display: flex;
-    flex-wrap: nowrap;
     align-items: center;
-    float: right;
 }
-.pagination-element, .pagination-element-next, .pagination-element-prev {
-    font-weight: 300;
+.element-img {
+    width: toRem(310);
+    height: 75%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+}
+.slider-next, .slider-prev{
+    display: flex;
+    align-items: center;
     text-align: center;
-    line-height: toRem(22);
-    font-size: toRem(20);
-    margin: 0 toRem(8);
-    border: toRem(1.33) solid #e5e5e5;
-    border-radius: toRem(5.33);
-    padding: toRem(8) toRem(12);
+    padding: toRem(12) toRem(16);
+    border-radius: toRem(6);
+    border: toRem(1.33) solid rgba(229, 229, 229, 1);
+    color: #3D3D3D;
+    background-color: transparent;
+    &:active {
+        background-color: rgba(70, 163, 88, 1);
+        color: #fff;
+      }
 }
-.pagination-active {
-    font-weight: 400;
-    background-color: #46A358;
-    color: #fff;
-    text-align: center;
-    line-height: toRem(22);
-    font-size: toRem(20);
-    margin: 0 toRem(8);
-    border: toRem(1.33) solid #e5e5e5;
-    border-radius: toRem(5.33);
-    padding: toRem(8) toRem(12);
+.slider-prev {
+    margin-right: toRem(20);
 }
-
+.btn-pagination {
+    width: 100%;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    font-size: toRem(18);
+    line-height: toRem(16.33);
+    padding: 0 toRem(21) 0 0;
+    margin: toRem(20) 0 0 0;
+}
 //====================================================================================================
 
 .body-recommend {
@@ -410,8 +396,8 @@ button.active{
   }
   .dropdown .dropdown-menu li:active {
       background-color: #e2e2e2
+      
   }
-
 //====================================================================================================
 
 .popup__content {
@@ -422,8 +408,11 @@ button.active{
     right: toRem(80);
 }
 .popup-content-img {
-    min-width: toRem(533.333);
-    min-height: toRem(592);
+    height: toRem(592);
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
 }
 .popup-content-info {
     align-items: left;
@@ -582,13 +571,6 @@ button.active{
     &:focus {
         border-color: #46A358;
     }
-}
-.element-img {
-    height: toRem(406.76);
-    width: toRem(323);
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: contain;
 }
 .show-auth {
     background-image: url("../img/show.svg") !important; 
@@ -1358,7 +1340,6 @@ button.active{
     width: toRem(87);
     height: toRem(87);
     margin: 0 toRem(17) 0 0;
-    background-image: url("../img/goods1.png");
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
@@ -1695,3 +1676,22 @@ button.active{
     flex-wrap: wrap;
     width: 100%;
 }
+
+
+// Test
+
+.slider {
+    position: relative;
+    left: 0;
+    transition: left 0.3s ease-out; 
+    display: flex;
+    width: 993px; /* Ширина для 3 элементов */  
+  }
+  
+  .slide {
+    display: block;
+    min-width: 331px;
+    height: 300px;
+    float: left;
+  }
+  

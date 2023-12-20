@@ -4,7 +4,10 @@ const postData = async (url, data) => {
         body: data,
         mode: 'cors',
         headers: new Headers({
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Access-Control-Allow-Origin" : "*",
+            "Access-Control-Allow-Methods" : "DELETE, POST, GET, OPTIONS",
+            "Access-Control-Allow-Headers" : "Content-Type, Authorization, X-Requested-With"
           })
     });
 
@@ -14,7 +17,7 @@ const postData = async (url, data) => {
 function showUserInfo() {
     const jsonFirst = JSON.stringify({"token" : localStorage.getItem("session")});
 
-    postData("http://192.168.100.13:8008/token", jsonFirst).then(json => {
+    postData("http://localhost:8008/token", jsonFirst).then(json => {
         const allPersonalForms = document.querySelectorAll(".defForm");
 
         allPersonalForms[0].value = json["First_Name"]
@@ -24,25 +27,28 @@ function showUserInfo() {
 }
 
 function showUserAddress(class_check) {
-    const jsonFirst = JSON.stringify({"token" : localStorage.getItem("session")});
+    if(localStorage.getItem("session")) {
 
-    postData("http://192.168.100.13:8008/token", jsonFirst).then(json => {
-        const allPersonalForms = document.querySelectorAll(class_check);
+        const jsonFirst = JSON.stringify({"token" : localStorage.getItem("session")});
 
-        allPersonalForms[0].value = json["First_Name"]
-        allPersonalForms[1].value = json["Last_Name"]
-        allPersonalForms[2].value = json["Country"]
-        allPersonalForms[3].value = json["Town"]
-        allPersonalForms[4].value = json["Address"]
-        allPersonalForms[5].value = json["State"]
-        allPersonalForms[6].value = json["Zip"]
-        allPersonalForms[7].value = json["email"]
-    })
+
+        postData("http://localhost:8008/token", jsonFirst).then(json => {
+            const allPersonalForms = document.querySelectorAll(class_check);
+    
+            allPersonalForms[0].value = json["First_Name"]
+            allPersonalForms[1].value = json["Last_Name"]
+            allPersonalForms[2].value = json["Country"]
+            allPersonalForms[3].value = json["Town"]
+            allPersonalForms[4].value = json["Address"]
+            allPersonalForms[5].value = json["State"]
+            allPersonalForms[6].value = json["Zip"]
+            allPersonalForms[7].value = json["email"]
+        })
+    }
 }
 //CHECK=GOOD=IN=CART====================================================================================================
-
 function checkGoodsInCart(element) {
-
+    
     const uniqueNames = new Set();
 
     let nameOfGoods = "";
@@ -54,7 +60,7 @@ function checkGoodsInCart(element) {
     nowCart.forEach((elem) => {
         uniqueNames.add(elem.textContent.trim())
     })
-    //Потом заменить на nameOfGoods и оно будет из
+
     return uniqueNames.has(nameOfGoods)
 }
 
@@ -80,7 +86,6 @@ if(document.getElementsByTagName("body")[0].classList.contains("shipping.html"))
     }
 
     radios.forEach((elem) => {
-        console.log(elem.parentElement)
         elem.parentElement.addEventListener("click", (e) => {
             e.target.parentElement.getElementsByTagName("input")[0].checked = true
             check();
@@ -92,45 +97,28 @@ if(document.getElementsByTagName("body")[0].classList.contains("shipping.html"))
 
         const formData = new FormData(document.querySelector(".shipping_form_details"));
 
-        const jsonFirst = JSON.stringify(Object.assign({}, {"user_token": localStorage.getItem("session")}, Object.fromEntries(formData.entries())));
+        const jsonFirst = JSON.stringify(Object.assign({}, {"html" : localStorage.getItem("products"), "user_token": localStorage.getItem("session")}, Object.fromEntries(formData.entries())));
         
-        postData("http://192.168.100.13:8008/edituser", jsonFirst)
+        postData("http://localhost:8008/parse_cart", JSON.stringify({"token" : localStorage.getItem("session"), "html" : localStorage.getItem("products")}))
+        .then(json => {
+            console.log(json)
+        })
+        postData("http://localhost:8008/getorder", JSON.stringify({"token" : localStorage.getItem("session")}))
+        .then(json => {
+            console.log(json)
+        })
+        // postData("http://localhost:8008/edituser", jsonFirst)
     })
 
 
 }
 
 //CART_GOODS====================================================================================================
-
 const cart_goods = document.querySelectorAll(".cart-goods-body");
 const subtotalCart = document.querySelectorAll(".info-calcs-subt > span");
 const shippingCart = document.querySelectorAll(".info-calcs-ship > span");
 const totalCart = document.querySelectorAll(".cart-info-total > span");
 let i = 0;
-
-const initialState = () => {
-    if (localStorage.getItem('products') !== null) {
-        document.querySelectorAll('.cart-goods-body').forEach((elem) => {
-            cartIsEmpty();
-            elem.innerHTML = localStorage.getItem('products');
-            sumTotal();
-        })
-    }
-};
-
-const updateStorage = () => {
-    const parent1 = document.querySelector("#shopCart");
-    
-    let html1 = parent1.innerHTML;
-
-    html1 = html1.trim();
-
-    if (html1.length) {
-        localStorage.setItem('products', html1);
-    } else {
-        localStorage.removeItem('products');
-    }
-};
 
 function sumTotal() {
 
@@ -151,27 +139,33 @@ function sumTotal() {
         elem.textContent = "$" + (totalShop + Number(shippingCart[0].textContent.slice(1, -3))).toFixed(2)
     })
 }
-initialState();
 
 function cartIsEmpty() {
-    if (document.querySelectorAll("#shopCart > .goods-body-good").length == 0) {
-        document.querySelectorAll(".goods-body-showempty").forEach((elem) => elem.innerHTML = `
-        <div id="emptyCart" style="font-size: 18px; display: flex; flex-direction: column; flex: 0 1 100%; justify-content: center; height: 185px; align-items:center; text-align: center">Cart is empty!</div>
-        `)
+    document.querySelector("#emptyCart").style.display = "none";
+    console.log(document.querySelector("#shopCart").childElementCount)
+    if (document.querySelector("#shopCart").childElementCount == 1) {
+        document.getElementById("emptyCart").style.display = "flex"
         shippingCart.forEach((elem) => elem.textContent = "$0.00");
+        document.getElementById("order-btn").style.pointerEvents = "none"
         sumTotal();
     } else {
-        document.querySelectorAll(".goods-body-showempty").forEach((elem) => elem.innerHTML = "")
+        document.getElementById("emptyCart").style.display = "none";
+        document.getElementById("order-btn").style.pointerEvents = "auto"
+        sumTotal();
     }
 }
-
-cartIsEmpty();
+if(document.getElementsByTagName("body")[0].classList.contains("shipping.html") || document.getElementsByTagName("body")[0].classList.contains("index_html")) {
+    document.querySelector("#shopCart").innerHTML = localStorage.getItem("products");
+    cartIsEmpty();
+    sumTotal();
+}
 
 class CartItem {
-    constructor(srcImg, title, stock, price, quantity, parentSelector, ...classes) {
+    constructor(srcImg, title, stock, price, quantity, attr, parentSelector, ...classes) {
         this.src = srcImg;
         this.title = title;
-        this.stock = stock
+        this.stock = stock;
+        this.attr = attr;
         this.price = price.toFixed(2);
         this.classes = classes;
         this.quantity = quantity
@@ -209,6 +203,7 @@ class CartItem {
         </div>
         <div class="goods-body-total">$${this.total}</div>
         <button id="del" class="goods-body-delelem"></button>
+        <div style="display: none" class="goods-body-attr">${this.attr}</div>
         `;
 
         this.parent.forEach((par) => {
@@ -217,18 +212,6 @@ class CartItem {
     }
 }
 
-
-// setTimeout(function addCartFromDB() {
-//     if (i != 10) {
-//         new CartItem('img/goods1.png', "Robot Transformer", 13, 200.00, 2, ".cart-goods-body").render() // можно попробовать вставлять 
-//         cartIsEmpty();
-//         sumTotal();
-//         updateStorage();
-//         i++;
-//     }
-//         setTimeout(addCartFromDB, 2)
-//     }, 2);
-
 cart_goods.forEach((elem) => elem.addEventListener("click", (e) => {
     e.preventDefault()
 
@@ -236,9 +219,8 @@ cart_goods.forEach((elem) => elem.addEventListener("click", (e) => {
 
         e.target.parentElement.remove();
 
-        updateStorage();
-        initialState();
         cartIsEmpty();
+        localStorage.setItem("products", document.querySelector("#shopCart").innerHTML)
         sumTotal();
 
 
@@ -252,8 +234,7 @@ cart_goods.forEach((elem) => elem.addEventListener("click", (e) => {
             quantity.textContent = Number(quantity.textContent) + 1
             total.textContent = "$" + (Number(price.textContent.slice(1, -3)) * Number(quantity.textContent)).toFixed(2)
 
-            updateStorage();
-            initialState();
+            localStorage.setItem("products", document.querySelector("#shopCart").innerHTML)
             sumTotal();
 
         }
@@ -270,8 +251,7 @@ cart_goods.forEach((elem) => elem.addEventListener("click", (e) => {
             quantity.textContent = Number(quantity.textContent) - 1
             total.textContent = "$" + (Number(price.textContent.slice(1, -3)) * Number(quantity.textContent)).toFixed(2)
 
-            updateStorage();
-            initialState();
+            localStorage.setItem("products", document.querySelector("#shopCart").innerHTML)
             sumTotal();
 
         }
@@ -280,45 +260,77 @@ cart_goods.forEach((elem) => elem.addEventListener("click", (e) => {
 }))
 //CARD_GOODS====================================================================================================
 
-if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
-    class GoodsCard {
-        constructor(src, title, price, parentSelector, attr, ...classes) {
-            this.src = src;
-            this.title = title;
-            this.price = price;
-            this.classes = classes;
-            this.attr = attr;
-            this.parent = document.querySelector(parentSelector);
+class GoodsCard {
+    constructor(src, title, price, article, parentSelector, attr, ...classes) {
+        this.src = src;
+        this.title = title;
+        this.price = price.toFixed(2);
+        this.classes = classes;
+        this.attr = attr;
+        this.article = article;
+        this.parent = document.querySelector(parentSelector);
+    }
+
+
+    render() {
+        const element = document.createElement('button');
+
+        if (this.classes.length === 0) {
+            this.classes = "goods-element";
+            element.classList.add(this.classes);
+            element.setAttribute(this.attr, "");
+        } else {
+            this.classes.forEach(className => {
+                element.classList.add(className)
+                element.setAttribute(this.attr, "")
+            });
         }
-    
-    
-        render() {
-            const element = document.createElement('button');
-    
-            if (this.classes.length === 0) {
-                this.classes = "goods-element";
-                element.classList.add(this.classes);
-                element.setAttribute(this.attr, "");
-            } else {
-                this.classes.forEach(className => {
-                    element.classList.add(className)
-                    element.setAttribute(this.attr, "")
-                });
-            }
-    
-            element.innerHTML = `
-            <div style="background-image: url(${this.src})" class="element-img"></div>
-            <div class="element-info">
-                <div class="element-info-name">${this.title}</div>
-                <div class="element-info-price">$${this.price}</div>
-            </div>
-            `;
-            this.parent.append(element);
+
+        element.innerHTML = `
+        <div style="background-image: url(${this.src})" class="element-img"></div>
+        <div class="element-info">
+            <div class="element-info-name">${this.title}</div>
+            <div class="element-info-price">$${this.price}</div>
+        </div>
+        <div style="display: none" class="element-info-article">${this.article}</div>
+        `;
+        this.parent.append(element);
+    }
+}
+if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
+
+    localStorage.setItem("category", "")
+
+    postData("http://localhost:8008/admin/getgoods")
+    .then(json => json.forEach(elem => {
+        if (elem["stock"] > 0) {
+            new GoodsCard(elem["photo"], elem["title"], elem["price"], elem["article"], ".goods-elements" , "data-goods", "goods-element").render();
+        }
+    }))
+
+    const slider = document.querySelector('.goods-elements');
+    const next_elem = document.querySelector('.slider-next');
+    const prev_elem = document.querySelector('.slider-prev');
+    var current = 0;
+
+    function nextSlide() {
+        if (current != (slider.childElementCount - 3) && (slider.childElementCount - 3) > 0) {
+            slider.style.left = `-${(current + 1) * 331}px`;
+            current++;
         }
     }
-    new GoodsCard("../img/goods1.png", "Stacking pyramid", "10.00", ".goods-elements" , "data-goods", "goods-element").render();
-    new GoodsCard("../img/goods3.png", "Mini basketball", "9.00", ".goods-elements" , "data-goods", "goods-element").render();
-    new GoodsCard("../img/goods4.png", "Robot Transformer", "29.00", ".goods-elements" , "data-goods", "goods-element").render();
+
+    function prevSlide() {
+        if((current - 1) >= 0) {
+            slider.style.left = `-${(current - 1) * 331}px`;  
+            current--; 
+        }
+    }
+
+    // Обработчики событий для кнопок  
+    next_elem.addEventListener('click', nextSlide);
+    prev_elem.addEventListener('click', prevSlide);
+
 }
 
 //POPUP_GOODS====================================================================================================
@@ -341,16 +353,17 @@ class BigGoodsCard {
 
         if (this.classes.length === 0) {
             this.classes = "popup__content";
+            element.id = "bigGood"
             element.classList.add(this.classes);
         } else {
             this.classes.forEach(className => {
                 element.classList.add(className)
+                element.id = "bigGood"
             });
         }
         element.innerHTML = `
         <button data-close type="button" class="popup__close"><img src="../img/close.svg" alt=""></button>
-        <div class="popup-content-img">
-            <img class="popup-content-img" src="${this.src}" alt="">
+        <div style="background-image: url('${this.src}')" class="popup-content-img">
         </div>
         <div class="popup-content-info">
             <div class="popup-content-title">${this.title}</div>
@@ -367,7 +380,7 @@ class BigGoodsCard {
                     <button class="orderpanel-addGoods"><img src="../img/plus.svg" alt=""></button>
                 </div>
                 <button class="orderpanel-goOrder btn-activate">Buy now</button>
-                <button class="orderpanel-cart btn-activate-text">Add to cart</button>
+                <button class="orderpanel-cart btn-activate-text"></button>
             </div>
         </div>
         </div>
@@ -379,73 +392,64 @@ class BigGoodsCard {
 
 //GOODS====================================================================================================
 
-const btnFilterAge = document.querySelectorAll(".filter-item");
-const btnCategories = document.querySelectorAll(".goods-category-item");
-const pagination = document.querySelectorAll(".row-pagination-elements > *");
-const pages = document.querySelectorAll(".pagination-element");
+if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
+    const btnFilterAge = document.querySelector(".filter-age");
+    const btnCategories = document.querySelector(".goods-category-items");
+    
+    postData("http://localhost:8008/getcatsgoods")
+    .then(json => Object.keys(json).forEach((elem) => {
+        btnCategories.innerHTML += 
+        `
+        <button class="goods-category-item">${elem.charAt(0).toUpperCase() + elem.slice(1)}<span>(${json[`${elem}`]})</span></button>
+        `
+    }))
+    
+    btnCategories.addEventListener("click", (e) => {
+        if (e.target.classList.contains("goods-category-item")) {
+            btnCategories.querySelectorAll(".goods-category-item").forEach(elem => elem.classList.remove("category-active"))
+            e.target.classList.add("category-active")
 
-let pageOfGoods = 0
-
-// Обновляет цифры в пагинации
-function updatePage(elem){
-    pages.forEach((btn) => {
-        btn.classList.remove("pagination-active")
+            document.querySelector('.goods-elements').style.left = "0px"
+            current = 0
+            
+            localStorage.setItem("category", e.target.textContent.replace(/\s*\(.*?\)\s*/g, ''))
+            const jsonFirst = JSON.stringify({"category" : e.target.textContent.replace(/\s*\(.*?\)\s*/g, ''), "age" : ""});
+    
+            postData("http://localhost:8008/getgoodbycatss", jsonFirst)
+            .then(json => {
+                document.querySelector(".goods-elements").innerHTML = "";
+                json.forEach((elem) => {
+                    if (elem["stock"] > 0) {
+                        new GoodsCard(elem["photo"], elem["title"], elem["price"], elem["article"], ".goods-elements" , "data-goods", "goods-element").render();
+                    }
+                }
+            )})
+        }
     })
-    if (typeof elem == "number") {
-        pages.item(elem).classList.add("pagination-active")
-    } else {
-        elem.classList.add("pagination-active")
-    }
+    btnFilterAge.addEventListener("click", (e) => {
+        if (e.target.classList.contains("filter-age")) {
+            btnCategories.querySelectorAll(".filter-age").forEach(elem => elem.classList.remove("active"))
+            e.target.classList.add("active")
 
+            document.querySelector('.goods-elements').style.left = "0px"
+            current = 0
+            
+            localStorage.setItem("age", e.target.textContent.replace(/[^a-zA-Z]+/g, '').toLowerCase())
+            const jsonFirst = JSON.stringify({"category" : localStorage.getItem("category"), "age" : ""});
+    
+            postData("http://localhost:8008/getgoodbycatss", jsonFirst)
+            .then(json => {
+                document.querySelector(".goods-elements").innerHTML = "";
+                json.forEach((elem) => {
+                    if (elem["stock"] > 0) {
+                        new GoodsCard("../img/goods3.png", elem["title"], elem["price"], elem["article"], ".goods-elements" , "data-goods", "goods-element").render();
+                    }
+                }
+            )})
+        }
+    })
 }
 
-// Я добавляю класс active элементам
-function show(element, classelem) {
-    element.forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-            element.forEach((btn) => {
-                btn.classList.remove(classelem)
-            })
-            e.target.classList.add(classelem)
-        })
-    })
-}
-
-pagination.forEach((btn) => {
-    if (btn.id == "next-list") {
-        btn.addEventListener("click", () => {
-            if (pageOfGoods !== 3) {
-                ++pageOfGoods;
-            } else if (pages.item(0).textContent != "999"){ // УКАЖИ ПОТОМ МАКСИМУМ ИЗ БД, КОТОРЫЙ МОЖЕТ ПРИЛЕТЕТЬ
-                pageOfGoods = 0
-                pages.forEach((btn) => {
-                    btn.textContent = parseInt(btn.textContent.match(/\d+/)) + 4
-                })
-            }
-            updatePage(pageOfGoods)
-        })
-    } else if (btn.id == "prev-list") {
-        btn.addEventListener("click", () => {
-            if (pageOfGoods !== 0) {
-                --pageOfGoods;
-            } else if (pages.item(0).textContent != "1") {
-                pageOfGoods = 3
-                pages.forEach((btn) => {
-                    btn.textContent = parseInt(btn.textContent.match(/\d+/)) - 4
-                })
-            }
-            updatePage(pageOfGoods)
-        })
-    } else {
-        btn.addEventListener("click", (e) => {
-            updatePage(e.target)
-            pageOfGoods = parseInt(e.target.id.match(/\d+/)) - 1
-        })
-    }
-})
-
-show(btnFilterAge, "active");
-show(btnCategories, "category-active");
 
 //POPUP====================================================================================================
 
@@ -458,122 +462,128 @@ const userAuth = document.querySelectorAll(".user-header");
 function addPopup(elemPop, data, id) {
     elemPop.forEach((elem) => {
         elem.setAttribute(data, id)
+        cartIsEmpty();
         elem.classList.add("link")
     })
 }
 
 if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
+
+
     popup.addEventListener("click", (e) => {
         const parent = e.target.parentElement;
 
 
-        if(parent.classList.contains("goods-element")) {
-            
-            new BigGoodsCard(
-                "../img/biggoods1.png",
-                parent.querySelector(".element-info-name").textContent.trim(),
-                100.00,
-                125125123,
-                22,
-                "loresdgsdgsdf",
-                "#bigGoods"
-                ).render();
 
+        if(parent.classList.contains("goods-element")) {
+
+            cartIsEmpty();
+
+            const jsonFirst = JSON.stringify({"article" : Number(parent.querySelector(".element-info-article").textContent)});
+
+            postData("http://localhost:8008/getgood", jsonFirst)
+            .then(json => {
+                new BigGoodsCard(
+                    json["photo"],
+                    json["title"],
+                    json["price"],
+                    json["article"],
+                    json["stock"],
+                    json["description"],
+                    "#bigGoods"
+                    ).render();
+                })
 
             parent.setAttribute("data-popup", "#popup-goods");
             parent.setAttribute("data-close", "");
 
-
-            const addGoods = document.querySelector(".orderpanel-addGoods");
-            const removeGoods = document.querySelector(".orderpanel-removeGoods");
-            const countGoods = document.querySelector(".orderpanel-countGoods");
-            const stockGoods = document.querySelector(".popup-content-stock");
-            const addToCart = document.querySelectorAll(".orderpanel-cart");
-            const goOrder = document.querySelector(".orderpanel-goOrder");
-
-            if (checkGoodsInCart(parent)) {
-                addToCart[0].textContent = "In cart"
-                addPopup(addToCart, "data-popup", "#popup-cart");
-            } else {
-                addToCart[0].removeAttribute("data-popup")
-            }
-
-            addGoods.addEventListener("click", () => {
-                if (parseInt(countGoods.textContent.match(/\d+/)) != parseInt(stockGoods.textContent.match(/\d+/))) {
-                    countGoods.textContent = parseInt(countGoods.textContent.match(/\d+/)) + 1
+            setTimeout(() => {
+                if (checkGoodsInCart(parent)) {
+                    document.querySelector(".orderpanel-cart").textContent = "In cart"
+                    addPopup(document.querySelectorAll(".orderpanel-cart"), "data-popup", "#popup-cart");
+                } else {
+                    document.querySelector(".orderpanel-cart").textContent = "Add to Cart"
+                    document.querySelector(".orderpanel-cart").removeAttribute("data-popup")
                 }
-            })
-            
-            removeGoods.addEventListener("click", () => {
-                if (parseInt(countGoods.textContent.match(/\d+/)) != 1) {
-                    countGoods.textContent = parseInt(countGoods.textContent.match(/\d+/)) - 1
-                }
-            })
-            
-            goOrder.addEventListener("click", (e) => {
-                const parent = e.target.parentElement.parentElement.parentElement
-                console.log(parent)
 
-                if (parent.querySelector(".popup-content-info").querySelector(".popup-content-orderpanel").querySelector(".orderpanel-cart").textContent.toLowerCase().trim() == "add to cart") {
-                    new CartItem(
-                        parent.getElementsByClassName("popup-content-img")[0].getElementsByTagName("IMG")[0].src, 
-                        parent.getElementsByClassName("popup-content-title")[0].textContent,
-                        Number(parent.getElementsByClassName("popup-content-stock")[0].getElementsByTagName("SPAN")[0].textContent),
-                        Number(parent.getElementsByClassName("popup-content-price")[0].textContent.slice(1, -3)),
-                        Number(parent.getElementsByClassName("orderpanel-countGoods")[0].textContent),
-                        ".cart-goods-body")
-                        .render()
-                
-                    updateStorage();
-                    initialState();
-                    cartIsEmpty();
-                    sumTotal();
-                }
-            
-                window.location.href = "../shipping.html";
-            
-            })
-            
-            addToCart[0].addEventListener("click", (e) => {
-                const parent = e.target.parentElement.parentElement.parentElement
+                document.querySelector(".orderpanel-addGoods").addEventListener("click", () => {
+                    const countGoods = document.querySelector(".orderpanel-countGoods");
+                    const stockGoods = document.querySelector(".popup-content-stock");
 
-                console.log(parent)
-
-                if (parent.querySelector(".popup-content-info").querySelector(".popup-content-orderpanel").querySelector(".orderpanel-cart").textContent.toLowerCase().trim() == "add to cart") {
-                    new CartItem(
-                        parent.getElementsByClassName("popup-content-img")[0].getElementsByTagName("IMG")[0].src, 
-                        parent.getElementsByClassName("popup-content-title")[0].textContent,
-                        Number(parent.getElementsByClassName("popup-content-stock")[0].getElementsByTagName("SPAN")[0].textContent),
-                        Number(parent.getElementsByClassName("popup-content-price")[0].textContent.slice(1, -3)),
-                        Number(parent.getElementsByClassName("orderpanel-countGoods")[0].textContent),
-                        ".cart-goods-body")
-                        .render()
-                
-                    updateStorage();
-                    initialState();
-                    cartIsEmpty();
-                    sumTotal();
-
-                    if (checkGoodsInCart(parent)) {
-                        addToCart[0].textContent = "In cart";
-                        addPopup(addToCart, "data-popup", "#popup-cart");
-                    } else {
-                        addToCart[0].removeAttribute("data-popup")
+                    if (parseInt(countGoods.textContent.match(/\d+/)) != parseInt(stockGoods.textContent.match(/\d+/))) {
+                        countGoods.textContent = parseInt(countGoods.textContent.match(/\d+/)) + 1
                     }
-                }
-            })
+                })
+                
+                document.querySelector(".orderpanel-removeGoods").addEventListener("click", () => {
+                    const countGoods = document.querySelector(".orderpanel-countGoods");
+
+                    if (parseInt(countGoods.textContent.match(/\d+/)) != 1) {
+                        countGoods.textContent = parseInt(countGoods.textContent.match(/\d+/)) - 1
+                    }
+                })
+                
+                document.querySelector(".orderpanel-goOrder").addEventListener("click", (e) => {
+                    const parent = e.target.parentElement.parentElement.parentElement
+//BUY NOW
+                    if (parent.querySelector(".popup-content-info").querySelector(".popup-content-orderpanel").querySelector(".orderpanel-cart").textContent.toLowerCase().trim() == "add to cart") {
+                        new CartItem(
+                            ".." + parent.querySelector(".popup-content-img").style.backgroundImage.slice(7, -2), 
+                            parent.getElementsByClassName("popup-content-title")[0].textContent,
+                            Number(parent.getElementsByClassName("popup-content-stock")[0].getElementsByTagName("SPAN")[0].textContent),
+                            Number(parent.getElementsByClassName("popup-content-price")[0].textContent.slice(1, -3)),
+                            Number(parent.getElementsByClassName("orderpanel-countGoods")[0].textContent),
+                            Number(parent.getElementsByClassName("popup-content-article")[0].textContent.replace(/\D/g, '')),
+                            ".cart-goods-body")
+                            .render()
+                    
+                            localStorage.setItem("products", document.querySelector("#shopCart").innerHTML)
+                            sumTotal();
+                    }
+                
+                    window.location.href = "../shipping.html";
+                
+                })
+// CART
+                document.querySelector(".orderpanel-cart").addEventListener("click", (e) => {
+                    const parent = e.target.parentElement.parentElement.parentElement
+
+                    if (parent.querySelector(".popup-content-info").querySelector(".popup-content-orderpanel").querySelector(".orderpanel-cart").textContent.toLowerCase().trim() == "add to cart") {
+                        new CartItem(
+                            ".." + parent.querySelector(".popup-content-img").style.backgroundImage.slice(7, -2), 
+                            parent.getElementsByClassName("popup-content-title")[0].textContent,
+                            Number(parent.getElementsByClassName("popup-content-stock")[0].getElementsByTagName("SPAN")[0].textContent),
+                            Number(parent.getElementsByClassName("popup-content-price")[0].textContent.slice(1, -3)),
+                            Number(parent.getElementsByClassName("orderpanel-countGoods")[0].textContent),
+                            Number(parent.getElementsByClassName("popup-content-article")[0].textContent.replace(/\D/g, '')),
+                            ".cart-goods-body")
+                            .render()
+                    
+                            localStorage.setItem("products", document.querySelector("#shopCart").innerHTML)
+                            sumTotal();
+
+                        if (checkGoodsInCart(parent)) {
+                            document.querySelector(".orderpanel-cart").textContent = "In cart"
+                            addPopup(document.querySelectorAll(".orderpanel-cart"), "data-popup", "#popup-cart");
+                        } else {
+                            document.querySelector(".orderpanel-cart").textContent = "Add to Cart"
+                            document.querySelector(".orderpanel-cart").removeAttribute("data-popup")
+                        }
+                    }
+                })
+            }, 50)     
         }
     })
 }
 
 addPopup(cartGood, "data-popup", "#popup-cart")
 
-if(localStorage.getItem("session") == null) {
+if(!localStorage.getItem("session")) {
     addPopup(userAuth, "data-popup", "#popup-auth")
 } else {
     const jsonFirst = JSON.stringify({"token" : localStorage.getItem("session")});
 
-    postData("http://192.168.100.13:8008/token", jsonFirst)
+    postData("http://localhost:8008/token", jsonFirst)
     .then(json => {
         if (json["SuperUser"]) {
             document.querySelector("#user-account-btn").href = "../admin.html"
@@ -678,7 +688,7 @@ class Order {
 
         element.innerHTML = `
         <div class="body-good-info">
-            <div style="background-image = url('${this.src}')" class="body-good-img"></div>
+            <div style="${this.src};" class="body-good-img"></div>
             <div class="body-good-blocktext">
                 <div class="good-info-titleorder">${this.title}</div>
                 <div class="good-info-article">Article: <span>${this.article}</span></div>
@@ -711,7 +721,7 @@ const addEventButton = () => {
     
         const jsonFirst = JSON.stringify(Object.assign({}, {"token": localStorage.getItem("session"), "blocked": false, "superuser": false}, Object.fromEntries(formData.entries())));
         
-        postData("http://192.168.100.13:8008/setpassworduser", jsonFirst).then(
+        postData("http://localhost:8008/setpassworduser", jsonFirst).then(
             json => {localStorage.setItem("session", json);
             window.location.reload();
         })
@@ -768,9 +778,9 @@ user_pages.addEventListener("click", (e) => {
 
             const formData = new FormData(e.target.parentElement.parentElement.parentElement.querySelector(".user-auth-forms").querySelector(".user_form_details"));
 
-            const jsonFirst = JSON.stringify(Object.assign({}, {"user_token": localStorage.getItem("session")}, Object.fromEntries(formData.entries())));
+            const jsonFirst = JSON.stringify(Object.assign({}, {"html" : localStorage.getItem("products"), "user_token": localStorage.getItem("session")}, Object.fromEntries(formData.entries())));
             
-            postData("http://192.168.100.13:8008/edituser", jsonFirst).then(json => window.location.reload())
+            postData("http://localhost:8008/edituser", jsonFirst).then(json => window.location.reload())
         })
 
     } 
@@ -814,21 +824,35 @@ user_pages.addEventListener("click", (e) => {
         </div>
             `;
         if(document.getElementsByTagName("body")[0].classList.contains("user-acc")) {
-            new Order(
-                "../img/goods1.png", 
-                "Stacking pyramid", 
-                1995751877966, 
-                "In delivery", 
-                Date.now(),
-                Date.now(),
-                2,
-                10.00, 
-                ".auth-forms-body",
-                ).render();
+            postData("http://localhost:8008/getorder", JSON.stringify({"token" : localStorage.getItem("session")}))
+            .then(mass => {
+                mass.forEach((elem) => {
+                    console.log(elem["image"].split(" ")[1].slice(4, -1))
+                    new Order (
+                        elem["image"],
+                        elem["title"],
+                        elem["article"],
+                        elem["status"],
+                        elem["date"],
+                        `${Date.UTC}`,
+                        elem["count"],
+                        elem["price"],
+                        ".auth-forms-body",
+                    ).render();
+                })
+            })
         }
     }  else if (e.target.classList.contains("user-pages-logout")) {
         e.preventDefault();
+
+        const jsonFirst = JSON.stringify({"token" : localStorage.getItem("session"), "html" : localStorage.getItem("products")});
+
+        postData("http://localhost:8008/logout", jsonFirst)
         localStorage.removeItem("session");
+        // localStorage.setItem("products", 
+        // `
+        // <div id="emptyCart" style="font-size: 18px; display: flex; flex-direction: column; flex: 0 1 100%; justify-content: center; height: 185px; align-items:center; text-align: center">Cart is empty!</div>
+        // `)
         window.location.href = "../index.html"
     }
 })
@@ -840,8 +864,9 @@ user_pages.addEventListener("click", (e) => {
 if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
 
     class UserAccount {
-        constructor(id, email, status, parentSelector, ...classes) {
+        constructor(id, email, status, token, parentSelector, ...classes) {
            this.id = id;
+           this.token = token;
            this.email = email;
            this.status = status;
            this.classes = classes;
@@ -873,6 +898,7 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
                 <button class="userinfo-opportunity-changer"></button>
                 <button class="userinfo-opportunity-delete"></button>
             </div>
+            <div style="display: none" class="userinfo-token">${this.token}</div>
                 `;
     
             this.parent.forEach((par) => {
@@ -881,8 +907,14 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
             })
         }
     }
-    new UserAccount(1, "user1@gmail.com", "Unblocked", ".admin-auth-block").render();
-    new UserAccount(2, "user2@gmail.com", "Blocked", ".admin-auth-block").render();
+
+    postData("http://localhost:8008/admin/getuser", JSON.stringify({"token": "b2QnK6imJqtrGCwlVtVxKo7I7epzy_Vhxq2qQM0YY2NZfxNI7FM6SGgmwHSmcbfyXN9txo6IQiSO6S2jT_LGEBsSE--pUgvQs5N5vTaqBDrKIanqClZM-rqmK7tcLBxAEDYShS6_cfuHg7_p2yH3Eiw5VB5--VTB", "level": 2}))
+    .then(json => {
+        for(i = 0; i < json.length; i++) {
+            new UserAccount((i + 1), json[i]["token"] == localStorage.getItem("session") ? "You" : json[i]["email"], json[i]["blocked"] ? "Blocked" : "Unblocked", json[i]["token"], ".admin-auth-block").render();
+        }
+    }
+    )
 
     //Боковая панелька
     const user_pages = document.querySelector(".admin-auth-pages");
@@ -928,8 +960,14 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
             <div class="admin-forms-body">
             </div>
             `
-            new UserAccount(1, "lastnamefirstname@gmail.com", "Unblocked", ".admin-auth-block").render();
-            new UserAccount(2, "user2@gmail.com", "Blocked", ".admin-auth-block").render();
+            postData("http://localhost:8008/admin/getuser", JSON.stringify({"token": "b2QnK6imJqtrGCwlVtVxKo7I7epzy_Vhxq2qQM0YY2NZfxNI7FM6SGgmwHSmcbfyXN9txo6IQiSO6S2jT_LGEBsSE--pUgvQs5N5vTaqBDrKIanqClZM-rqmK7tcLBxAEDYShS6_cfuHg7_p2yH3Eiw5VB5--VTB", "level": 2}))
+            .then(json => {
+                for(i = 0; i < json.length; i++) {
+                    new UserAccount((i + 1), json[i]["token"] == localStorage.getItem("session") ? "You" : json[i]["email"], json[i]["blocked"] ? "Blocked" : "Unblocked", json[i]["token"], ".admin-auth-block").render();
+                }
+            })
+            
+
         } else if (e.target.classList.contains("admin-pages-orders")) {
             check("../img/shopcart-active.svg")
             user_forms.innerHTML = `
@@ -944,27 +982,73 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
     // Товарка
 
     user_forms.addEventListener("click", (e) => {
-        
+
+        const now_user_token = e.target.parentElement.parentElement.querySelector(".userinfo-token").textContent;
+
         if (e.target.classList.contains("userinfo-opportunity-delete")) {
-            e.target.parentElement.parentElement.remove();
+            postData("http://localhost:8008/admin/deleteuser", JSON.stringify({"super_user_token" : localStorage.getItem("session"), "token" : now_user_token}))
+            .then(json => {
+                window.location.reload();
+            })
         } else {e.target.classList.contains("userinfo-opportunity-changer")} {
-            e.target.parentElement.parentElement.querySelector(".userinfo-opportunity-changer").setAttribute("data-popup", "#popup-username");
+            if (now_user_token != localStorage.getItem("session")) {
+                e.target.parentElement.parentElement.querySelector(".userinfo-opportunity-changer").setAttribute("data-popup", "#popup-username");
+
+            const jsonFirst = JSON.stringify({"token" : e.target.parentElement.parentElement.querySelector(".userinfo-token").textContent});
+
+            postData("http://localhost:8008/token", jsonFirst).then(json => {
+                const allPersonalForms = document.querySelectorAll(".adminForm");
+        
+                allPersonalForms[0].value = json["First_Name"]
+                allPersonalForms[1].value = json["Last_Name"]
+                allPersonalForms[2].value = json["Country"]
+                allPersonalForms[3].value = json["Town"]
+                allPersonalForms[4].value = json["Address"]
+                allPersonalForms[5].value = json["State"]
+                allPersonalForms[6].value = json["Zip"]
+                json["blocked"] ? document.querySelector(".item-1").classList.add("item-1-checked") : document.querySelector(".item-2").classList.add("item-2-checked");
+        })
+            
+            } else {
+                e.target.parentElement.parentElement.querySelector(".userinfo-opportunity-changer").disabled = true;
+                e.target.parentElement.parentElement.querySelector(".userinfo-opportunity-delete").disabled = true;
+            }
+
+            const blocked = document.querySelector(".item-1");
+            const unblocked = document.querySelector(".item-2");
+
+            unblocked.classList.remove("item-2-checked");
+            blocked.classList.remove("item-1-checked");
+
+            unblocked.addEventListener("click", (e) => {
+                unblocked.classList.add("item-2-checked");
+                blocked.classList.remove("item-1-checked");
+                unblocked.getElementsByTagName("input").checked = true;
+            })
+    
+            blocked.addEventListener("click", (e) => {
+                blocked.classList.add("item-1-checked");
+                unblocked.classList.remove("item-2-checked");
+                blocked.getElementsByTagName("input").checked = true;
+            })
         }
 
-        const blocked = document.querySelector(".item-1");
-        const unblocked = document.querySelector(".item-2");
+        document.querySelector(".changed-userInfo").addEventListener("click", () => {
+            e.preventDefault();
 
-        unblocked.addEventListener("click", (e) => {
-            unblocked.classList.add("item-2-checked");
-            blocked.classList.remove("item-1-checked");
-            unblocked.getElementsByTagName("input").checked = true;
-        })
+            const form = document.querySelector(".admin-change-userInfo");
 
-        blocked.addEventListener("click", (e) => {
-            blocked.classList.add("item-1-checked");
-            unblocked.classList.remove("item-2-checked");
-            blocked.getElementsByTagName("input").checked = true;
+            const formData = new FormData(form);
+
+            const blocked = form.querySelector(".item-1").classList.contains("item-1-checked") ? {"html" : " ", "user_token" : now_user_token, "blocked" : true, "superuser" : false} : {"html" : " ", "user_token" : now_user_token, "blocked" : false, "superuser" : false};
+            const jsonFirst = JSON.stringify(Object.assign({}, blocked, Object.fromEntries(formData.entries())));
+
+            postData("http://localhost:8008/edituser", jsonFirst)
+            .then(json => {
+                window.location.reload()
+            })
         })
+        
 
     })
 
@@ -975,30 +1059,47 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
 
 const btns_sumbit = document.querySelectorAll(".form_auth_button");
 
-function sendRequest(parent, url) {
-    const formData = new FormData(parent);
-
-    const jsonFirst = JSON.stringify(Object.fromEntries(formData.entries()));
-
-    postData(url, jsonFirst)
-      .then(json => {
-        if (url == "http://192.168.100.13:8008/login" && typeof(json) == "string") {
-            localStorage.setItem("session", json);
-            window.location.reload();
-        }
-      })
-
-    parent.reset();
-}
-
 btns_sumbit.forEach((elem) => {
     elem.addEventListener("click", (e) => {
         e.preventDefault();
 
         if(elem.parentElement.id == "form_user_reg") {
-            sendRequest(elem.parentElement, "http://192.168.100.13:8008/reg")
+            const formData = new FormData(elem.parentElement);
+
+            const jsonFirst = JSON.stringify(Object.assign({}, {"html" : localStorage.getItem("products")}, Object.fromEntries(formData.entries())));
+        
+        
+            postData("http://localhost:8008/reg", jsonFirst)
+              .then(json => {
+                    localStorage.setItem("session", json);
+                    localStorage.setItem("products", "")
+                }
+              )
+        
+            elem.parentElement.reset();
+
         } else if (elem.parentElement.id == "form_user_log") {
-            sendRequest(elem.parentElement, "http://192.168.100.13:8008/login")
+            const formData = new FormData(elem.parentElement);
+        
+            const jsonFirst = JSON.stringify(Object.fromEntries(formData.entries()));
+        
+        
+            postData("http://localhost:8008/login", jsonFirst)
+              .then(json => {
+                    if (typeof(json[0]) == "string") {
+                        localStorage.setItem("session", json[0]);
+                        localStorage.setItem("products", json[1]);
+                        window.location.reload();
+                    }
+                }
+              )
+        
+            elem.parentElement.reset();
         }
     })
 })
+
+
+// Test
+
+

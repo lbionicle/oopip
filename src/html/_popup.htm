@@ -75,7 +75,7 @@
 				</div>
 				<div style="margin-top: 20px;" class="cart-info-block2">
 					<div class="cart-info-total">Total<span>$0.00</span></div>
-					<button class="cart-info-submit btn-activate"><a href="../shipping.html">Proceed To Checkout</a></button>
+					<button class="cart-info-submit btn-activate"><a id="order-btn" href="../shipping.html">Proceed To Checkout</a></button>
 				</div>
 			</div>
 		</div>
@@ -87,15 +87,15 @@
 		<div style="width: 1440px; height: auto; padding: 50px 50px; background-color: #fff;" class="popup__content">
 			<button style="top: 24px; right: 24px;" data-close type="button" class="popup__close"><img src="../img/close.svg" alt=""></button>
 			<div class="content-username-row">
-				<form action="" method="post">
+				<form class="admin-change-userInfo" action="#" method="post">
 					<div class="username-changeInfo">
 						<div class="username-address">
 							<div class="username-address-title">Billing Address</div>
-							<div class="admin-input-address"><input type="email" name="firstname" class="adminForm"><label for="firstname" class="textinputbox">First Name</label></div>
-							<div class="admin-input-address"><input type="text" name="lastname" class="adminForm"><label for="lastname" class="textinputbox">Last Name</label></div>
-							<div class="admin-input-address"><input type="text" name="country-region" class="adminForm"><label for="country-region" class="textinputbox">Country / Region</label></div>
-							<div class="admin-input-address"><input type="text" name="town-city" class="adminForm"><label for="town-city" class="textinputbox">Town / City</label></div>
-							<div class="admin-input-address"><input type="text" name="street" class="adminForm"><label for="street" class="textinputbox">Street Address</label></div>
+							<div class="admin-input-address"><input type="text" name="first_name" class="adminForm"><label for="first_name" class="textinputbox">First Name</label></div>
+							<div class="admin-input-address"><input type="text" name="last_name" class="adminForm"><label for="last_name" class="textinputbox">Last Name</label></div>
+							<div class="admin-input-address"><input type="text" name="country" class="adminForm"><label for="country" class="textinputbox">Country / Region</label></div>
+							<div class="admin-input-address"><input type="text" name="town" class="adminForm"><label for="town" class="textinputbox">Town / City</label></div>
+							<div class="admin-input-address"><input type="text" name="address" class="adminForm"><label for="address" class="textinputbox">Street Address</label></div>
 							<div class="admin-input-address"><input type="text" name="state" class="adminForm"><label for="state" class="textinputbox">State</label></div>
 							<div class="admin-input-address"><input type="text" name="zip" class="adminForm"><label for="zip" class="textinputbox">Zip</label></div>
 							<div style="display: flex; flex-wrap: nowrap; width: 50%;" class="admin-input-personal">
@@ -113,7 +113,7 @@
 							</div>
 						</div>
 					</div>
-					<button type="submit" class="btn-submit">Save Change</button>
+					<button type="submit" class="changed-userInfo btn-submit">Save Change</button>
 				</form>
 			</div>
 		</div>
