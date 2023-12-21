@@ -14,6 +14,19 @@ const postData = async (url, data) => {
     return await res.json();
 };
 
+function removeEmptyCarts(html) {
+
+    const temp = document.createElement('div');
+  
+    temp.innerHTML = html;
+  
+    const emptyCarts = temp.querySelectorAll('.goods-body-showempty');
+    emptyCarts.forEach(cart => cart.remove());
+  
+    return temp.innerHTML;
+  
+  }
+
 function showUserInfo() {
     const jsonFirst = JSON.stringify({"token" : localStorage.getItem("session")});
 
@@ -25,6 +38,7 @@ function showUserInfo() {
         allPersonalForms[2].value = json["email"]
     })
 }
+localStorage.setItem("products", removeEmptyCarts(localStorage.getItem("products")))
 
 function showUserAddress(class_check) {
     if(localStorage.getItem("session")) {
@@ -101,16 +115,21 @@ if(document.getElementsByTagName("body")[0].classList.contains("shipping.html"))
         
         postData("http://localhost:8008/parse_cart", JSON.stringify({"token" : localStorage.getItem("session"), "html" : localStorage.getItem("products")}))
         .then(json => {
-            console.log(json)
-        })
-        postData("http://localhost:8008/getorder", JSON.stringify({"token" : localStorage.getItem("session")}))
-        .then(json => {
-            console.log(json)
         })
         // postData("http://localhost:8008/edituser", jsonFirst)
+
+        window.location.reload();
     })
 
 
+}
+
+function fd(data, delivery = false) {
+    let month = data.getUTCMonth() + 1;
+    let day = delivery ? data.getUTCDate() + 7: data.getUTCDate();
+    let year = data.getUTCFullYear();
+
+    return `${day}.${month}.${year}`
 }
 
 //CART_GOODS====================================================================================================
@@ -153,9 +172,10 @@ function cartIsEmpty() {
         document.getElementById("order-btn").style.pointerEvents = "auto"
         sumTotal();
     }
+    localStorage.setItem("products", removeEmptyCarts(localStorage.getItem("products")))
 }
 if(document.getElementsByTagName("body")[0].classList.contains("shipping.html") || document.getElementsByTagName("body")[0].classList.contains("index_html")) {
-    document.querySelector("#shopCart").innerHTML = localStorage.getItem("products");
+    document.querySelector("#shopCart").innerHTML += removeEmptyCarts(localStorage.getItem("products"));
     cartIsEmpty();
     sumTotal();
 }
@@ -220,7 +240,8 @@ cart_goods.forEach((elem) => elem.addEventListener("click", (e) => {
         e.target.parentElement.remove();
 
         cartIsEmpty();
-        localStorage.setItem("products", document.querySelector("#shopCart").innerHTML)
+        localStorage.setItem("products", removeEmptyCarts(document.querySelector("#shopCart").innerHTML))
+        cartIsEmpty();
         sumTotal();
 
 
@@ -234,7 +255,7 @@ cart_goods.forEach((elem) => elem.addEventListener("click", (e) => {
             quantity.textContent = Number(quantity.textContent) + 1
             total.textContent = "$" + (Number(price.textContent.slice(1, -3)) * Number(quantity.textContent)).toFixed(2)
 
-            localStorage.setItem("products", document.querySelector("#shopCart").innerHTML)
+            localStorage.setItem("products", removeEmptyCarts(document.querySelector("#shopCart").innerHTML))
             sumTotal();
 
         }
@@ -251,7 +272,7 @@ cart_goods.forEach((elem) => elem.addEventListener("click", (e) => {
             quantity.textContent = Number(quantity.textContent) - 1
             total.textContent = "$" + (Number(price.textContent.slice(1, -3)) * Number(quantity.textContent)).toFixed(2)
 
-            localStorage.setItem("products", document.querySelector("#shopCart").innerHTML)
+            localStorage.setItem("products", removeEmptyCarts(document.querySelector("#shopCart").innerHTML))
             sumTotal();
 
         }
@@ -493,85 +514,87 @@ if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
                     "#bigGoods"
                     ).render();
                 })
-
-            parent.setAttribute("data-popup", "#popup-goods");
-            parent.setAttribute("data-close", "");
-
-            setTimeout(() => {
-                if (checkGoodsInCart(parent)) {
-                    document.querySelector(".orderpanel-cart").textContent = "In cart"
-                    addPopup(document.querySelectorAll(".orderpanel-cart"), "data-popup", "#popup-cart");
-                } else {
-                    document.querySelector(".orderpanel-cart").textContent = "Add to Cart"
-                    document.querySelector(".orderpanel-cart").removeAttribute("data-popup")
-                }
-
-                document.querySelector(".orderpanel-addGoods").addEventListener("click", () => {
-                    const countGoods = document.querySelector(".orderpanel-countGoods");
-                    const stockGoods = document.querySelector(".popup-content-stock");
-
-                    if (parseInt(countGoods.textContent.match(/\d+/)) != parseInt(stockGoods.textContent.match(/\d+/))) {
-                        countGoods.textContent = parseInt(countGoods.textContent.match(/\d+/)) + 1
+            .then(
+                () => {
+                    if (checkGoodsInCart(parent)) {
+                        document.querySelector(".orderpanel-cart").textContent = "In cart"
+                        addPopup(document.querySelectorAll(".orderpanel-cart"), "data-popup", "#popup-cart");
+                    } else {
+                        document.querySelector(".orderpanel-cart").textContent = "Add to Cart"
+                        document.querySelector(".orderpanel-cart").removeAttribute("data-popup")
                     }
-                })
-                
-                document.querySelector(".orderpanel-removeGoods").addEventListener("click", () => {
-                    const countGoods = document.querySelector(".orderpanel-countGoods");
-
-                    if (parseInt(countGoods.textContent.match(/\d+/)) != 1) {
-                        countGoods.textContent = parseInt(countGoods.textContent.match(/\d+/)) - 1
-                    }
-                })
-                
-                document.querySelector(".orderpanel-goOrder").addEventListener("click", (e) => {
-                    const parent = e.target.parentElement.parentElement.parentElement
-//BUY NOW
-                    if (parent.querySelector(".popup-content-info").querySelector(".popup-content-orderpanel").querySelector(".orderpanel-cart").textContent.toLowerCase().trim() == "add to cart") {
-                        new CartItem(
-                            ".." + parent.querySelector(".popup-content-img").style.backgroundImage.slice(7, -2), 
-                            parent.getElementsByClassName("popup-content-title")[0].textContent,
-                            Number(parent.getElementsByClassName("popup-content-stock")[0].getElementsByTagName("SPAN")[0].textContent),
-                            Number(parent.getElementsByClassName("popup-content-price")[0].textContent.slice(1, -3)),
-                            Number(parent.getElementsByClassName("orderpanel-countGoods")[0].textContent),
-                            Number(parent.getElementsByClassName("popup-content-article")[0].textContent.replace(/\D/g, '')),
-                            ".cart-goods-body")
-                            .render()
-                    
-                            localStorage.setItem("products", document.querySelector("#shopCart").innerHTML)
-                            sumTotal();
-                    }
-                
-                    window.location.href = "../shipping.html";
-                
-                })
-// CART
-                document.querySelector(".orderpanel-cart").addEventListener("click", (e) => {
-                    const parent = e.target.parentElement.parentElement.parentElement
-
-                    if (parent.querySelector(".popup-content-info").querySelector(".popup-content-orderpanel").querySelector(".orderpanel-cart").textContent.toLowerCase().trim() == "add to cart") {
-                        new CartItem(
-                            ".." + parent.querySelector(".popup-content-img").style.backgroundImage.slice(7, -2), 
-                            parent.getElementsByClassName("popup-content-title")[0].textContent,
-                            Number(parent.getElementsByClassName("popup-content-stock")[0].getElementsByTagName("SPAN")[0].textContent),
-                            Number(parent.getElementsByClassName("popup-content-price")[0].textContent.slice(1, -3)),
-                            Number(parent.getElementsByClassName("orderpanel-countGoods")[0].textContent),
-                            Number(parent.getElementsByClassName("popup-content-article")[0].textContent.replace(/\D/g, '')),
-                            ".cart-goods-body")
-                            .render()
-                    
-                            localStorage.setItem("products", document.querySelector("#shopCart").innerHTML)
-                            sumTotal();
-
-                        if (checkGoodsInCart(parent)) {
-                            document.querySelector(".orderpanel-cart").textContent = "In cart"
-                            addPopup(document.querySelectorAll(".orderpanel-cart"), "data-popup", "#popup-cart");
-                        } else {
-                            document.querySelector(".orderpanel-cart").textContent = "Add to Cart"
-                            document.querySelector(".orderpanel-cart").removeAttribute("data-popup")
+    
+                    document.querySelector(".orderpanel-addGoods").addEventListener("click", () => {
+                        const countGoods = document.querySelector(".orderpanel-countGoods");
+                        const stockGoods = document.querySelector(".popup-content-stock");
+    
+                        if (parseInt(countGoods.textContent.match(/\d+/)) != parseInt(stockGoods.textContent.match(/\d+/))) {
+                            countGoods.textContent = parseInt(countGoods.textContent.match(/\d+/)) + 1
                         }
-                    }
-                })
-            }, 50)     
+                    })
+                    
+                    document.querySelector(".orderpanel-removeGoods").addEventListener("click", () => {
+                        const countGoods = document.querySelector(".orderpanel-countGoods");
+    
+                        if (parseInt(countGoods.textContent.match(/\d+/)) != 1) {
+                            countGoods.textContent = parseInt(countGoods.textContent.match(/\d+/)) - 1
+                        }
+                    })
+                    
+                    document.querySelector(".orderpanel-goOrder").addEventListener("click", (e) => {
+                        const parent = e.target.parentElement.parentElement.parentElement
+    //BUY NOW
+                        if (parent.querySelector(".popup-content-info").querySelector(".popup-content-orderpanel").querySelector(".orderpanel-cart").textContent.toLowerCase().trim() == "add to cart") {
+                            new CartItem(
+                                ".." + parent.querySelector(".popup-content-img").style.backgroundImage.slice(7, -2), 
+                                parent.getElementsByClassName("popup-content-title")[0].textContent,
+                                Number(parent.getElementsByClassName("popup-content-stock")[0].getElementsByTagName("SPAN")[0].textContent),
+                                Number(parent.getElementsByClassName("popup-content-price")[0].textContent.slice(1, -3)),
+                                Number(parent.getElementsByClassName("orderpanel-countGoods")[0].textContent),
+                                Number(parent.getElementsByClassName("popup-content-article")[0].textContent.replace(/\D/g, '')),
+                                ".cart-goods-body")
+                                .render()
+                        
+                                localStorage.setItem("products", removeEmptyCarts(document.querySelector("#shopCart").innerHTML))
+                                sumTotal();
+                        }
+                    
+                        window.location.href = "../shipping.html";
+                    
+                    })
+    // CART
+                    document.querySelector(".orderpanel-cart").addEventListener("click", (e) => {
+                        const parent = e.target.parentElement.parentElement.parentElement
+    
+                        if (parent.querySelector(".popup-content-info").querySelector(".popup-content-orderpanel").querySelector(".orderpanel-cart").textContent.toLowerCase().trim() == "add to cart") {
+                            new CartItem(
+                                ".." + parent.querySelector(".popup-content-img").style.backgroundImage.slice(7, -2), 
+                                parent.getElementsByClassName("popup-content-title")[0].textContent,
+                                Number(parent.getElementsByClassName("popup-content-stock")[0].getElementsByTagName("SPAN")[0].textContent),
+                                Number(parent.getElementsByClassName("popup-content-price")[0].textContent.slice(1, -3)),
+                                Number(parent.getElementsByClassName("orderpanel-countGoods")[0].textContent),
+                                Number(parent.getElementsByClassName("popup-content-article")[0].textContent.replace(/\D/g, '')),
+                                ".cart-goods-body")
+                                .render()
+                        
+                                localStorage.setItem("products", removeEmptyCarts(document.querySelector("#shopCart").innerHTML))
+                                sumTotal();
+    
+                            if (checkGoodsInCart(parent)) {
+                                document.querySelector(".orderpanel-cart").textContent = "In cart"
+                                addPopup(document.querySelectorAll(".orderpanel-cart"), "data-popup", "#popup-cart");
+                            } else {
+                                document.querySelector(".orderpanel-cart").textContent = "Add to Cart"
+                                document.querySelector(".orderpanel-cart").removeAttribute("data-popup")
+                            }
+                        }
+                    })
+                }
+            )
+
+                
+            parent.setAttribute("data-popup", "#popup-goods");
+            parent.setAttribute("data-close", "");    
         }
     })
 }
@@ -821,25 +844,30 @@ user_pages.addEventListener("click", (e) => {
 
         </div>
         <div class="auth-forms-body">
+        <div style="width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; font-size: 24px;" class="order-is-empty">Orders is empty</div>
         </div>
             `;
         if(document.getElementsByTagName("body")[0].classList.contains("user-acc")) {
             postData("http://localhost:8008/getorder", JSON.stringify({"token" : localStorage.getItem("session")}))
             .then(mass => {
-                mass.forEach((elem) => {
-                    console.log(elem["image"].split(" ")[1].slice(4, -1))
-                    new Order (
-                        elem["image"],
-                        elem["title"],
-                        elem["article"],
-                        elem["status"],
-                        elem["date"],
-                        `${Date.UTC}`,
-                        elem["count"],
-                        elem["price"],
-                        ".auth-forms-body",
-                    ).render();
-                })
+                if (mass && mass["message"] != "Orders does not exist") {
+                    document.querySelector(".order-is-empty").style.display = "none";
+                    mass.forEach((elem) => elem.forEach(elem1 => {
+                        new Order (
+                            elem1["image"],
+                            elem1["title"],
+                            elem1["article"],
+                            elem1["status"],
+                            elem1["date"],
+                            `${fd(new Date(Date.now()), true)}`,
+                            elem1["count"],
+                            elem1["price"],
+                            ".auth-forms-body",
+                        ).render();
+                    }))
+                } else {
+                    document.querySelector(".order-is-empty").style.display = "flex";
+                }
             })
         }
     }  else if (e.target.classList.contains("user-pages-logout")) {
@@ -847,13 +875,13 @@ user_pages.addEventListener("click", (e) => {
 
         const jsonFirst = JSON.stringify({"token" : localStorage.getItem("session"), "html" : localStorage.getItem("products")});
 
-        postData("http://localhost:8008/logout", jsonFirst)
-        localStorage.removeItem("session");
-        // localStorage.setItem("products", 
-        // `
-        // <div id="emptyCart" style="font-size: 18px; display: flex; flex-direction: column; flex: 0 1 100%; justify-content: center; height: 185px; align-items:center; text-align: center">Cart is empty!</div>
-        // `)
-        window.location.href = "../index.html"
+        postData("http://localhost:8008/logout", jsonFirst).then( () => {
+            localStorage.removeItem("session");
+            localStorage.setItem("products", "");
+    
+            window.location.href = "../index.html";
+        }
+        )
     }
 })
 }
@@ -916,6 +944,54 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
     }
     )
 
+    class UsersGoods {
+        constructor(src, title, article, stock, categ, age, price, parentSelector, ...classes) {
+           this.src = src;
+           this.title = title;
+           this.article = article;
+           this.stock = stock;
+           this.categ = categ;
+           this.age = age;
+           this.price = price.toFixed(2);
+           this.classes = classes;
+           this.parent = document.querySelector(parentSelector).querySelectorAll(".admin-goods-body");
+        }
+    
+        render() {
+            const element = document.createElement('div');
+    
+            if (this.classes.length === 0) {
+                element.classList.add("goods-body-item");
+            } else {
+                this.classes.forEach(className => {
+                    element.classList.add(className)
+                });
+            }
+    
+            element.innerHTML = `
+            <div class="goods-body-info">
+                <div style="background-image: url('${this.src}');" class="body-goods-img"></div>
+                <div class="body-goods-block">
+                    <div class="body-goods-title">${this.title}</div>
+                    <div class="body-goods-article">Article: <span>${this.article}</span></div>
+                </div>
+            </div>
+            <div class="body-goods-stock">${this.stock}</div>
+            <div class="body-goods-category">${this.categ}</div>
+            <div class="body-goods-age">${this.age}</div>
+            <div class="body-goods-price">$${this.price}</div>
+            <div class="goods-body-btns">
+                <button class="userinfo-goods-changer"></button>
+                <button class="userinfo-opportunity-delete"></button>
+            </div>
+                `;
+    
+            this.parent.forEach((par) => {
+                par.append(element);
+            })
+        }
+    }
+
     //Боковая панелька
     const user_pages = document.querySelector(".admin-auth-pages");
     const user_forms = document.querySelector(".admin-auth-block");
@@ -947,7 +1023,25 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
         if (e.target.classList.contains("admin-pages-goods")) {
             check("../img/box-active.svg")
             user_forms.innerHTML = `
+            <div class="admin-forms-title">Goods</div>
+            <div class="admin-users-header">
+                <div class="admin-goods-item1 admin-header-item">Product</div>
+                <div class="admin-goods-item2 admin-header-item">Stock</div>
+                <div class="admin-goods-item3 admin-header-item">Category</div>
+                <div class="admin-goods-item4 admin-header-item">Age</div>
+                <div class="admin-goods-item5 admin-header-item">Price</div>
+                <button class="admin-goods-item6 admin-header-item">Add a product
+                </button>
+            </div>
+            <div class="admin-goods-body">
+            </div>
             `
+            postData("http://localhost:8008/admin/getgoods", "")
+            .then(json => {
+                json.forEach((elem) => {
+                new UsersGoods(elem["photo"], elem["title"], elem["article"], elem["stock"], elem["category"], elem["age"], elem["price"], ".admin-auth-block").render();
+            })})
+
         } else if (e.target.classList.contains("admin-pages-details")) {
             check("../img/user-acc-active.svg")
             user_forms.innerHTML = `
@@ -982,15 +1076,18 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
     // Товарка
 
     user_forms.addEventListener("click", (e) => {
-
-        const now_user_token = e.target.parentElement.parentElement.querySelector(".userinfo-token").textContent;
+// Users
+        if (e.target.parentElement.parentElement.classList.contains("forms-body-userinfo")) {
+            const now_user_token = e.target.parentElement.parentElement.querySelector(".userinfo-token").textContent;
 
         if (e.target.classList.contains("userinfo-opportunity-delete")) {
+            
             postData("http://localhost:8008/admin/deleteuser", JSON.stringify({"super_user_token" : localStorage.getItem("session"), "token" : now_user_token}))
             .then(json => {
                 window.location.reload();
             })
-        } else {e.target.classList.contains("userinfo-opportunity-changer")} {
+        } else if (e.target.classList.contains("userinfo-opportunity-changer")) {
+
             if (now_user_token != localStorage.getItem("session")) {
                 e.target.parentElement.parentElement.querySelector(".userinfo-opportunity-changer").setAttribute("data-popup", "#popup-username");
 
@@ -1045,10 +1142,52 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
 
             postData("http://localhost:8008/edituser", jsonFirst)
             .then(json => {
-                window.location.reload()
             })
         })
-        
+        // Goods
+        } else if (e.target.parentElement.parentElement.classList.contains("goods-body-item")) {
+
+            const now_good_article = Number(e.target.parentElement.parentElement.querySelector(".body-goods-article").getElementsByTagName("span")[0].textContent);
+
+            if (e.target.classList.contains("userinfo-opportunity-delete")) {
+            
+                postData("http://localhost:8008/admin/deletegoods", JSON.stringify({"token" : localStorage.getItem("session"), "article" : now_good_article}))
+                .then(json => {
+                    window.location.reload();
+                })
+            } else if (e.target.classList.contains("userinfo-goods-changer")) {
+
+                postData("http://localhost:8008/getgood", JSON.stringify({"article" : now_good_article}))
+                .then(json => {
+                    const allGoodsForms = document.querySelectorAll(".goodsForm");
+                    const textarea = document.querySelector(".description-admin-goods");
+
+                    allGoodsForms[0].value = json["title"];
+                    allGoodsForms[1].value = json["category"];
+                    allGoodsForms[2].value = json["article"];
+                    allGoodsForms[3].value = json["photo"];
+                    allGoodsForms[4].value = json["price"];
+                    allGoodsForms[5].value = json["stock"];
+
+                    textarea.value = json["description"];
+                })
+                e.target.parentElement.parentElement.querySelector(".userinfo-goods-changer").setAttribute("data-popup", "#popup-admin-goods");
+
+            }
+            document.querySelector(".admin-goods-submit").addEventListener("click", () => {
+                e.preventDefault();
+    
+                const form = document.querySelector(".admin-edit-goods");
+    
+                const formData = new FormData(form);
+    
+                const jsonFirst = JSON.stringify(Object.assign({}, blocked, Object.fromEntries(formData.entries())));
+    
+                postData("http://localhost:8008/edituser", jsonFirst)
+                .then(json => {
+                })
+            })
+        }        
 
     })
 
@@ -1064,6 +1203,8 @@ btns_sumbit.forEach((elem) => {
         e.preventDefault();
 
         if(elem.parentElement.id == "form_user_reg") {
+            
+
             const formData = new FormData(elem.parentElement);
 
             const jsonFirst = JSON.stringify(Object.assign({}, {"html" : localStorage.getItem("products")}, Object.fromEntries(formData.entries())));
@@ -1088,7 +1229,13 @@ btns_sumbit.forEach((elem) => {
               .then(json => {
                     if (typeof(json[0]) == "string") {
                         localStorage.setItem("session", json[0]);
-                        localStorage.setItem("products", json[1]);
+                        if (document.querySelector("#shopCart").childElementCount == 1) {
+                            localStorage.setItem("products", removeEmptyCarts(json[1]));
+                            cartIsEmpty();
+                        } else {
+                            localStorage.setItem("products", removeEmptyCarts(json[1] + localStorage.getItem("products")));
+                            cartIsEmpty();
+                        }
                         window.location.reload();
                     }
                 }

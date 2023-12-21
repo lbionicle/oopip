@@ -1342,7 +1342,7 @@ button.active{
     margin: 0 toRem(17) 0 0;
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: cover;
+    background-size: contain;
 }
 .body-good-info {
     flex: 0 1 30%;
@@ -1428,6 +1428,7 @@ button.active{
 .admin-auth-pages {
     display: flex;
     flex: 0 1 20%;
+    height: toRem(290);
     flex-direction: column;
     padding: toRem(21) 0 0 0;
     margin: 0 toRem(17) 0 0;
@@ -1677,15 +1678,12 @@ button.active{
     width: 100%;
 }
 
-
-// Test
-
 .slider {
     position: relative;
     left: 0;
     transition: left 0.3s ease-out; 
     display: flex;
-    width: 993px; /* Ширина для 3 элементов */  
+    width: 993px; 
   }
   
   .slide {
@@ -1694,4 +1692,251 @@ button.active{
     height: 300px;
     float: left;
   }
-  
+
+//   Goods у админа
+
+.admin-users-header {
+    text-align: center;
+    font-size: toRem(20);
+    line-height: toRem(20);
+    color: #3D3D3D;
+    .admin-goods-item1 {
+        text-align: left;
+        flex: 0 1 25%;
+    }
+    .admin-goods-item2 {
+        flex: 0 1 10%;
+    }
+    .admin-goods-item3 {
+        flex: 0 1 20%;
+    }
+    .admin-goods-item4 {
+        flex: 0 1 10%;
+    }
+    .admin-goods-item5 {
+        flex: 0 1 15%;
+    }
+    .admin-goods-item6 {
+        flex: 0 1 20%;
+        font-weight: 500;
+        text-align: center;
+        span {
+            font-size: toRem(22);
+            font-weight: 400;
+        }
+        &:hover {
+            text-decoration: underline;
+        }
+        &:active {
+            text-decoration: none;
+        }
+    }
+}
+.admin-goods-body {
+}
+.goods-body-item {
+    margin: toRem(14) 0 0 0;
+    align-items: center;
+    background-color: #FBFBFB;
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    height: auto;
+    width: 100%;
+    color: #2C2D3B;
+    font-size: toRem(18.67);
+    font-weight: 500;
+    line-height: toRem(20);
+}
+.goods-body-info {
+    display: flex;
+    flex-wrap: nowrap;
+    text-align: left;
+    align-items: center;
+    justify-content: left;
+    flex-direction: row;
+    flex: 0 1 25%;
+}
+.body-goods-img {
+    width: toRem(87);
+    height: toRem(87);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.body-goods-block {
+    margin: 0 0 0 toRem(18);
+}
+.body-goods-article {
+    color: #A5A5A5;
+    font-weight: 400;
+    font-size: toRem(16);
+    span {
+        color: #727272;
+    }
+}
+.body-goods-stock {
+    flex: 0 1 10%;
+}
+.body-goods-category {
+    flex: 0 1 20%;
+    word-wrap: break-word;
+}
+.body-goods-age {
+    flex: 0 1 10%;
+}
+.body-goods-price {
+    color: #46A358;
+    font-size: toRem(18);
+    line-height: toRem(16);
+    font-weight: 700;
+    flex: 0 1 15%;
+}
+.goods-body-btns {
+    flex: 0 1 20%;
+    display: flex;
+}
+.userinfo-goods-changer {
+    width: 50%;
+    height: toRem(87);
+    background-image: url("../img/filter and sort.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 32px 32px;
+}
+
+//modal Goods
+
+.admin-goods-row {
+    color: #3D3D3D;
+    display: flex;
+    flex-direction: column;
+}
+.goods-row-title {
+    font-size: toRem(21);
+    line-height: toRem(20);
+    font-weight: 500;
+    width: 100%;
+}
+.goods-allforms {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+.admin-input-goods {
+    height: toRem(77.5);
+    display: flex;
+    position: relative;
+    flex: 0 1 47.5%;
+    margin: toRem(24) 0 0 0;
+    flex-direction: column-reverse;
+    font-size: toRem(14);
+    line-height: toRem(14);
+    color: #3D3D3D;
+    justify-content: space-between;
+    label {
+        font-size: toRem(18.24);
+        line-height: toRem(18.24);
+        color: #3D3D3D;
+    }
+}
+.goodsForm {
+    height: toRem(50);
+    width: 100%;
+    border-radius: toRem(2.82);
+    border: toRem(0.94) solid rgba(234, 234, 234, 1);
+    padding: 0 toRem(50) 0 toRem(10);
+    &:focus {
+        border-color: #46A358;
+    }
+}
+.textinputbox-admin {
+    text-align: left;
+    float: left;
+}
+.form_toggle-item-admin {
+    flex: 0 1 33.333%;
+    display: flex;
+    align-items: center;
+    height: toRem(50);
+    font-size: toRem(16);
+    line-height: toRem(14);
+    border: toRem(0.25) solid #d9d9d9;
+}
+.form_toggle-admin {
+    flex: 0 1 47.5%;
+    display: flex;
+    height: toRem(85);
+    text-align: center;  
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column; 
+    label {
+        width: 100%;
+        display: block;
+        border-right: none;
+        cursor: pointer;
+        user-select: none; 
+    }
+    .item-admin-1 {
+        border-radius: toRem(6) 0 0 toRem(6);
+    }
+    .item-admin-3 {
+        border-radius: 0 toRem(6) toRem(6) 0;
+    }
+}
+.toggle-forms-block {
+    display: flex;
+    width: 100%;
+}
+.item-checked{
+    background-color: #46A358;
+    label {
+        color: white;
+    }
+}
+.form_toggle-item-admin input[type=radio] {
+    display: none;
+}
+.admin-input-textarea {
+    height: toRem(77.5);
+    display: flex;
+    position: relative;
+    flex: 0 1 47.5%;
+    flex-direction: column-reverse;
+    font-size: toRem(14);
+    line-height: toRem(14);
+    color: #3D3D3D;
+    justify-content: space-between;
+    label {
+        font-size: toRem(18.24);
+        line-height: toRem(18.24);
+        color: #3D3D3D;
+    }
+}
+.description-admin-goods {
+    width: 100%;
+    margin: toRem(10) 0 0 0;
+    border-radius: toRem(2.82);
+    border: toRem(0.94) solid rgba(234, 234, 234, 1);
+    padding: toRem(5) toRem(10);
+    resize: none;
+    &:focus {
+        outline: none !important;
+        border: toRem(1) solid #46A358;
+      }
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type='number'],
+input[type="number"]:hover,
+input[type="number"]:focus {
+    appearance: none;
+    -moz-appearance: textfield;
+}
