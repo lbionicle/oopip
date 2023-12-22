@@ -1,3 +1,66 @@
+async function updateProducts(html) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html'); 
+
+    const products = [];
+  
+    for(let product of doc.querySelectorAll('.goods-body-good')) {
+  
+      const article = product.querySelector('.goods-body-attr').textContent;
+
+      const count = parseInt(product.querySelector('.body-countGoods').textContent);
+      
+      const dbData = await postData("http://localhost:8008/getgood", JSON.stringify({"article" : article}));
+
+      products.push({
+        token: 'b2QnK6imJqtrGCwlVtVxKo7I7epzy_Vhxq2qQM0YY2NZfxNI7FM6SGgmwHSmcbfyXN9txo6IQiSO6S2jT_LGEBsSE--pUgvQs5N5vTaqBDrKIanqClZM-rqmK7tcLBxAEDYShS6_cfuHg7_p2yH3Eiw5VB5--VTB',
+        article: dbData.article,  
+        title: dbData.title,
+        description: dbData.description,
+        stock: dbData.stock - count,  
+        price: dbData.price,
+        category: dbData.category,
+        photo: dbData.photo,
+        age: dbData.age
+      });
+  
+    }
+  
+    return JSON.stringify({products});
+  
+  }
+
+
+function consolidateDuplicates(html) {
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+  
+    const products = {};
+    for(let product of doc.querySelectorAll('.goods-body-good')) {
+      const id = product.querySelector('.goods-body-attr').textContent;
+      if(!products[id]) {
+        products[id] = product;
+      } else {
+        const dupProduct = products[id];
+        
+        let dupCount = parseInt(dupProduct.querySelector('.body-countGoods').textContent);
+        let newCount = dupCount + parseInt(product.querySelector('.body-countGoods').textContent);
+        
+        let stock = parseInt(dupProduct.querySelector('.body-info-stock span').textContent);
+        if(newCount > stock) {
+          newCount = stock;  
+        }
+  
+        dupProduct.querySelector('.body-countGoods').textContent = newCount;
+        
+        product.remove(); 
+      }
+    }
+  
+    return doc.documentElement.innerHTML;
+  }
+
 const postData = async (url, data) => {
     const res = await fetch(url, {
         method: "POST",
@@ -38,7 +101,7 @@ function showUserInfo() {
         allPersonalForms[2].value = json["email"]
     })
 }
-localStorage.setItem("products", removeEmptyCarts(localStorage.getItem("products")))
+localStorage.setItem("products", removeEmptyCarts(localStorage.getItem("products").trim()))
 
 function showUserAddress(class_check) {
     if(localStorage.getItem("session")) {
@@ -67,7 +130,11 @@ function checkGoodsInCart(element) {
 
     let nameOfGoods = "";
 
-    element.classList.contains("goods-element") ? nameOfGoods = element.querySelector(".element-info").querySelector(".element-info-name").textContent : nameOfGoods = element.querySelector(".popup-content-title").textContent;
+    if (element.classList.contains("goods-element")) {
+        element.classList.contains("goods-element") ? nameOfGoods = element.querySelector(".element-info").querySelector(".element-info-name").textContent : nameOfGoods = element.querySelector(".popup-content-title").textContent;
+    } else if (element.classList.contains("recommend-good)")) {
+        element.classList.contains("recommend-good") ? nameOfGoods = element.querySelector(".good-info-title").textContent : nameOfGoods = element.querySelector(".popup-content-title").textContent;
+    }
 
     const nowCart = document.querySelector("#shopCart").querySelectorAll(".body-info-title");
 
@@ -111,14 +178,26 @@ if(document.getElementsByTagName("body")[0].classList.contains("shipping.html"))
 
         const formData = new FormData(document.querySelector(".shipping_form_details"));
 
-        const jsonFirst = JSON.stringify(Object.assign({}, {"html" : localStorage.getItem("products"), "user_token": localStorage.getItem("session")}, Object.fromEntries(formData.entries())));
+        const jsonFirst = JSON.stringify(Object.assign({}, {"html" : localStorage.getItem("products").trim(), "user_token": localStorage.getItem("session")}, Object.fromEntries(formData.entries())));
         
-        postData("http://localhost:8008/parse_cart", JSON.stringify({"token" : localStorage.getItem("session"), "html" : localStorage.getItem("products")}))
+        postData("http://localhost:8008/parse_cart", JSON.stringify({"token" : localStorage.getItem("session"), "html" : localStorage.getItem("products").trim()}))
         .then(json => {
+            console.log(json)
         })
-        // postData("http://localhost:8008/edituser", jsonFirst)
 
-        window.location.reload();
+        updateProducts(localStorage.getItem("products"))
+        .then(json => {
+            const allChanges = JSON.parse(json);
+
+            allChanges["products"].forEach(elem => {
+                postData("http://localhost:8008/admin/editgoods", JSON.stringify(elem))
+                .then(json => {
+                    localStorage.setItem("products", "")
+                    window.location.href = "../index.html"
+                }
+                )
+            })
+        });
     })
 
 
@@ -161,7 +240,7 @@ function sumTotal() {
 
 function cartIsEmpty() {
     document.querySelector("#emptyCart").style.display = "none";
-    console.log(document.querySelector("#shopCart").childElementCount)
+
     if (document.querySelector("#shopCart").childElementCount == 1) {
         document.getElementById("emptyCart").style.display = "flex"
         shippingCart.forEach((elem) => elem.textContent = "$0.00");
@@ -170,12 +249,21 @@ function cartIsEmpty() {
     } else {
         document.getElementById("emptyCart").style.display = "none";
         document.getElementById("order-btn").style.pointerEvents = "auto"
+        if(localStorage.getItem("session") != null) {
+            document.getElementById("order-btn").removeAttribute("data-popup")
+            document.getElementById("order-btn").href = "../shipping.html"
+        } else {
+            document.getElementById("order-btn").href = ""
+            if (!document.getElementById("order-btn").getAttribute("data-popup")) {
+                addPopup(document.querySelectorAll("#order-btn"), "data-popup", "#popup-auth");
+            }
+        }
         sumTotal();
     }
-    localStorage.setItem("products", removeEmptyCarts(localStorage.getItem("products")))
+    localStorage.setItem("products", removeEmptyCarts(localStorage.getItem("products").trim()))
 }
 if(document.getElementsByTagName("body")[0].classList.contains("shipping.html") || document.getElementsByTagName("body")[0].classList.contains("index_html")) {
-    document.querySelector("#shopCart").innerHTML += removeEmptyCarts(localStorage.getItem("products"));
+    document.querySelector("#shopCart").innerHTML += removeEmptyCarts(localStorage.getItem("products").trim());
     cartIsEmpty();
     sumTotal();
 }
@@ -186,7 +274,7 @@ class CartItem {
         this.title = title;
         this.stock = stock;
         this.attr = attr;
-        this.price = price.toFixed(2);
+        this.price = Number(price).toFixed(2);
         this.classes = classes;
         this.quantity = quantity
         this.parent = document.querySelectorAll(parentSelector);
@@ -211,7 +299,7 @@ class CartItem {
         element.innerHTML = `
         <div style="display: flex; flex-wrap: nowrap;" class="goods-elem">						
         <div style="background-image: url(${this.src})" class="goods-body-img"></div>
-        <div class="goods-body-info">
+        <div class="good-body-info">
             <div class="body-info-title">${this.title}</div>
             <div class="body-info-stock">Stock:<span>${this.stock}</span></div>
         </div></div>
@@ -240,7 +328,7 @@ cart_goods.forEach((elem) => elem.addEventListener("click", (e) => {
         e.target.parentElement.remove();
 
         cartIsEmpty();
-        localStorage.setItem("products", removeEmptyCarts(document.querySelector("#shopCart").innerHTML))
+        localStorage.setItem("products", removeEmptyCarts(document.querySelector("#shopCart").innerHTML.trim()))
         cartIsEmpty();
         sumTotal();
 
@@ -255,7 +343,7 @@ cart_goods.forEach((elem) => elem.addEventListener("click", (e) => {
             quantity.textContent = Number(quantity.textContent) + 1
             total.textContent = "$" + (Number(price.textContent.slice(1, -3)) * Number(quantity.textContent)).toFixed(2)
 
-            localStorage.setItem("products", removeEmptyCarts(document.querySelector("#shopCart").innerHTML))
+            localStorage.setItem("products", removeEmptyCarts(document.querySelector("#shopCart").innerHTML.trim()))
             sumTotal();
 
         }
@@ -272,7 +360,7 @@ cart_goods.forEach((elem) => elem.addEventListener("click", (e) => {
             quantity.textContent = Number(quantity.textContent) - 1
             total.textContent = "$" + (Number(price.textContent.slice(1, -3)) * Number(quantity.textContent)).toFixed(2)
 
-            localStorage.setItem("products", removeEmptyCarts(document.querySelector("#shopCart").innerHTML))
+            localStorage.setItem("products", removeEmptyCarts(document.querySelector("#shopCart").innerHTML.trim()))
             sumTotal();
 
         }
@@ -285,7 +373,7 @@ class GoodsCard {
     constructor(src, title, price, article, parentSelector, attr, ...classes) {
         this.src = src;
         this.title = title;
-        this.price = price.toFixed(2);
+        this.price = Number(price).toFixed(2);
         this.classes = classes;
         this.attr = attr;
         this.article = article;
@@ -322,6 +410,32 @@ if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
 
     localStorage.setItem("category", "")
 
+    const btnFilterAge = document.querySelector(".filter-age");
+
+    btnFilterAge.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        if(e.target.classList.contains("filter-item")) {
+            btnFilterAge.querySelectorAll(".filter-item").forEach(elem => elem.classList.remove("active"))
+            e.target.classList.add("active")
+            if (e.target.textContent == "All ages") {
+                localStorage.setItem("age", "")
+            } else {
+                localStorage.setItem("age", e.target.textContent.split(" ")[0])
+            }
+
+            postData("http://localhost:8008/getgoodbycatss", JSON.stringify({"category" : localStorage.getItem("category"), "age" : localStorage.getItem("age")}))
+            .then(json => {
+                document.querySelector(".goods-elements").innerHTML = "";
+                json.forEach((elem) => {
+                    if (elem["stock"] > 0) {
+                        new GoodsCard(elem["photo"], elem["title"], elem["price"], elem["article"], ".goods-elements" , "data-goods", "goods-element").render();
+                    }
+                }
+            )})
+        }
+    })
+
     postData("http://localhost:8008/admin/getgoods")
     .then(json => json.forEach(elem => {
         if (elem["stock"] > 0) {
@@ -352,6 +466,57 @@ if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
     next_elem.addEventListener('click', nextSlide);
     prev_elem.addEventListener('click', prevSlide);
 
+//Recommendation====================================================================================================
+
+    class Recommend {
+        constructor(srcImg, title, article, descr, parentSelector, ...classes) {
+            this.src = srcImg;
+            this.title = title;
+            this.descr = descr;
+            this.article = article;
+            this.classes = classes;
+            this.parent = document.querySelectorAll(parentSelector);
+        }
+    
+        calcTotal() {
+            this.total = (Number(this.price) * Number(this.quantity)).toFixed(2); 
+        }
+        render() {
+            const element = document.createElement('div');
+    
+            if (this.classes.length === 0) {
+                element.classList.add("recommend-good");
+            } else {
+                this.classes.forEach(className => {
+                    element.classList.add(className)
+                });
+            }
+    
+            element.innerHTML = `
+            <div style="background-image: url(${this.src})" class="recommend-good-img">
+            </div>
+            <div class="recommend-good-info">
+                <div class="good-info-title">${this.title}</div>
+                <div class="good-info-subtitle">${this.descr}</div>
+                <div style="display: none" class="recommend-article">${this.article}</div>
+                <div class="info-button-good">
+                    <button data-goods class="good-info-button">Show more -></button>
+                </div>
+            </div>
+            `;
+    
+            this.parent.forEach((par) => {
+                par.append(element);
+            })
+        }
+    }
+    
+    postData("http://localhost:8008/admin/getgoods", "")
+    .then(json => {
+        new Recommend(json[0]["photo"], json[0]["title"], json[0]["article"], json[0]["description"], ".recommend-goods").render();
+        new Recommend(json[3]["photo"], json[3]["title"], json[3]["article"], json[3]["description"], ".recommend-goods").render();
+    })
+
 }
 
 //POPUP_GOODS====================================================================================================
@@ -363,7 +528,7 @@ class BigGoodsCard {
         this.article = article;
         this.stock = stock;
         this.descr = descr;
-        this.price = price.toFixed(2);
+        this.price = Number(price).toFixed(2);
         this.classes = classes;
         this.parent = document.querySelector(parentSelector);
     }
@@ -434,7 +599,7 @@ if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
             current = 0
             
             localStorage.setItem("category", e.target.textContent.replace(/\s*\(.*?\)\s*/g, ''))
-            const jsonFirst = JSON.stringify({"category" : e.target.textContent.replace(/\s*\(.*?\)\s*/g, ''), "age" : ""});
+            const jsonFirst = JSON.stringify({"category" : e.target.textContent.replace(/\s*\(.*?\)\s*/g, ''), "age" : localStorage.getItem("age")});
     
             postData("http://localhost:8008/getgoodbycatss", jsonFirst)
             .then(json => {
@@ -442,28 +607,6 @@ if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
                 json.forEach((elem) => {
                     if (elem["stock"] > 0) {
                         new GoodsCard(elem["photo"], elem["title"], elem["price"], elem["article"], ".goods-elements" , "data-goods", "goods-element").render();
-                    }
-                }
-            )})
-        }
-    })
-    btnFilterAge.addEventListener("click", (e) => {
-        if (e.target.classList.contains("filter-age")) {
-            btnCategories.querySelectorAll(".filter-age").forEach(elem => elem.classList.remove("active"))
-            e.target.classList.add("active")
-
-            document.querySelector('.goods-elements').style.left = "0px"
-            current = 0
-            
-            localStorage.setItem("age", e.target.textContent.replace(/[^a-zA-Z]+/g, '').toLowerCase())
-            const jsonFirst = JSON.stringify({"category" : localStorage.getItem("category"), "age" : ""});
-    
-            postData("http://localhost:8008/getgoodbycatss", jsonFirst)
-            .then(json => {
-                document.querySelector(".goods-elements").innerHTML = "";
-                json.forEach((elem) => {
-                    if (elem["stock"] > 0) {
-                        new GoodsCard("../img/goods3.png", elem["title"], elem["price"], elem["article"], ".goods-elements" , "data-goods", "goods-element").render();
                     }
                 }
             )})
@@ -489,6 +632,118 @@ function addPopup(elemPop, data, id) {
 }
 
 if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
+
+    const recommendation = document.querySelector(".body-recommend");
+
+    recommendation.addEventListener("click", (e) => {
+        if(e.target.classList.contains("good-info-button")) {
+
+            const parent = e.target.parentElement.parentElement.parentElement;
+            
+            cartIsEmpty();
+
+            const jsonFirst = JSON.stringify({"article" : Number(parent.querySelector(".recommend-article").textContent)});
+
+            postData("http://localhost:8008/getgood", jsonFirst)
+            .then(json => {
+                new BigGoodsCard(
+                    json["photo"],
+                    json["title"],
+                    json["price"],
+                    json["article"],
+                    json["stock"],
+                    json["description"],
+                    "#bigGoods"
+                    ).render();
+                })
+            .then(
+                () => {
+                    if (checkGoodsInCart(parent)) {
+                        document.querySelector(".orderpanel-cart").textContent = "In cart"
+                        addPopup(document.querySelectorAll(".orderpanel-cart"), "data-popup", "#popup-cart");
+                    } else {
+                        document.querySelector(".orderpanel-cart").textContent = "Add to Cart"
+                        document.querySelector(".orderpanel-cart").removeAttribute("data-popup")
+                    }
+    
+                    document.querySelector(".orderpanel-addGoods").addEventListener("click", () => {
+                        const countGoods = document.querySelector(".orderpanel-countGoods");
+                        const stockGoods = document.querySelector(".popup-content-stock");
+    
+                        if (parseInt(countGoods.textContent.match(/\d+/)) != parseInt(stockGoods.textContent.match(/\d+/))) {
+                            countGoods.textContent = parseInt(countGoods.textContent.match(/\d+/)) + 1
+                        }
+                    })
+                    
+                    document.querySelector(".orderpanel-removeGoods").addEventListener("click", () => {
+                        const countGoods = document.querySelector(".orderpanel-countGoods");
+    
+                        if (parseInt(countGoods.textContent.match(/\d+/)) != 1) {
+                            countGoods.textContent = parseInt(countGoods.textContent.match(/\d+/)) - 1
+                        }
+                    })
+                    
+                    document.querySelector(".orderpanel-goOrder").addEventListener("click", (e) => {
+                        const parent = e.target.parentElement.parentElement.parentElement
+    //BUY NOW
+                        if (parent.querySelector(".popup-content-info").querySelector(".popup-content-orderpanel").querySelector(".orderpanel-cart").textContent.toLowerCase().trim() == "add to cart") {
+                            new CartItem(
+                                ".." + parent.querySelector(".popup-content-img").style.backgroundImage.slice(7, -2), 
+                                parent.getElementsByClassName("popup-content-title")[0].textContent,
+                                Number(parent.getElementsByClassName("popup-content-stock")[0].getElementsByTagName("SPAN")[0].textContent),
+                                Number(parent.getElementsByClassName("popup-content-price")[0].textContent.slice(1, -3)),
+                                Number(parent.getElementsByClassName("orderpanel-countGoods")[0].textContent),
+                                Number(parent.getElementsByClassName("popup-content-article")[0].textContent.replace(/\D/g, '')),
+                                ".cart-goods-body")
+                                .render()
+                        
+                                localStorage.setItem("products", removeEmptyCarts(document.querySelector("#shopCart").innerHTML.trim()))
+                                sumTotal();
+                        }
+
+                        if (localStorage.getItem("session") != null) {
+                            document.querySelector(".orderpanel-goOrder").removeAttribute("data-popup")
+                            window.location.href = "../shipping.html";
+                        } else {
+                            addPopup(document.querySelectorAll(".orderpanel-goOrder"), "data-popup", "#popup-auth");
+                        }
+                    
+                    })
+    // CART
+                    document.querySelector(".orderpanel-cart").addEventListener("click", (e) => {
+                        const parent = e.target.parentElement.parentElement.parentElement
+    
+                        if (parent.querySelector(".popup-content-info").querySelector(".popup-content-orderpanel").querySelector(".orderpanel-cart").textContent.toLowerCase().trim() == "add to cart") {
+                            new CartItem(
+                                ".." + parent.querySelector(".popup-content-img").style.backgroundImage.slice(7, -2), 
+                                parent.getElementsByClassName("popup-content-title")[0].textContent,
+                                Number(parent.getElementsByClassName("popup-content-stock")[0].getElementsByTagName("SPAN")[0].textContent),
+                                Number(parent.getElementsByClassName("popup-content-price")[0].textContent.slice(1, -3)),
+                                Number(parent.getElementsByClassName("orderpanel-countGoods")[0].textContent),
+                                Number(parent.getElementsByClassName("popup-content-article")[0].textContent.replace(/\D/g, '')),
+                                ".cart-goods-body")
+                                .render()
+                        
+                                localStorage.setItem("products", removeEmptyCarts(document.querySelector("#shopCart").innerHTML.trim()))
+                                sumTotal();
+    
+                            if (checkGoodsInCart(parent)) {
+                                document.querySelector(".orderpanel-cart").textContent = "In cart"
+                                addPopup(document.querySelectorAll(".orderpanel-cart"), "data-popup", "#popup-cart");
+                            } else {
+                                document.querySelector(".orderpanel-cart").textContent = "Add to Cart"
+                                document.querySelector(".orderpanel-cart").removeAttribute("data-popup")
+                            }
+                        }
+                    })
+                }
+            )
+
+                
+            e.target.setAttribute("data-popup", "#popup-goods");
+            e.target.setAttribute("data-close", "");    
+        }
+    })
 
 
     popup.addEventListener("click", (e) => {
@@ -555,11 +810,16 @@ if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
                                 ".cart-goods-body")
                                 .render()
                         
-                                localStorage.setItem("products", removeEmptyCarts(document.querySelector("#shopCart").innerHTML))
+                                localStorage.setItem("products", removeEmptyCarts(document.querySelector("#shopCart").innerHTML.trim()))
                                 sumTotal();
                         }
-                    
-                        window.location.href = "../shipping.html";
+
+                        if (localStorage.getItem("session") != null) {
+                            document.querySelector(".orderpanel-goOrder").removeAttribute("data-popup")
+                            window.location.href = "../shipping.html";
+                        } else {
+                            addPopup(document.querySelectorAll(".orderpanel-goOrder"), "data-popup", "#popup-auth");
+                        }
                     
                     })
     // CART
@@ -577,7 +837,7 @@ if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
                                 ".cart-goods-body")
                                 .render()
                         
-                                localStorage.setItem("products", removeEmptyCarts(document.querySelector("#shopCart").innerHTML))
+                                localStorage.setItem("products", removeEmptyCarts(document.querySelector("#shopCart").innerHTML.trim()))
                                 sumTotal();
     
                             if (checkGoodsInCart(parent)) {
@@ -600,6 +860,14 @@ if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
 }
 
 addPopup(cartGood, "data-popup", "#popup-cart")
+document.querySelectorAll(".cart-info-shipping").forEach((elem) => {
+    if (localStorage.getItem("session") != null) {
+        elem.href = "../user.html"
+    } else {
+        addPopup(document.querySelectorAll(".cart-info-shipping"), "data-popup", "#popup-auth")
+        elem.href = ""
+    }
+})
 
 if(!localStorage.getItem("session")) {
     addPopup(userAuth, "data-popup", "#popup-auth")
@@ -681,7 +949,7 @@ class Order {
         this.src = srcImg;
         this.title = title;
         this.article = article;
-        this.total = total.toFixed(2);
+        this.total = Number(total).toFixed(2);
         this.classes = classes;
         this.amount = amount;
         this.status = status;
@@ -801,7 +1069,7 @@ user_pages.addEventListener("click", (e) => {
 
             const formData = new FormData(e.target.parentElement.parentElement.parentElement.querySelector(".user-auth-forms").querySelector(".user_form_details"));
 
-            const jsonFirst = JSON.stringify(Object.assign({}, {"html" : localStorage.getItem("products"), "user_token": localStorage.getItem("session")}, Object.fromEntries(formData.entries())));
+            const jsonFirst = JSON.stringify(Object.assign({}, {"html" : localStorage.getItem("products").trim(), "user_token": localStorage.getItem("session")}, Object.fromEntries(formData.entries())));
             
             postData("http://localhost:8008/edituser", jsonFirst).then(json => window.location.reload())
         })
@@ -873,7 +1141,7 @@ user_pages.addEventListener("click", (e) => {
     }  else if (e.target.classList.contains("user-pages-logout")) {
         e.preventDefault();
 
-        const jsonFirst = JSON.stringify({"token" : localStorage.getItem("session"), "html" : localStorage.getItem("products")});
+        const jsonFirst = JSON.stringify({"token" : localStorage.getItem("session"), "html" : localStorage.getItem("products").trim()});
 
         postData("http://localhost:8008/logout", jsonFirst).then( () => {
             localStorage.removeItem("session");
@@ -952,7 +1220,7 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
            this.stock = stock;
            this.categ = categ;
            this.age = age;
-           this.price = price.toFixed(2);
+           this.price = Number(price).toFixed(2);
            this.classes = classes;
            this.parent = document.querySelector(parentSelector).querySelectorAll(".admin-goods-body");
         }
@@ -1170,24 +1438,63 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
                     allGoodsForms[5].value = json["stock"];
 
                     textarea.value = json["description"];
+
+                    function defAge() {
+                        document.querySelectorAll(".form_toggle-item-admin").forEach(elem => elem.classList.remove("item-checked"))
+                    }
+                    
+                    const ageBlock = document.querySelector(".toggle-forms-block");
+
+                    ageBlock.addEventListener("click", (e) => {
+                        defAge()
+                        e.preventDefault();
+                        if (e.target.classList.contains("form_toggle-item-admin")) {
+                            e.target.classList.add("item-checked")
+                        } else if (e.target.parentElement.classList.contains("form_toggle-item-admin")) {
+                            e.target.parentElement.classList.add("item-checked")
+                        }
+                    })
                 })
                 e.target.parentElement.parentElement.querySelector(".userinfo-goods-changer").setAttribute("data-popup", "#popup-admin-goods");
 
             }
+
             document.querySelector(".admin-goods-submit").addEventListener("click", () => {
                 e.preventDefault();
     
                 const form = document.querySelector(".admin-edit-goods");
     
-                const formData = new FormData(form);
+                const formData = Object.fromEntries(new FormData(form));
+
+                formData["price"] = Number(formData["price"])
+                formData["stock"] = Number(formData["stock"])
+
+                let age = ""
+                
+                if (document.querySelector(".item-admin-1").classList.contains("item-checked")) {
+                    age = "0-3"
+                } else if (document.querySelector(".item-admin-2").classList.contains("item-checked")) {
+                    age = "3-6"
+                } else {
+                    age = "6+"
+                }
     
-                const jsonFirst = JSON.stringify(Object.assign({}, blocked, Object.fromEntries(formData.entries())));
-    
-                postData("http://localhost:8008/edituser", jsonFirst)
+                const jsonFirst = JSON.stringify(Object.assign({}, {"token" : localStorage.getItem("session"), "age" : age, "article" : Number(now_good_article)}, formData));
+
+                postData("http://localhost:8008/admin/editgoods", jsonFirst)
                 .then(json => {
+                    window.location.reload()
                 })
             })
         }        
+
+    })
+
+    const addGoodBtn = document.querySelector(".admin-goods-item6");
+
+    addGoodBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+
 
     })
 
@@ -1207,7 +1514,7 @@ btns_sumbit.forEach((elem) => {
 
             const formData = new FormData(elem.parentElement);
 
-            const jsonFirst = JSON.stringify(Object.assign({}, {"html" : localStorage.getItem("products")}, Object.fromEntries(formData.entries())));
+            const jsonFirst = JSON.stringify(Object.assign({}, {"html" : localStorage.getItem("products").trim()}, Object.fromEntries(formData.entries())));
         
         
             postData("http://localhost:8008/reg", jsonFirst)
@@ -1230,10 +1537,10 @@ btns_sumbit.forEach((elem) => {
                     if (typeof(json[0]) == "string") {
                         localStorage.setItem("session", json[0]);
                         if (document.querySelector("#shopCart").childElementCount == 1) {
-                            localStorage.setItem("products", removeEmptyCarts(json[1]));
+                            localStorage.setItem("products", consolidateDuplicates(removeEmptyCarts(json[1]).trim()));
                             cartIsEmpty();
                         } else {
-                            localStorage.setItem("products", removeEmptyCarts(json[1] + localStorage.getItem("products")));
+                            localStorage.setItem("products", consolidateDuplicates(removeEmptyCarts(json[1] + localStorage.getItem("products")).trim()));
                             cartIsEmpty();
                         }
                         window.location.reload();

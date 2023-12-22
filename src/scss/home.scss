@@ -233,16 +233,31 @@ button.active{
     margin: toRem(110) auto;
 }
 .recommend-good {
-    width: toRem(700);
     display: flex;
+    flex: 0 1 47.5%;
     flex-wrap: nowrap;
     background-color: #FBFBFB;
+    padding: toRem(10);
 }
 .recommend-good-img {
-    position: relative;
-    bottom: toRem(75);
-    left: toRem(30);
+    flex: 0 1 40%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
     align-items: center;
+}
+.info-button-good {
+    width: 100%;
+    display: flex;
+    justify-content: right;
+    flex-wrap: nowrap;
+}
+.recommend-good-info {
+    flex: 0 1 60%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: right;
 }
 .good-info-title {
     color: #3D3D3D;
@@ -250,20 +265,20 @@ button.active{
     font-size: toRem(24);
     font-weight: 900;
     line-height: toRem(32);
-    margin: toRem(46) toRem(44) toRem(30) 0;
+    margin: toRem(23) toRem(44) toRem(23) 0;
     text-align: right;
 }
 .good-info-subtitle {
     color: #727272;
     text-align: right;
     padding-left: toRem(45);
+    flex: 1 0 auto;
     font-size: toRem(19);
     line-height: toRem(32);
     margin: toRem(0) toRem(37) 0 0;
 }
 .good-info-button {
     margin: toRem(30) toRem(37) toRem(36) 0;
-    float: right;
     display: flex;
     border-radius: toRem(8);
     justify-content: center;
@@ -275,6 +290,11 @@ button.active{
     font-weight: 500;
     line-height: toRem(27);
     font-size: toRem(19);
+    &:active {
+        background-color: white;
+        color: #46A358;
+        border: toRem(1.33) solid #46A358;
+      }
 }
 
 //====================================================================================================
@@ -824,7 +844,7 @@ button.active{
     background-position: center center;
     background-size: contain;
 }
-.goods-body-info {
+.good-body-info {
     width: 100%;
     float: left;
     display: flex;
@@ -1939,4 +1959,98 @@ input[type="number"]:hover,
 input[type="number"]:focus {
     appearance: none;
     -moz-appearance: textfield;
+}
+
+// Admin-orders
+
+.admin-forms-title {
+    font-size: toRem(21);
+    line-height: toRem(20);
+    font-weight: 700;
+    color: #3D3D3D;
+    width: 100%;
+}
+.admin-users-orders {
+    display: flex;
+    margin: toRem(26) 0 0 0;
+    padding: 0 0 toRem(14) 0;
+    border-bottom: toRem(0.37) solid rgba(70, 163, 88, 0.5);
+    font-size: toRem(20);
+    line-height: toRem(20);
+    font-weight: 500;
+    color: #3D3D3D;
+    text-align: center;
+    align-items: center;
+    .admin-orders-item1 {
+        flex: 0 1 10%;
+    }
+    .admin-orders-item2 {
+        flex: 0 1 25%;
+    }
+    .admin-orders-item3 {
+        flex: 0 1 20%;
+    }
+    .admin-orders-item4 {
+        flex: 0 1 10%;
+    }
+    .admin-orders-item5 {
+        flex: 0 1 15%;
+    }
+}
+.admin-forms-orders {
+    margin: toRem(10) 0 0 0;
+    padding: toRem(28) 0;
+    background-color: #FBFBFB;
+    display: flex;
+    width: 100%;
+    height: toRem(87);
+    text-align: center;
+    font-size: toRem(19);
+    line-height: toRem(20);
+    align-items: center;
+}
+.forms-orders-id {
+    flex: 0 1 10%;
+}
+.forms-orders-email {
+    flex: 0 1 25%;
+    text-decoration: underline;
+}
+.forms-orders-status {
+    flex: 0 1 20%;
+}
+.forms-orders-amount {
+    flex: 0 1 10%;
+}
+.forms-orders-total {
+    flex: 0 1 15%;
+    font-weight: 700;
+    color: #46A358;
+}
+.forms-orders-btns {
+    flex: 0 1 20%;
+    display: flex;
+    flex-wrap: nowrap;
+}
+.orders-btns-complete {
+    height: toRem(24);
+    flex: 0 1 33.333%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: toRem(24) toRem(24);
+}
+.orders-btns-canceled {
+    height: toRem(24);
+    flex: 0 1 33.333%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: toRem(24) toRem(24);
+}
+.goods-body-delelem-admin {
+    padding: toRem(1.81), toRem(2.42), toRem(1.87), toRem(2.81);
+    flex: 0 1 33.333%;
+    background-image: url("../img/Delete.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: toRem(24) toRem(24);
 }
