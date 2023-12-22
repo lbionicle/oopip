@@ -180,7 +180,7 @@ if(document.getElementsByTagName("body")[0].classList.contains("shipping.html"))
         
         postData("http://localhost:8008/parse_cart", JSON.stringify({"token" : localStorage.getItem("session"), "html" : localStorage.getItem("products").trim()}))
         .then(json => {
-            console.log(json)
+            localStorage.setItem("testCArt", JSON.stringify(json))
         })
 
         updateProducts(localStorage.getItem("products"))
@@ -418,13 +418,14 @@ if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
         if(e.target.classList.contains("filter-item")) {
             btnFilterAge.querySelectorAll(".filter-item").forEach(elem => elem.classList.remove("active"))
             e.target.classList.add("active")
+
             if (e.target.textContent == "All ages") {
                 localStorage.setItem("age", "")
             } else {
                 localStorage.setItem("age", e.target.textContent.split(" ")[0])
             }
 
-            postData("http://localhost:8008/getgoodbycatss", JSON.stringify({"category" : localStorage.getItem("category").toLocaleLowerCase(), "age" : localStorage.getItem("age")}))
+            postData("http://localhost:8008/getgoodbycatss", JSON.stringify({"category" : localStorage.getItem("category") ? localStorage.getItem("category").split(/\s+/).map(word => word[0].toUpperCase() + word.substring(1)).join(' ') : "", "age" : localStorage.getItem("age")}))
             .then(json => {
                 document.querySelector(".goods-elements").innerHTML = "";
                 json.forEach((elem) => {
@@ -586,7 +587,7 @@ if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
     .then(json => Object.keys(json).forEach((elem) => {
         btnCategories.innerHTML += 
         `
-        <button class="goods-category-item">${elem.charAt(0).toUpperCase() + elem.slice(1)}<span>(${json[`${elem}`]})</span></button>
+        <button class="goods-category-item">${elem.split(/\s+/).map(word => word[0].toUpperCase() + word.substring(1)).join(' ')}<span>(${json[`${elem}`]})</span></button>
         `
     }))
     
@@ -1502,7 +1503,7 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
 
                 formData["price"] = Number(formData["price"])
                 formData["stock"] = Number(formData["stock"])
-                formData["category"] = formData["category"].charAt(0).toUpperCase() + formData["category"].slice(1)
+                formData["category"] = formData["category"].split(/\s+/).map(word => word[0].toUpperCase() + word.substring(1)).join(' ')
 
 
                 let age = ""
@@ -1554,7 +1555,7 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
 
                 formData["price"] = Number(formData["price"])
                 formData["stock"] = Number(formData["stock"])
-                formData["category"] = formData["category"].charAt(0).toUpperCase() + formData["category"].slice(1)
+                formData["category"] = formData["category"].split(/\s+/).map(word => word[0].toUpperCase() + word.substring(1)).join(' ')
 
                 let age = ""
                 
