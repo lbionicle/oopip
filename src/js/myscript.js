@@ -130,11 +130,9 @@ function checkGoodsInCart(element) {
 
     let nameOfGoods = "";
 
-    if (element.classList.contains("goods-element")) {
-        element.classList.contains("goods-element") ? nameOfGoods = element.querySelector(".element-info").querySelector(".element-info-name").textContent : nameOfGoods = element.querySelector(".popup-content-title").textContent;
-    } else if (element.classList.contains("recommend-good)")) {
-        element.classList.contains("recommend-good") ? nameOfGoods = element.querySelector(".good-info-title").textContent : nameOfGoods = element.querySelector(".popup-content-title").textContent;
-    }
+    console.log(element)
+
+    element.classList.contains("goods-element") || element.classList.contains("recommend-good") ? nameOfGoods = element.querySelector(".element-info-name").textContent : nameOfGoods = element.querySelector(".popup-content-title").textContent;
 
     const nowCart = document.querySelector("#shopCart").querySelectorAll(".body-info-title");
 
@@ -409,6 +407,8 @@ class GoodsCard {
 if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
 
     localStorage.setItem("category", "")
+    localStorage.setItem("age", "")
+
 
     const btnFilterAge = document.querySelector(".filter-age");
 
@@ -424,7 +424,7 @@ if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
                 localStorage.setItem("age", e.target.textContent.split(" ")[0])
             }
 
-            postData("http://localhost:8008/getgoodbycatss", JSON.stringify({"category" : localStorage.getItem("category"), "age" : localStorage.getItem("age")}))
+            postData("http://localhost:8008/getgoodbycatss", JSON.stringify({"category" : localStorage.getItem("category").toLocaleLowerCase(), "age" : localStorage.getItem("age")}))
             .then(json => {
                 document.querySelector(".goods-elements").innerHTML = "";
                 json.forEach((elem) => {
@@ -496,7 +496,7 @@ if(document.getElementsByTagName("body")[0].classList.contains("index_html")) {
             <div style="background-image: url(${this.src})" class="recommend-good-img">
             </div>
             <div class="recommend-good-info">
-                <div class="good-info-title">${this.title}</div>
+                <div class="element-info-name good-info-title">${this.title}</div>
                 <div class="good-info-subtitle">${this.descr}</div>
                 <div style="display: none" class="recommend-article">${this.article}</div>
                 <div class="info-button-good">
@@ -1298,8 +1298,7 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
                 <div class="admin-goods-item3 admin-header-item">Category</div>
                 <div class="admin-goods-item4 admin-header-item">Age</div>
                 <div class="admin-goods-item5 admin-header-item">Price</div>
-                <button class="admin-goods-item6 admin-header-item">Add a product
-                </button>
+                <button class="admin-goods-item6">Add a product</button>
             </div>
             <div class="admin-goods-body">
             </div>
@@ -1333,6 +1332,27 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
         } else if (e.target.classList.contains("admin-pages-orders")) {
             check("../img/shopcart-active.svg")
             user_forms.innerHTML = `
+            <div class="admin-forms-title">Orders</div>
+            <div class="admin-users-orders">
+                <div class="admin-orders-item1">Id</div>
+                <div class="admin-orders-item2">Email</div>
+                <div class="admin-orders-item3">Status</div>
+                <div class="admin-orders-item4">Amount</div>
+                <div class="admin-orders-item5">Total</div>
+                <div class="admin-orders-item5"></div>
+            </div>
+            <div class="admin-forms-orders">
+                <div class="forms-orders-id">1</div>
+                <div class="forms-orders-email">user1@gmail.com</div>
+                <div class="forms-orders-status">In delivery</div>
+                <div class="forms-orders-amount">(x <span>2</span>)</div>
+                <div class="forms-orders-total">$400.00</div>
+                <div class="forms-orders-btns">
+                    <button style="background-image: url('img/success.svg');" class="orders-btns-complete"></button>
+                    <button style="background-image: url('img/canceled.svg');" class="orders-btns-canceled"></button>
+                    <button id="del" class="goods-body-delelem-admin"></button>
+                </div>  
+            </div>
                 `;
         } else if (e.target.classList.contains("admin-pages-logout")) {
             e.preventDefault();
@@ -1348,6 +1368,7 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
         if (e.target.parentElement.parentElement.classList.contains("forms-body-userinfo")) {
             const now_user_token = e.target.parentElement.parentElement.querySelector(".userinfo-token").textContent;
 
+        
         if (e.target.classList.contains("userinfo-opportunity-delete")) {
             
             postData("http://localhost:8008/admin/deleteuser", JSON.stringify({"super_user_token" : localStorage.getItem("session"), "token" : now_user_token}))
@@ -1415,6 +1436,19 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
         // Goods
         } else if (e.target.parentElement.parentElement.classList.contains("goods-body-item")) {
 
+            document.querySelector(".admin-goods-item6").setAttribute("data-popup", "#popup-admin-addgoods");
+
+            function findActiveAgeBtn(age) {
+                const ActiveBtnBlock = document.querySelector(".toggle-forms-block").querySelectorAll("input");
+
+                ActiveBtnBlock.forEach((elem) => {
+                    elem.parentElement.classList.remove("item-checked")
+                    if (String(elem.value) == age) {
+                        elem.parentElement.classList.add("item-checked")
+                    }
+                })
+            }
+
             const now_good_article = Number(e.target.parentElement.parentElement.querySelector(".body-goods-article").getElementsByTagName("span")[0].textContent);
 
             if (e.target.classList.contains("userinfo-opportunity-delete")) {
@@ -1437,6 +1471,7 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
                     allGoodsForms[4].value = json["price"];
                     allGoodsForms[5].value = json["stock"];
 
+                    findActiveAgeBtn(json["age"]);
                     textarea.value = json["description"];
 
                     function defAge() {
@@ -1444,6 +1479,7 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
                     }
                     
                     const ageBlock = document.querySelector(".toggle-forms-block");
+
 
                     ageBlock.addEventListener("click", (e) => {
                         defAge()
@@ -1455,11 +1491,9 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
                         }
                     })
                 })
-                e.target.parentElement.parentElement.querySelector(".userinfo-goods-changer").setAttribute("data-popup", "#popup-admin-goods");
-
+                e.target.parentElement.parentElement.querySelector(".userinfo-goods-changer").setAttribute("data-popup", "#popup-admin-goods")               
             }
-
-            document.querySelector(".admin-goods-submit").addEventListener("click", () => {
+            document.querySelector(".admin-edit-goods").addEventListener("submit", () => {
                 e.preventDefault();
     
                 const form = document.querySelector(".admin-edit-goods");
@@ -1468,6 +1502,59 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
 
                 formData["price"] = Number(formData["price"])
                 formData["stock"] = Number(formData["stock"])
+                formData["category"] = formData["category"].charAt(0).toUpperCase() + formData["category"].slice(1)
+
+
+                let age = ""
+                
+                if (document.querySelector(".item-admin-1").classList.contains("item-checked")) {
+                    age = "0-3"
+                } else if (document.querySelector(".item-admin-2").classList.contains("item-checked")) {
+                    age = "3-6"
+                } else {
+                    age = "6+"
+                } 
+    
+                const jsonFirst = JSON.stringify(Object.assign({}, {"token" : localStorage.getItem("session"), "age" : age, "article" : Number(now_good_article)}, formData));
+
+                postData("http://localhost:8008/admin/editgoods", jsonFirst)
+                .then(json => {
+                    window.location.reload()
+                })
+            })
+        } else if (e.target.classList.contains("admin-goods-item6")) {
+
+            e.target.setAttribute("data-popup", "#popup-admin-addgoods")
+
+            document.querySelector("#popup-admin-addgoods")
+
+            function defAge() {
+                document.querySelectorAll(".form_toggle-item-admin").forEach(elem => elem.classList.remove("item-checked"))
+            }
+            
+            const ageBlock = document.querySelector(".toggle-forms-block-add");
+
+
+            ageBlock.addEventListener("click", (e) => {
+                defAge()
+                e.preventDefault();
+                if (e.target.classList.contains("form_toggle-item-admin")) {
+                    e.target.classList.add("item-checked")
+                } else if (e.target.parentElement.classList.contains("form_toggle-item-admin")) {
+                    e.target.parentElement.classList.add("item-checked")
+                }
+            })
+
+            document.querySelector(".form-admin-addgood").addEventListener("submit", (e) => {
+                e.preventDefault();
+    
+                const form = document.querySelector(".form-admin-addgood");
+    
+                const formData = Object.fromEntries(new FormData(form));
+
+                formData["price"] = Number(formData["price"])
+                formData["stock"] = Number(formData["stock"])
+                formData["category"] = formData["category"].charAt(0).toUpperCase() + formData["category"].slice(1)
 
                 let age = ""
                 
@@ -1479,24 +1566,18 @@ if(document.getElementsByTagName("body")[0].classList.contains("admin-acc")) {
                     age = "6+"
                 }
     
-                const jsonFirst = JSON.stringify(Object.assign({}, {"token" : localStorage.getItem("session"), "age" : age, "article" : Number(now_good_article)}, formData));
+                const jsonFirst = JSON.stringify(Object.assign({}, {"token" : localStorage.getItem("session"), "age" : age}, formData));
 
-                postData("http://localhost:8008/admin/editgoods", jsonFirst)
+                localStorage.setItem("test", jsonFirst)
+                postData("http://localhost:8008/admin/addgoods", jsonFirst)
                 .then(json => {
                     window.location.reload()
                 })
             })
-        }        
+        }    
 
     })
 
-    const addGoodBtn = document.querySelector(".admin-goods-item6");
-
-    addGoodBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-
-
-    })
 
 
 }

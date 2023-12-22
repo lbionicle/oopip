@@ -127,12 +127,12 @@
 					<div class="admin-goods-row">
 					<div class="goods-row-title">Product Information</div>
 					<div class="goods-allforms">
-						<div class="admin-input-goods"><input type="text" name="title" class="goodsForm"><label for="title" class="textinputbox">Title</label></div>
-						<div class="admin-input-goods"><input type="text" name="category" class="goodsForm"><label for="category" class="textinputbox">Category</label></div>
+						<div class="admin-input-goods"><input type="text" name="title" class="goodsForm" required><label for="title" class="textinputbox">Title</label></div>
+						<div class="admin-input-goods"><input type="text" name="category" class="goodsForm" required><label for="category" class="textinputbox">Category</label></div>
 						<div class="admin-input-goods"><input type="number" name="article" class="goodsForm" disabled><label for="article" class="textinputbox">Article</label></div>
-						<div class="admin-input-goods"><input type="text" name="photo" class="goodsForm"><label for="photo" class="textinputbox">Photo</label></div>
-						<div class="admin-input-goods"><input type="number" name="price" class="goodsForm"><label for="price" class="textinputbox">Price</label></div>
-						<div class="admin-input-goods"><input type="number" name="stock" class="goodsForm"><label for="stock" class="textinputbox">Stock</label></div>
+						<div class="admin-input-goods"><input type="text" name="photo" class="goodsForm" required><label for="photo" class="textinputbox">Photo</label></div>
+						<div class="admin-input-goods"><input type="number" name="price" class="goodsForm" required><label for="price" class="textinputbox">Price</label></div>
+						<div class="admin-input-goods"><input type="number" name="stock" class="goodsForm" required><label for="stock" class="textinputbox">Stock</label></div>
 						<div class="form_toggle-admin">
 							<label style="width: 100%; font-size: 18px; line-height: 35px;" class="textinputbox-admin">Age</label>
 							<div class="toggle-forms-block">
@@ -153,6 +153,46 @@
 						<div class="admin-input-textarea"><textarea class="description-admin-goods" name="description" id="" cols="30" rows="10"></textarea><label for="description" class="textinputbox">Description</label></div>
 					</div>
 					<button type="submit" class="admin-goods-submit btn-submit">Save Change</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<div id="popup-admin-addgoods" aria-hidden="true" class="popup">
+	<div style="position: relative;" class="popup__wrapper">
+		<div style="width: 1120px; height: auto; padding: 40px 50px; background-color: #fff;" class="popup__content">
+			<button style="top: 12px; right: 12px;" data-close type="button" class="popup__close"><img style="max-width: 15px; max-height: 15px;" src="@img/close.svg" alt=""></button>
+			<form class="form-admin-addgood">
+				<div class="admin-goods-row">
+					<div class="goods-row-title">Product Information</div>
+					<div class="goods-allforms">
+						<div class="admin-input-goods"><input type="text" name="title" class="goodsForm" required><label for="title" class="textinputbox">Title</label></div>
+						<div class="admin-input-goods"><input type="text" name="category" class="goodsForm" required><label for="category" class="textinputbox">Category</label></div>
+						<div class="admin-input-goods"><input type="text" name="photo" class="goodsForm" required><label for="photo" class="textinputbox">Photo</label></div>
+						<div class="admin-input-goods"><input type="number" name="price" class="goodsForm" required><label for="price" class="textinputbox">Price</label></div>
+						<div class="admin-input-goods"><input type="number" name="stock" class="goodsForm" required><label for="stock" class="textinputbox">Stock</label></div>
+						<div class="form_toggle-admin">
+							<label style="width: 100%; font-size: 18px; line-height: 35px;" class="textinputbox-admin">Age</label>
+							<div class="toggle-forms-block-add">
+								<button class="form_toggle-item-admin item-admin-1">
+									<input id="fid-1" type="radio" value="0-3">
+									<label for="fid-1">0-3</label>
+								</button>
+								<button class="form_toggle-item-admin item-admin-2">
+									<input id="fid-2" type="radio" value="3-6">
+									<label for="fid-2">3-6</label>
+								</button>
+								<button class="form_toggle-item-admin item-admin-3">
+									<input id="fid-3" type="radio" value="6+">
+									<label for="fid-3">6+</label>
+								</button>
+							</div>
+						</div>
+						<div class="admin-input-textarea"><textarea class="description-admin-goods" name="description" id="" cols="30" rows="10"></textarea><label for="description" class="textinputbox">Description</label></div>
+					</div>
+					<button type="submit" class="admin-addgoods-submit btn-submit">Save Change</button>
 				</div>
 			</form>
 		</div>

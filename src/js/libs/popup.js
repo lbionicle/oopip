@@ -132,7 +132,7 @@ class Popup {
 			/*Сюда вноси изменения, если будет неправильно закрываться в конце if */
 			// Закриття на порожньому місці (popup__wrapper) та кнопки закриття (popup__close) для закриття
 			const buttonClose = e.target.closest(`[${this.options.attributeCloseButton}]`);
-			if (buttonClose || !e.target.closest(`.${this.options.classes.popupContent}`) && this.isOpen && e.target.id != "del" && !e.target.parentElement.classList.contains("goods-body-count")) {
+			if (buttonClose || !e.target.closest(`.${this.options.classes.popupContent}`) && this.isOpen && e.target.id != "del" && !e.target.parentElement.classList.contains("goods-body-count") && !e.target.classList.contains("toggle-forms-block-add")) {
 				e.preventDefault();
 				this.close();
 				return;

@@ -1827,12 +1827,16 @@ button.active{
 
 //modal Goods
 
-.admin-goods-row {
+.admin-goods-row{
     color: #3D3D3D;
     display: flex;
     flex-direction: column;
 }
-.goods-row-title {
+.admin-addgood-row {
+    display: flex;
+    width: 100%;
+}
+.goods-row-title, .addgood-row-title {
     font-size: toRem(21);
     line-height: toRem(20);
     font-weight: 500;
@@ -1845,7 +1849,7 @@ button.active{
     justify-content: space-between;
     align-items: center;
 }
-.admin-input-goods {
+.admin-input-goods, .admin-input-addgoods {
     height: toRem(77.5);
     display: flex;
     position: relative;
@@ -1862,7 +1866,7 @@ button.active{
         color: #3D3D3D;
     }
 }
-.goodsForm {
+.goodsForm, .addgoodsForm {
     height: toRem(50);
     width: 100%;
     border-radius: toRem(2.82);
@@ -1876,23 +1880,28 @@ button.active{
     text-align: left;
     float: left;
 }
-.form_toggle-item-admin {
+.form_toggle-item-admin{
     flex: 0 1 33.333%;
     display: flex;
     align-items: center;
     height: toRem(50);
     font-size: toRem(16);
     line-height: toRem(14);
+    text-align: center;
+    justify-content: center;
     border: toRem(0.25) solid #d9d9d9;
 }
+
+
 .form_toggle-admin {
-    flex: 0 1 47.5%;
+    width: 47.5%;
     display: flex;
     height: toRem(85);
     text-align: center;  
     align-items: center;
     justify-content: space-between;
     flex-direction: column; 
+    cursor: pointer;
     label {
         width: 100%;
         display: block;
@@ -1900,14 +1909,14 @@ button.active{
         cursor: pointer;
         user-select: none; 
     }
-    .item-admin-1 {
-        border-radius: toRem(6) 0 0 toRem(6);
-    }
-    .item-admin-3 {
-        border-radius: 0 toRem(6) toRem(6) 0;
-    }
 }
-.toggle-forms-block {
+.item-admin-1, .item-admin-1-add {
+    border-radius: toRem(6) 0 0 toRem(6);
+}
+.item-admin-3, .item-admin-3-add {
+    border-radius: 0 toRem(6) toRem(6) 0;
+}
+.toggle-forms-block, .toggle-forms-block-add{
     display: flex;
     width: 100%;
 }
@@ -1924,6 +1933,7 @@ button.active{
     height: toRem(77.5);
     display: flex;
     position: relative;
+    margin: toRem(24) 0 0 0;
     flex: 0 1 47.5%;
     flex-direction: column-reverse;
     font-size: toRem(14);
